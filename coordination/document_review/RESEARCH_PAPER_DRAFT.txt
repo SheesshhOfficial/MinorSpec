@@ -1,0 +1,374 @@
+PAGE 1
+Risk-Return Trade-offs of LightGBM & NSGA-II Trading Rules | Retrospective Walk-Forward Study 
+Draft Academic Manuscript — For Review Only — Manipal Institute of Technology (Oct 2026) 
+Risk-Return Trade-offs of LightGBM and NSGA-II Trading Rules: 
+A Retrospective Walk-Forward Study of Three NSE Equities 
+Ashish Ranjan,  Khuushi Maheshwari,  Satyanarayan H. 
+Department of Computer Science, Manipal Institute of Technology 
+B.Tech – Computer Science | [Author Emails: {student1, student2, student3}@learner.manipal.edu] 
+Academic Capstone Research Draft — October 2026 
+Abstract— Machine learning models in financial forecasting frequently fail to preserve portfolio capital because 
+directional predictions are disconnected from dynamic risk management. This study conducts a rigorous retrospective 
+walk-forward evaluation of a Two-Tier Computational Intelligence (CI) architecture across three large-cap Indian 
+equities (RELIANCE.NS, TCS.NS, INFY.NS) over a 6-year period (2020–2025, 1,487 trading sessions per asset). Tier 1 
+employs a LightGBM gradient-boosted decision tree to estimate forward 3-day directional probabilities from 20 
+technical indicators. Tier 2 leverages the Non-dominated Sorting Genetic Algorithm II (NSGA-II) to evolve real-valued 
+trading rule chromosomes (probability hurdles, dynamic ATR stop-loss and take-profit multipliers, trailing stops, and 
+regime-conditional capital allocation) simultaneously optimizing Annualized Sharpe Ratio and Maximum Drawdown. All 
+backtests enforce strict next-bar Open execution, slippage, transaction costs (10 bps round-trip standard; 40 bps 
+sensitivity), conservative intrabar bracket conflict ordering, horizon purging, and scheduled fold-end liquidation 
+prohibiting final-day entries. Across 18 annual test folds and three GA seeds, LightGBM achieves a modest out-of-sample 
+directional AUC of 0.5324 and accuracy of 52.68% (against the training-prior baseline of 52.66%). The Full Hybrid 
+strategy dampens annual maximum drawdown relative to Buy & Hold in 17 out of 18 folds (94.4%). However, by 
+remaining in cash during secular market expansions, the Hybrid underperforms Buy & Hold total return in 13 out of 18 
+folds (72.2%), delivering multi-year stitched seed-median returns of -0.35% for RELIANCE.NS, +25.60% for TCS.NS, and 
++9.10% for INFY.NS, compared to Buy & Hold compound growth of +128.74%, +65.13%, and +152.78%, respectively. 
+An evolutionary ablation without machine learning signals yields comparable or superior multi-year returns. These 
+results demonstrate that defensive metaheuristic rules provide robust tail-risk dampening but impose substantial 
+opportunity costs in trending equity markets. 
+Keywords— Computational Intelligence, Algorithmic Trading, LightGBM, NSGA-II, Multi-Objective Optimization, Walk-
+Forward Validation, National Stock Exchange of India (NSE), Backtest Overfitting. 
+1. Introduction & Research Question 
+The application of machine learning (ML) to financial market forecasting has expanded rapidly, yet practical deployment 
+consistently confronts the realities of low signal-to-noise ratios, non-stationarity, and market efficiency [1], [5]. A central 
+failure mode in computational finance literature is the conceptual gap between directional statistical prediction and 
+dynamic capital preservation. A predictive classifier achieving 55% directional accuracy will rapidly deplete portfolio 
+equity if trade exits, transaction friction, and volatility-induced position sizing are left unmanaged [3]. Conversely, 
+traditional rule-based algorithmic strategies rely on static technical indicators that fail to adapt across changing volatility 
+regimes. 
+To bridge this gap, this study investigates a Two-Tier Computational Intelligence (CI) architecture that decouples 
+directional statistical inference from multi-objective policy search. Tier 1 trains a gradient-boosted decision tree 
+(LightGBM) to estimate forward 3-day directional return probabilities from engineered technical and volatility features. 
+Tier 2 applies the Non-dominated Sorting Genetic Algorithm II (NSGA-II) [1] to evolve continuous trading rule 
+parameters—including entry/exit probability thresholds, Average True Range (ATR) stop-loss and take-profit multipliers, 
+trailing stop percentages, and regime-conditioned capital allocations. By framing strategy selection as a bi-objective 
+optimization between risk-adjusted return (Sharpe Ratio) and capital risk (Maximum Drawdown), the evolutionary 
+engine constructs a Pareto frontier of candidate trading policies. 
+
+PAGE 2
+Risk-Return Trade-offs of LightGBM & NSGA-II Trading Rules | Retrospective Walk-Forward Study 
+Draft Academic Manuscript — For Review Only — Manipal Institute of Technology (Oct 2026) 
+We ground our investigation in three specific research questions: (1) Does gradient tree boosting provide measurable 
+directional predictive edge on large-cap National Stock Exchange of India (NSE) equities over simple base rates? (2) Does 
+evolving multi-objective risk parameters dampen out-of-sample portfolio drawdowns during historical market 
+downturns? (3) How does cash preservation under defensive probability hurdles affect multi-year compounded capital 
+accumulation relative to passive benchmark holding? 
+[METHODOLOGICAL CONTRIBUTION & BOUNDARY DISCLOSURE] 
+Our primary contribution is methodological rigor, audit provenance, and reproducible empirical evidence rather than 
+claims of algorithmic novelty or guaranteed investment alpha. All experiments are conducted retrospectively over 
+2020–2025 using frozen parquet data snapshots, versioned audit corrections, and verified code execution. The universe 
+is restricted to three surviving large-cap equities (RELIANCE.NS, TCS.NS, INFY.NS) evaluated individually without cross-
+asset portfolio rebalancing. 
+ 
+2. Related Work & Theoretical Foundations 
+The theoretical foundation of empirical market forecasting rests upon the Efficient Market Hypothesis (EMH) 
+formulated by Fama [6], which posits that historical prices rapidly reflect available information, leaving technical trading 
+rules with negligible risk-adjusted excess returns net of transaction costs. In modern econometric literature, White [5] 
+established that empirical outperformance in trading rule evaluations is frequently an artifact of data snooping bias: 
+searching across thousands of parameter permutations guarantees finding strategies that appear profitable purely due 
+to random noise. Bailey and López de Prado [4] formalized this hazard via the Deflated Sharpe Ratio (DSR), 
+demonstrating that the expected maximum Sharpe ratio increases as a function of the number of evaluated trials and 
+non-normal return distributions. 
+To mitigate backtest overfitting, López de Prado [3] proposed rigorous protocols for financial machine learning, notably 
+purged and embargoed combinatorial cross-validation. When overlapping forward labels are utilized (e.g., multi-bar 
+holding returns), standard random cross-validation leaks information across adjacent folds. Purging trailing samples 
+equal to the prediction horizon prevents this forward-looking contamination. 
+In the domain of multi-objective metaheuristics, Deb et al. [1] introduced NSGA-II, which eliminated the $O(M N^3)$ 
+computational bottlenecks of early genetic algorithms by introducing fast non-dominated sorting ($O(M N^2)$), elitist 
+selection preserving non-dominated individuals across generations, and parameter-less crowding distance operators. In 
+tree-based machine learning, Ke et al. [2] developed LightGBM, combining Gradient-based One-Side Sampling (GOSS) 
+and Exclusive Feature Bundling (EFB) to provide high-speed, scalable gradient boosting on tabular data. Our work 
+integrates these two established paradigms into an auditable, causal walk-forward backtesting framework. 
+3. Methodology & System Architecture 
+The proposed CI system operates across two distinct tiers coupled to a vectorized causal execution simulator. Figure 1 
+illustrates the end-to-end data processing, feature engineering, model training, evolutionary search, and test evaluation 
+pipeline. 
+3.1 Tier 1: Feature Engineering & Predictive Classifier 
+From historical daily OHLCV series, the system extracts 20 stationary technical and volatility features spanning four core 
+categories: (1) Momentum: Relative Strength Index (RSI-14), Stochastic %K and %D, Rate of Change (ROC-5, ROC-20), 
+and Williams %R; (2) Trend: MACD line, MACD signal, MACD histogram, and price ratios to 20-day, 50-day, and 200-day 
+Simple Moving Averages; (3) Volatility: Average True Range percentage (ATR-14 / Close), Bollinger Bands %B and 
+Bandwidth, and Historical Volatility (20-day return standard deviation); (4) Volume: On-Balance Volume (OBV) 20-day 
+
+PAGE 3
+Risk-Return Trade-offs of LightGBM & NSGA-II Trading Rules | Retrospective Walk-Forward Study 
+Draft Academic Manuscript — For Review Only — Manipal Institute of Technology (Oct 2026) 
+slope, Chaikin Money Flow (CMF-20), and Volume SMA ratios. Additionally, a market volatility regime filter classifies 
+sessions where 20-day annualized historical volatility exceeds its expanding 60-day median. 
+The prediction target is formulated as a binary directional indicator over a 3-day holding horizon: $y_t = 1$ if $(C_{t+3} - 
+C_t)/C_t > 0$, and $y_t = 0$ otherwise. A LightGBM classifier is trained on historical data with hyperparameters: 
+max_depth=5, num_leaves=24, learning_rate=0.03, n_estimators=300, and early stopping on a separate validation 
+partition. LightGBM outputs calibrated conditional probabilities $hat{p}_t = hat{P}(y_t = 1 | {x}_t)$. 
+3.2 Tier 2: NSGA-II Multi-Objective Evolutionary Engine 
+The evolutionary decision layer optimizes a 7-dimensional real-valued chromosome ${g} = [p_{{entry}}, p_{{exit}}, {SL}, 
+{TP}, {Trail}, {VolAlloc}, {MaxHold}]$ bounded by domain constraints: $p_{{entry}} in [0.52, 0.75]$, $p_{{exit}} in [0.35, 
+0.50]$, Stop-Loss multiplier ${SL} in [1.0, 5.0] x {ATR}$, Take-Profit multiplier ${TP} in [1.5, 10.0] x {ATR}$, Trailing Stop 
+percentage ${Trail} in [0.01, 0.10]$, Volatility discount allocation fraction ${VolAlloc} in [0.20, 1.00]$, and Maximum 
+holding duration ${MaxHold} in [3, 45]$ bars. 
+NSGA-II evaluates each candidate individual across the 2-year Development partition using two competing objective 
+functions: (1) Maximize Annualized Sharpe Ratio f_1 = (mu_r / sigma_r) * sqrt(252) (assuming a 0.0% risk-free rate); (2) 
+Minimize Maximum Drawdown f_2 = max_t ((peak_t - E_t) / peak_t). To enforce behavioral validity, a feasibility 
+constraint requires candidate rules to generate at least 5 completed trades during development. Individuals with $<5$ 
+trades are penalized with $f_1 = -10.0$ and $f_2 = 1.0$. The population of size $N=30$ evolves across $G=10$ 
+generations using Simulated Binary Crossover (SBX, $eta_c = 15$, $p_c = 0.90$) and Polynomial Mutation ($eta_m = 
+20$, $p_m = 1/7$). 
+3.3 Causal Simulator & Execution Mechanics 
+The backtest engine enforces realistic execution timing and friction: (1) Next-Bar Execution: Signals evaluated at bar $t$ 
+Close execute strictly at bar $t+1$ Open at price $P_{{entry}} = O_{t+1}(1 + {slip})$; (2) Transaction Friction: Standard 
+costs are fixed at 0.05% commission and 0.05% slippage per side (10 bps round-trip); sensitivity tests double friction to 
+20 bps per side (40 bps round-trip); (3) Conservative Intrabar Conflict: If both stop-loss and take-profit thresholds are 
+touched during the same session's high-low range, the simulator prioritizes the stop-loss; (4) Opening Gaps: Gaps below 
+stop-loss or above take-profit execute at the opening price with slippage penalty; (5) Zero-Volume Prohibition: No trade 
+fills occur on zero-volume sessions; (6) Scheduled Fold-End Policy: New entries are prohibited on the scheduled last 
+tradable day ($i < {last_tradable_idx}$); open positions liquidate at final session Close. 
+4. Empirical Evaluation Setup & Walk-Forward Protocol 
+To rigorously assess temporal generalization without look-ahead bias, we implement a rolling walk-forward protocol 
+evaluated annually across six test years ($Y in [2020, 2025]$) on three large-cap equities: Reliance Industries 
+(`RELIANCE.NS`), Tata Consultancy Services (`TCS.NS`), and Infosys (`INFY.NS`). Daily historical OHLCV data was acquired 
+from Yahoo Finance via yfinance with dividend and split adjustments applied. For each test year $Y$, data partitions are 
+structured chronologically: 
+Partition Stage 
+Calendar Window 
+Duration 
+Purging / Causal Gate 
+Model Training 
+[Y-8, Y-4] 
+5 Years (~1,230 bars) 
+Purged trailing 3 bars 
+Model Validation 
+[Y-3] 
+1 Year (~246 bars) 
+Early stopping; purged trailing 3 
+bars 
+Rule Development (GA) 
+[Y-2, Y-1] 
+2 Years (~493 bars) 
+NSGA-II search; t=-1 context 
+preserved 
+Out-of-Sample Test 
+[Y] 
+1 Year (~248 bars) 
+First N-3 bars scored; final bar 
+liquidated 
+
+PAGE 4
+Risk-Return Trade-offs of LightGBM & NSGA-II Trading Rules | Retrospective Walk-Forward Study 
+Draft Academic Manuscript — For Review Only — Manipal Institute of Technology (Oct 2026) 
+The model seed is held constant at 42. To evaluate metaheuristic sensitivity, NSGA-II is evaluated across three 
+independent random seeds (42, 43, 44). In total, the campaign comprises 54 walk-forward optimization runs (3 assets × 
+6 years × 3 GA seeds) spanning 1,487 out-of-sample trading days. All runs execute offline against immutable parquet 
+snapshots documented in campaign_audit.json. 
+5. Experimental Results & Performance Analysis 
+5.1 Machine Learning Directional Predictive Edge 
+Table 1 reports the out-of-sample classification performance of LightGBM across all 18 annual folds. The classifier 
+achieves a mean AUC of 0.5324 and an accuracy of 52.68%, closely matching the training partition positive -class base 
+rate of 52.66%. The mean Brier score is 0.2501 (vs baseline 0.2500). These metrics confirm that tabular gradient 
+boosting achieves only a modest directional advantage in liquid Indian equity markets, operating near the informational 
+base rate. 
+Asset 
+Mean AUC 
+Min AUC 
+Max AUC 
+Test Acc 
+Base Acc 
+Brier 
+Scored N 
+RELIANCE.NS 
+0.5319 
+0.4415 
+0.6246 
+52.01% 
+52.23% 
+0.2494 
+244.8 
+TCS.NS 
+0.5304 
+0.4774 
+0.6182 
+50.91% 
+51.28% 
+0.2517 
+244.8 
+INFY.NS 
+0.5350 
+0.4509 
+0.5766 
+55.12% 
+54.49% 
+0.2493 
+244.8 
+Table 1. Out-of-sample directional classification performance across 18 annual test folds (2020–2025). 
+5.2 Stitched 6-Year Compounded Performance 
+Stitched multi-year curves carry capital forward across test folds by compounding annual net wealth ratios starting from 
+₹100,000 on 2020-01-01. Table 2 reports terminal compound performance. Figure 2 displays the stitched equity curves 
+and underwater drawdowns. 
+Asset 
+Strategy Variant 
+Total Ret 
+CAGR 
+Sharpe 
+MaxDD 
+Terminal ₹ 
+RELIANCE.NS 
+Buy & Hold 
++128.74% 
+15.05% 
+0.64 
+44.08% 
+₹228,740 
+ 
+Full Hybrid (Median) 
+-0.35% 
+-0.06% 
+0.04 
+23.01% 
+₹99,652 
+ 
+Full Hybrid (Range) 
+[-6.58%, 
++5.18%] 
+[-1.15%, 
++0.86%] 
+[-0.07, 0.14] 
+[21.88%, 
+26.18%] 
+[₹93k, 
+₹105k] 
+ 
+No-ML Ablation (Median) 
++42.42% 
+6.18% 
+0.45 
+20.03% 
+₹142,415 
+TCS.NS 
+Buy & Hold 
++65.13% 
+8.87% 
+0.48 
+34.57% 
+₹165,134 
+ 
+Full Hybrid (Median) 
++25.60% 
+3.94% 
+0.44 
+28.66% 
+₹125,600 
+ 
+Full Hybrid (Range) 
+[+10.60%, 
++41.86%] 
+[+1.72%, 
++6.10%] 
+[0.21, 0.54] 
+[18.29%, 
+30.12%] 
+[₹111k, 
+₹142k] 
+ 
+No-ML Ablation (Median) 
++47.37% 
+6.79% 
+0.50 
+31.62% 
+₹147,369 
+INFY.NS 
+Buy & Hold 
++152.78% 
+17.02% 
+0.71 
+35.93% 
+₹252,783 
+ 
+Full Hybrid (Median) 
++9.10% 
+1.49% 
+0.18 
+37.16% 
+₹109,103 
+Table 2. Stitched 6-year multi-year compound performance (2020–2025, 1,487 trading bars). 
+
+PAGE 5
+Risk-Return Trade-offs of LightGBM & NSGA-II Trading Rules | Retrospective Walk-Forward Study 
+Draft Academic Manuscript — For Review Only — Manipal Institute of Technology (Oct 2026) 
+ 
+Figure 1. Stitched 6-year compounded equity curves (nominal INR ₹100,000 starting capital) for Buy & Hold vs. Full Hybrid seed median and 
+seed envelope. 
+
+PAGE 6
+Risk-Return Trade-offs of LightGBM & NSGA-II Trading Rules | Retrospective Walk-Forward Study 
+Draft Academic Manuscript — For Review Only — Manipal Institute of Technology (Oct 2026) 
+ 
+Figure 2. Underwater peak-to-trough drawdown profiles (2020–2025). 
+5.3 Annual Paired Strategy Differences & Scorecard 
+Evaluating the 18 annual folds individually reveals the structural asymmetry between annual drawdown dampening and 
+secular compounding: (1) Positive Hybrid Return: Achieved in 10 out of 18 folds (55.6%); (2) Return Outperformance vs 
+Buy & Hold: Hybrid exceeded Buy & Hold in 5 out of 18 folds (27.8%)—specifically during market stress in 2022 (TCS 
++16.55% diff, INFY +11.44% diff), 2023 (RELIANCE +2.00% diff, TCS +3.92% diff), and 2024 (RELIANCE +1.97% diff); (3) 
+Buy & Hold Outperformance: Buy & Hold exceeded Hybrid in 13 out of 18 folds (72.2%), particularly during strong bull 
+markets such as 2020 (INFY B&H +74.69% vs Hyb +27.83%) and 2021 (INFY B&H +52.73% vs Hyb +17.22%); (4) Maximum 
+Drawdown Reduction: Hybrid exhibited lower annual maximum drawdown in 17 out of 18 folds (94.4%). 
+5.4 Ablation and Exposure-Matched Diagnostic 
+To isolate the contribution of the ML classifier, a Constant Probability Ablation ($p=0.60$) evolved rules omitting 
+LightGBM features. The Ablation achieved 6-year stitched returns of +42.42% for RELIANCE.NS (vs Hyb -0.35%), +47.37% 
+for TCS.NS (vs Hyb +25.60%), and +18.69% for INFY.NS (vs Hyb +9.10%). Furthermore, an Exposure -Matched Buy & Hold 
+diagnostic blending passive holding with cash based on the Hybrid's development exposure fraction ($w_{{dev}}$) 
+
+PAGE 7
+Risk-Return Trade-offs of LightGBM & NSGA-II Trading Rules | Retrospective Walk-Forward Study 
+Draft Academic Manuscript — For Review Only — Manipal Institute of Technology (Oct 2026) 
+outperformed the Full Hybrid in 33 out of 54 runs (61.1%). These findings confirm that technical metaheuristic rules 
+provide strong risk containment, but LightGBM probability hurdles restricted market participation without adding net 
+excess return. 
+5.5 Transaction Cost Sensitivity & Slippage Dynamics 
+Evaluating frozen Development chromosomes under doubled transaction friction (20 bps per side, 40 bps round -trip) 
+caused substantial performance drops: RELIANCE.NS Seed 42 total return declined from -6.58% to -25.41% (-18.83 pp); 
+TCS.NS Seed 43 declined from +25.60% to +19.61% (-5.99 pp); and INFY.NS Seed 44 dropped from +27.88% to -7.97% (-
+35.85 pp). Mechanistically, slippage does not act as a linear cost subtraction. Because execution price shifts upward 
+($P_{{entry}} = O(1+{slip})$), the dynamic ATR stop-loss threshold ($P_{{stop}} = P_{{entry}} - {SL} x {ATR}$) is 
+mechanically elevated. On sessions where prices touch the stop band, trades exit prematurely, altering subsequent cash 
+levels and eliminating future trade signals. 
+ 
+Figure 3. Multi-seed performance distributions (Seeds 42, 43, 44) across strategy variants. 
+6. Discussion, Risk Attribution & Methodological Limitations 
+The empirical findings highlight several critical trade-offs in quantitative portfolio design: (1) Asymmetric Risk-Return 
+Profile: NSGA-II successfully discovers defensive chromosome parameters that truncate downside drawdowns during 
+sharp corrections. However, because the classifier's directional probabilities hover narrowly around 0.50, high entry 
+thresholds ($p_{{entry}} >= 0.55$) cause the system to remain in cash during multi-month bull market regimes, resulting 
+in heavy compounding penalties relative to passive index compounding. (2) Capital Exposure as an Overnight Proxy: In 
+our evaluation, capital exposure is defined as session-close invested value divided by equity (${Shares}_t x C_t / E_t$). 
+This proxy reflects overnight capital commitment and omits intraday capital utilization for same-day round trips. (3) 
+Survivorship and Single-Asset Constraints: The study evaluates three surviving large-cap equities individually. Results 
+cannot be generalized to broad cross-sectional universes where portfolio diversification, cross-asset rebalancing, and 
+delisting survivorship bias operate. (4) Retrospective Protocol Adjustments: While data snapshots and random seeds 
+remained strictly frozen, the final experimental protocol incorporated retrospective corrections (versioned in 
+protocol_correction.json v1.1.0) following initial simulator inspection. True out-of-sample validity requires prospective 
+forward execution. 
+7. Conclusion 
+This research evaluated the integration of gradient tree boosting (LightGBM) with multi-objective evolutionary 
+optimization (NSGA-II) for algorithmic trading across three major Indian equities over 2020–2025. Across 18 annual 
+walk-forward folds, the LightGBM classifier demonstrated modest predictive capability (AUC 0.5324), tracking majority-
+
+PAGE 8
+Risk-Return Trade-offs of LightGBM & NSGA-II Trading Rules | Retrospective Walk-Forward Study 
+Draft Academic Manuscript — For Review Only — Manipal Institute of Technology (Oct 2026) 
+class baselines. While NSGA-II evolved robust risk-management rules that lowered annual maximum drawdowns in 
+94.4% of folds, passive Buy & Hold generated substantially higher multi-year compounded wealth across all assets. 
+Ablation analysis confirmed that metaheuristic technical parameter search without ML signals provided equivalent or 
+superior capital growth. These results provide an honest empirical caution against assuming that machine learning 
+directional predictors consistently improve quantitative trading strategies, highlighting the paramount role of 
+opportunity cost in risk-constrained portfolio systems. 
+ References 
+[1] K. Deb, A. Pratap, S. Agarwal, and T. Meyarivan, "A fast and elitist multiobjective genetic algorithm: NSGA-II," IEEE Transactions on 
+Evolutionary Computation, vol. 6, no. 2, pp. 182–197, Apr. 2002. DOI: 10.1109/4235.996017. 
+[2] G. Ke, Q. Meng, T. Finley, T. Wang, W. Chen, W. Ma, Q. Ye, and T.-Y. Liu, "LightGBM: A highly efficient gradient boosting decision tree," in 
+Advances in Neural Information Processing Systems 30 (NIPS 2017), Long Beach, CA, USA, 2017, pp. 3146 –3154. 
+[3] M. López de Prado, Advances in Financial Machine Learning. Hoboken, NJ, USA: John Wiley & Sons, 2018. ISBN: 978 -1119482086. 
+[4] D. H. Bailey and M. López de Prado, "The deflated Sharpe ratio: Correcting for selection bias, backtest overfitting and n on-normality," The 
+Journal of Portfolio Management, vol. 40, no. 5, pp. 94–107, 2014. DOI: 10.3905/jpm.2014.40.5.094. 
+[5] H. White, "A reality check for data snooping," Econometrica, vol. 68, no. 5, pp. 1097 –1126, Sep. 2000. DOI: 10.1111/1468-0262.00152. 
+[6] E. F. Fama, "Efficient capital markets: A review of theory and empirical work," The Journal of Finance, vol. 25, no. 2, p p. 383–417, May 
+1970. DOI: 10.2307/2325486. 
+[7] R. Aroussi et al., "yfinance: Download market data from Yahoo! Finance," Python package documentation, 2024 –2026. [Online]. Available: 
+https://github.com/ranaroussi/yfinance. 

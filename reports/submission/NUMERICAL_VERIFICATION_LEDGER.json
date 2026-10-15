@@ -1,0 +1,378 @@
+[
+  {
+    "claim": "Overall Mean AUC",
+    "document_value": 0.5324,
+    "artifact_value": 0.5323964838612686,
+    "difference": 3.5161387313964454e-06,
+    "tolerance": 0.0001,
+    "status": "PASS"
+  },
+  {
+    "claim": "Overall Mean Accuracy (%)",
+    "document_value": 52.68,
+    "artifact_value": 52.68122706710011,
+    "difference": 0.001227067100110446,
+    "tolerance": 0.05,
+    "status": "PASS"
+  },
+  {
+    "claim": "Overall Mean Baseline Accuracy (%)",
+    "document_value": 52.66,
+    "artifact_value": 52.660750243589106,
+    "difference": 0.0007502435891098003,
+    "tolerance": 0.05,
+    "status": "PASS"
+  },
+  {
+    "claim": "Overall Mean Brier Score",
+    "document_value": 0.2501,
+    "artifact_value": 0.2501097030699439,
+    "difference": 9.703069943911569e-06,
+    "tolerance": 0.0001,
+    "status": "PASS"
+  },
+  {
+    "claim": "Overall Mean Baseline Brier Score",
+    "document_value": 0.25,
+    "artifact_value": 0.25001353199169674,
+    "difference": 1.3531991696735801e-05,
+    "tolerance": 0.0001,
+    "status": "PASS"
+  },
+  {
+    "claim": "RELIANCE.NS Mean AUC",
+    "document_value": 0.5469,
+    "artifact_value": 0.5468755676862941,
+    "difference": 2.4432313705968767e-05,
+    "tolerance": 0.0001,
+    "status": "PASS"
+  },
+  {
+    "claim": "RELIANCE.NS Min AUC",
+    "document_value": 0.4415,
+    "artifact_value": 0.4414787798408488,
+    "difference": 2.1220159151180695e-05,
+    "tolerance": 0.0001,
+    "status": "PASS"
+  },
+  {
+    "claim": "RELIANCE.NS Max AUC",
+    "document_value": 0.6246,
+    "artifact_value": 0.6246199557766722,
+    "difference": 1.9955776672131442e-05,
+    "tolerance": 0.0001,
+    "status": "PASS"
+  },
+  {
+    "claim": "TCS.NS Mean AUC",
+    "document_value": 0.5304,
+    "artifact_value": 0.5303926473074198,
+    "difference": 7.3526925802314125e-06,
+    "tolerance": 0.0001,
+    "status": "PASS"
+  },
+  {
+    "claim": "TCS.NS Min AUC",
+    "document_value": 0.4774,
+    "artifact_value": 0.4773587456069206,
+    "difference": 4.125439307939294e-05,
+    "tolerance": 0.0001,
+    "status": "PASS"
+  },
+  {
+    "claim": "TCS.NS Max AUC",
+    "document_value": 0.6182,
+    "artifact_value": 0.6181946025580928,
+    "difference": 5.397441907195599e-06,
+    "tolerance": 0.0001,
+    "status": "PASS"
+  },
+  {
+    "claim": "INFY.NS Mean AUC",
+    "document_value": 0.5199,
+    "artifact_value": 0.5199212365900918,
+    "difference": 2.12365900917888e-05,
+    "tolerance": 0.0001,
+    "status": "PASS"
+  },
+  {
+    "claim": "INFY.NS Min AUC",
+    "document_value": 0.4509,
+    "artifact_value": 0.4509105846912227,
+    "difference": 1.0584691222670362e-05,
+    "tolerance": 0.0001,
+    "status": "PASS"
+  },
+  {
+    "claim": "INFY.NS Max AUC",
+    "document_value": 0.5766,
+    "artifact_value": 0.5765746934225194,
+    "difference": 2.5306577480566084e-05,
+    "tolerance": 0.0001,
+    "status": "PASS"
+  },
+  {
+    "claim": "RELIANCE Buy & Hold Total Return (%)",
+    "document_value": 128.74,
+    "artifact_value": 128.73967932876425,
+    "difference": 0.00032067123575529877,
+    "tolerance": 0.05,
+    "status": "PASS"
+  },
+  {
+    "claim": "RELIANCE Buy & Hold MaxDD (%)",
+    "document_value": 44.08,
+    "artifact_value": 44.08284239250412,
+    "difference": 0.002842392504120994,
+    "tolerance": 0.05,
+    "status": "PASS"
+  },
+  {
+    "claim": "RELIANCE Buy & Hold Terminal Equity",
+    "document_value": 228740.16,
+    "artifact_value": 228739.67932876424,
+    "difference": 0.4806712357676588,
+    "tolerance": 1.0,
+    "status": "PASS"
+  },
+  {
+    "claim": "RELIANCE Hybrid Seed Median Return (%)",
+    "document_value": -0.35,
+    "artifact_value": -0.34801721689629,
+    "difference": 0.001982783103709973,
+    "tolerance": 0.05,
+    "status": "PASS"
+  },
+  {
+    "claim": "RELIANCE Hybrid Min Return (%)",
+    "document_value": -6.58,
+    "artifact_value": -6.57654250142949,
+    "difference": 0.0034574985705102534,
+    "tolerance": 0.05,
+    "status": "PASS"
+  },
+  {
+    "claim": "RELIANCE Hybrid Max Return (%)",
+    "document_value": 5.18,
+    "artifact_value": 5.184414514444461,
+    "difference": 0.0044145144444609485,
+    "tolerance": 0.05,
+    "status": "PASS"
+  },
+  {
+    "claim": "RELIANCE Hybrid Seed Median MaxDD (%)",
+    "document_value": 23.01,
+    "artifact_value": 23.01406915305964,
+    "difference": 0.0040691530596390635,
+    "tolerance": 0.05,
+    "status": "PASS"
+  },
+  {
+    "claim": "RELIANCE Hybrid Seed Median Terminal Equity",
+    "document_value": 99652.41,
+    "artifact_value": 99651.98278310373,
+    "difference": 0.42721689627796877,
+    "tolerance": 1.0,
+    "status": "PASS"
+  },
+  {
+    "claim": "TCS Buy & Hold Total Return (%)",
+    "document_value": 65.13,
+    "artifact_value": 65.13352980755691,
+    "difference": 0.003529807556915898,
+    "tolerance": 0.05,
+    "status": "PASS"
+  },
+  {
+    "claim": "TCS Buy & Hold MaxDD (%)",
+    "document_value": 34.57,
+    "artifact_value": 34.57353915960921,
+    "difference": 0.00353915960921114,
+    "tolerance": 0.05,
+    "status": "PASS"
+  },
+  {
+    "claim": "TCS Buy & Hold Terminal Equity",
+    "document_value": 165134.19,
+    "artifact_value": 165133.52980755692,
+    "difference": 0.6601924430869985,
+    "tolerance": 1.0,
+    "status": "PASS"
+  },
+  {
+    "claim": "TCS Hybrid Seed Median Return (%)",
+    "document_value": 25.6,
+    "artifact_value": 25.60006380742787,
+    "difference": 6.380742786760152e-05,
+    "tolerance": 0.05,
+    "status": "PASS"
+  },
+  {
+    "claim": "TCS Hybrid Min Return (%)",
+    "document_value": 10.6,
+    "artifact_value": 10.597163445078369,
+    "difference": 0.0028365549216307073,
+    "tolerance": 0.05,
+    "status": "PASS"
+  },
+  {
+    "claim": "TCS Hybrid Max Return (%)",
+    "document_value": 41.86,
+    "artifact_value": 41.86037552357451,
+    "difference": 0.0003755235745117602,
+    "tolerance": 0.05,
+    "status": "PASS"
+  },
+  {
+    "claim": "TCS Hybrid Seed Median MaxDD (%)",
+    "document_value": 28.66,
+    "artifact_value": 28.663906222639202,
+    "difference": 0.0039062226392019284,
+    "tolerance": 0.05,
+    "status": "PASS"
+  },
+  {
+    "claim": "TCS Hybrid Seed Median Terminal Equity",
+    "document_value": 125600.0,
+    "artifact_value": 125600.06380742788,
+    "difference": 0.0638074278831482,
+    "tolerance": 1.0,
+    "status": "PASS"
+  },
+  {
+    "claim": "INFY Buy & Hold Total Return (%)",
+    "document_value": 152.78,
+    "artifact_value": 152.78290071028385,
+    "difference": 0.002900710283853414,
+    "tolerance": 0.05,
+    "status": "PASS"
+  },
+  {
+    "claim": "INFY Buy & Hold MaxDD (%)",
+    "document_value": 35.93,
+    "artifact_value": 35.932328016635914,
+    "difference": 0.0023280166359143095,
+    "tolerance": 0.05,
+    "status": "PASS"
+  },
+  {
+    "claim": "INFY Buy & Hold Terminal Equity",
+    "document_value": 252783.33,
+    "artifact_value": 252782.90071028384,
+    "difference": 0.4292897161503788,
+    "tolerance": 1.0,
+    "status": "PASS"
+  },
+  {
+    "claim": "INFY Hybrid Seed Median Return (%)",
+    "document_value": 9.1,
+    "artifact_value": 9.10306690233377,
+    "difference": 0.0030669023337708268,
+    "tolerance": 0.05,
+    "status": "PASS"
+  },
+  {
+    "claim": "INFY Hybrid Min Return (%)",
+    "document_value": 0.47,
+    "artifact_value": 0.46752227850723005,
+    "difference": 0.0024777214927699243,
+    "tolerance": 0.05,
+    "status": "PASS"
+  },
+  {
+    "claim": "INFY Hybrid Max Return (%)",
+    "document_value": 27.88,
+    "artifact_value": 27.87945735897186,
+    "difference": 0.0005426410281401672,
+    "tolerance": 0.05,
+    "status": "PASS"
+  },
+  {
+    "claim": "INFY Hybrid Seed Median MaxDD (%)",
+    "document_value": 37.16,
+    "artifact_value": 37.15824633997054,
+    "difference": 0.0017536600294576488,
+    "tolerance": 0.05,
+    "status": "PASS"
+  },
+  {
+    "claim": "INFY Hybrid Seed Median Terminal Equity",
+    "document_value": 109103.11,
+    "artifact_value": 109103.06690233375,
+    "difference": 0.04309766624646727,
+    "tolerance": 1.0,
+    "status": "PASS"
+  },
+  {
+    "claim": "Positive Hybrid Return Folds",
+    "document_value": 10,
+    "artifact_value": 10,
+    "difference": 0,
+    "tolerance": 0,
+    "status": "PASS"
+  },
+  {
+    "claim": "Hybrid Beats Buy & Hold Return Folds",
+    "document_value": 5,
+    "artifact_value": 5,
+    "difference": 0,
+    "tolerance": 0,
+    "status": "PASS"
+  },
+  {
+    "claim": "Buy & Hold Beats Hybrid Return Folds",
+    "document_value": 13,
+    "artifact_value": 13,
+    "difference": 0,
+    "tolerance": 0,
+    "status": "PASS"
+  },
+  {
+    "claim": "Hybrid Lower Annual MaxDD Folds",
+    "document_value": 17,
+    "artifact_value": 17,
+    "difference": 0,
+    "tolerance": 0,
+    "status": "PASS"
+  },
+  {
+    "claim": "Sole Median Annual MaxDD Non-Win Fold",
+    "document_value": "RELIANCE.NS 2022",
+    "artifact_value": "RELIANCE.NS 2022",
+    "difference": 0,
+    "tolerance": 0,
+    "status": "PASS"
+  },
+  {
+    "claim": "Hybrid > Exp-Matched B&H Return Runs",
+    "document_value": 22,
+    "artifact_value": 22,
+    "difference": 0,
+    "tolerance": 0,
+    "status": "PASS"
+  },
+  {
+    "claim": "Exp-Matched B&H > Hybrid Return Runs",
+    "document_value": 29,
+    "artifact_value": 29,
+    "difference": 0,
+    "tolerance": 0,
+    "status": "PASS"
+  },
+  {
+    "claim": "Exp-Matched B&H Return Ties",
+    "document_value": 3,
+    "artifact_value": 3,
+    "difference": 0,
+    "tolerance": 0,
+    "status": "PASS"
+  },
+  {
+    "claim": "Exp-Matched B&H Lower MaxDD Runs",
+    "document_value": 43,
+    "artifact_value": 43,
+    "difference": 0,
+    "tolerance": 0,
+    "status": "PASS"
+  }
+]

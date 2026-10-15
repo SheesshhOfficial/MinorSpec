@@ -1,0 +1,94 @@
+{
+  "RELIANCE.NS": {
+    "status": "AVAILABLE",
+    "provider": "yfinance",
+    "adjustment": "auto_adjust=True (stock splits & dividends adjusted)",
+    "start_date": "2000-01-03",
+    "end_date": "2026-10-12",
+    "total_rows": 6677,
+    "nan_counts": {
+      "Open": 0,
+      "High": 0,
+      "Low": 0,
+      "Close": 0,
+      "Volume": 0
+    },
+    "zero_volume_bars": 59,
+    "zero_volume_pct": 0.88,
+    "data_frequency": "1d (daily bars)",
+    "known_limitations": [
+      "Zero-volume daily bars appear in the provider feed (observed in equity series and prominently in ^NSEI index series where volume is intermittently unpopulated by the provider).",
+      "Survivorship bias: Individual current tickers reflect surviving corporate entities and do not reconstruct historical point-in-time index constituent changes.",
+      "TCS.NS historical series provided by yfinance commences on 2002-08-12; provider data prior to that date is not available."
+    ]
+  },
+  "TCS.NS": {
+    "status": "AVAILABLE",
+    "provider": "yfinance",
+    "adjustment": "auto_adjust=True (stock splits & dividends adjusted)",
+    "start_date": "2002-08-12",
+    "end_date": "2026-10-12",
+    "total_rows": 5998,
+    "nan_counts": {
+      "Open": 0,
+      "High": 0,
+      "Low": 0,
+      "Close": 0,
+      "Volume": 0
+    },
+    "zero_volume_bars": 312,
+    "zero_volume_pct": 5.2,
+    "data_frequency": "1d (daily bars)",
+    "known_limitations": [
+      "Zero-volume daily bars appear in the provider feed (observed in equity series and prominently in ^NSEI index series where volume is intermittently unpopulated by the provider).",
+      "Survivorship bias: Individual current tickers reflect surviving corporate entities and do not reconstruct historical point-in-time index constituent changes.",
+      "TCS.NS historical series provided by yfinance commences on 2002-08-12; provider data prior to that date is not available."
+    ]
+  },
+  "INFY.NS": {
+    "status": "AVAILABLE",
+    "provider": "yfinance",
+    "adjustment": "auto_adjust=True (stock splits & dividends adjusted)",
+    "start_date": "2000-01-03",
+    "end_date": "2026-10-12",
+    "total_rows": 6680,
+    "nan_counts": {
+      "Open": 0,
+      "High": 0,
+      "Low": 0,
+      "Close": 0,
+      "Volume": 0
+    },
+    "zero_volume_bars": 62,
+    "zero_volume_pct": 0.93,
+    "data_frequency": "1d (daily bars)",
+    "known_limitations": [
+      "Zero-volume daily bars appear in the provider feed (observed in equity series and prominently in ^NSEI index series where volume is intermittently unpopulated by the provider).",
+      "Survivorship bias: Individual current tickers reflect surviving corporate entities and do not reconstruct historical point-in-time index constituent changes.",
+      "TCS.NS historical series provided by yfinance commences on 2002-08-12; provider data prior to that date is not available."
+    ]
+  },
+  "^NSEI": {
+    "status": "AVAILABLE",
+    "provider": "yfinance",
+    "adjustment": "auto_adjust=True (stock splits & dividends adjusted)",
+    "start_date": "2007-09-17",
+    "end_date": "2026-10-12",
+    "total_rows": 4678,
+    "nan_counts": {
+      "Open": 0,
+      "High": 0,
+      "Low": 0,
+      "Close": 0,
+      "Volume": 0
+    },
+    "zero_volume_bars": 1334,
+    "zero_volume_pct": 28.52,
+    "data_frequency": "1d (daily bars)",
+    "known_limitations": [
+      "Zero-volume daily bars appear in the provider feed (observed in equity series and prominently in ^NSEI index series where volume is intermittently unpopulated by the provider).",
+      "Survivorship bias: Individual current tickers reflect surviving corporate entities and do not reconstruct historical point-in-time index constituent changes.",
+      "TCS.NS historical series provided by yfinance commences on 2002-08-12; provider data prior to that date is not available."
+    ]
+  }
+}

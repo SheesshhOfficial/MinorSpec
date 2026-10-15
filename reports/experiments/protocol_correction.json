@@ -1,0 +1,64 @@
+{
+  "title": "Methodological Accounting and Protocol Correction Specification",
+  "document_version": "1.1.0",
+  "task": "P002-R3",
+  "status": "APPROVED_CORRECTION",
+  "created_at": "2026-10-12",
+  "original_protocol_reference": {
+    "path": "reports/experiments/protocol.json",
+    "sha256": "012e66ad55e4eed0c9017ffa84ec160e94697a7266a4064cf0ddfbe4c1c197bb",
+    "status": "FROZEN_BEFORE_CAMPAIGN"
+  },
+  "rationale": "P002 review identified accounting distortions in equity curve stitching, exposure diagnostics, zero-volume handling, trade count semantics, and classification label boundaries. This document specifies the exact methodological and arithmetic corrections applied to all campaign runners, aggregators, and diagnostics while leaving original inputs and seeds unchanged.",
+  "corrections": [
+    {
+      "id": "CORR-01",
+      "scope": "Equity Curve Stitching",
+      "problem": "Stitching previously scaled each fold by eq[t] / eq[0], where eq[0] was the first-day close equity. This erased day-0 market returns and entry transaction friction, producing compounded discrepancies against fold terminal/initial wealth ratios.",
+      "correction": "Every fold k scales by fold_scale[t] = eq_k[t] / initial_capital (where initial_capital = 100,000). The stitched curve strictly compounds: stitched_terminal = initial_capital * prod_k (terminal_k / initial_capital). Day-0 entry friction and price changes are fully preserved in stitched equity and returns.",
+      "regression_check": "Two folds with price path [90, 99] and starting capital 100 produce terminal equity strictly equal to 98.01 (fold 1 terminal = 99.0; fold 2 scales 99.0 * [90, 99]/100 -> [89.1, 98.01])."
+    },
+    {
+      "id": "CORR-02",
+      "scope": "Exposure Matching Diagnostic",
+      "problem": "Exposure matching previously omitted day-0 return, scaled from day 1, and equated binary time-in-market (positions > 0) with invested capital weight.",
+      "correction": "The diagnostic calculates daily invested capital weight w_dev = mean(invested_capital_t / equity_t) strictly on Development partition. It blends all daily returns including day 0: r_blend[t] = w_dev * r_bh[t], where r_bh[0] = (equity_bh[0] - initial_capital) / initial_capital. It is labeled as a hypothetical diagnostic with cash earning 0%, not an unmanaged static stock allocation.",
+      "regression_check": "Two folds with [90, 99] and w_dev = 0.25 produce terminal equity strictly equal to 99.875 (daily returns r_0 = -0.025, r_1 = +0.025 -> day 0 equity 97.5, day 1 equity 99.9375; fold 2 compounds to 99.875)."
+    },
+    {
+      "id": "CORR-03",
+      "scope": "Classification Masking and Target Horizon Purging",
+      "problem": "Forward returns (t+3) for bars near partition boundaries extend into subsequent partitions or beyond the dataset cutoff (2025-12-31). Earlier code evaluated dummy zero labels or unpurged boundaries.",
+      "correction": "All bars where target_direction extends beyond the test fold boundary or has NaN forward return are masked from classification scoring (ROC-AUC, accuracy, Brier score). Scored sample count, date ranges, and purge counts are recorded in the manifest. All calendar bars remain available for trading.",
+      "regression_check": "For test folds 2020-2025, the final 3 bars of each calendar year are masked from classification scoring, yielding exactly (N - 3) scored test bars per fold."
+    },
+    {
+      "id": "CORR-04",
+      "scope": "First-Open Causal Prefix Context",
+      "problem": "Bar 0 Open trading required signal evaluation from bar t-1 Close, but fold data previously lacked t=-1 Close indicators, preventing causal bar-0 entry execution.",
+      "correction": "The final completed bar of the preceding Development partition supplies prefix context (p_up, atr_14, regime_high_vol) for bar 0 Open signal evaluation without carrying forward any held position or leaking test labels.",
+      "regression_check": "Bar 0 Open entry executes causally if and only if Dev final bar p_up >= p_entry. Test price perturbations do not alter Dev selected genes."
+    },
+    {
+      "id": "CORR-05",
+      "scope": "Baseline Execution, Trade Counts, and Zero-Volume Boundaries",
+      "problem": "Buy & Hold and SMA baselines did not respect zero-volume bars or liquidations, and trade counts mixed opening and closing orders.",
+      "correction": "Buy & Hold checks for tradable volume at entry/exit; terminal liquidation executes on the final tradable bar with commission and slippage. SMA trade counts represent completed round trips only. Detailed trade logs with entry/exit dates, prices, and P&L are saved for all strategies.",
+      "regression_check": "Total trades equal count of closed round trips. Terminal equity equals cash plus proceeds from final liquidation minus costs."
+    },
+    {
+      "id": "CORR-06",
+      "scope": "Provenance, Reproducibility, and Reporting",
+      "problem": "Reporting lacked auditable artifact hashes, environment versions, and paired same-seed ablation comparisons.",
+      "correction": "Save full provenance manifest (SHA-256 hashes of inputs, code, and protocol; platform versions; seeds; trade logs). Rerun tests verify exact numerical reproduction without network calls. Results report median and range across seeds without selective cherry-picking.",
+      "regression_check": "Offline test passes and validates identical outputs against saved run artifacts."
+    },
+    {
+      "id": "CORR-07",
+      "scope": "Scheduled Horizon End Liquidation and Final-Day Entry Prohibition",
+      "problem": "Simulators previously allowed new trade entries on the final session of a scheduled simulation horizon (whether Development or Test), only to immediately liquidate them at Close or leave them unliquidated if trailing volume was zero. Entering a position on the last session that is scheduled to liquidate at the same session's Close incurs round-trip transaction costs without meaningful holding horizon, and introduces boundary asymmetry when zero-volume sessions follow.",
+      "correction": "In all backtest engines (fast vectorized Numba, detailed simulator, and SMA baseline), no new positions may be entered on the scheduled last tradable session (i < last_tradable_idx). Any existing open position is deterministically liquidated at the Close of the last tradable session with positive volume. This rule applies uniformly across Development optimization simulations and Test out-of-sample evaluations, ensuring identical execution mechanics throughout the evolutionary search.",
+      "regression_check": "On any dataset, no entries occur on bar last_tradable_idx; any position entered prior to that session liquidates at last_tradable_idx Close; terminal holdings are strictly 0.0 with 0 shares carryover."
+    }
+  ]
+}

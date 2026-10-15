@@ -1,0 +1,1809 @@
+{
+  "audit_schema_version": "1.1.0",
+  "task_id": "P002-R3",
+  "execution_metadata": {
+    "status": "REGENERATED_FROM_FROZEN_SOURCE",
+    "execution_date": "2026-10-12",
+    "elapsed_seconds": 13.4,
+    "command": "python -m src.rolling_runner"
+  },
+  "environment": {
+    "python_version": "3.13.14 (tags/v3.13.14:fd17997, Jun 10 2026, 13:03:48) [MSC v.1944 64 bit (AMD64)]",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "packages": {
+      "lightgbm": "4.7.0",
+      "numba": "0.66.0",
+      "numpy": "2.3.2",
+      "pandas": "3.0.2",
+      "scikit_learn": "1.9.0"
+    }
+  },
+  "commands": {
+    "campaign_execution": "python -m src.rolling_runner",
+    "metrics_and_plots": "python -m src.experiment_plots",
+    "reproducibility_audit": "python scripts/audit_campaign_reproducibility.py",
+    "test_suite": "python -m pytest tests/ -v",
+    "app_smoke_test": "python -m reports.baseline.smoke_apptest"
+  },
+  "parameters": {
+    "universe": [
+      "RELIANCE.NS",
+      "TCS.NS",
+      "INFY.NS"
+    ],
+    "test_years": [
+      2020,
+      2021,
+      2022,
+      2023,
+      2024,
+      2025
+    ],
+    "model_seed": 42,
+    "ga_seeds": [
+      42,
+      43,
+      44
+    ],
+    "initial_capital": 100000.0,
+    "transaction_costs": {
+      "standard": {
+        "commission_pct": 0.0005,
+        "slippage_pct": 0.0005
+      },
+      "doubled_sensitivity": {
+        "commission_pct": 0.001,
+        "slippage_pct": 0.001
+      }
+    },
+    "prediction_horizon_bars": 3,
+    "final_tradable_day_rule": "No new entries allowed on scheduled last tradable session (i < last_tradable_idx); open positions liquidate at last tradable session Close."
+  },
+  "provenance_hashes": {
+    "protocol_json_sha256": "012e66ad55e4eed0c9017ffa84ec160e94697a7266a4064cf0ddfbe4c1c197bb",
+    "protocol_correction_json_sha256": "390dafc4b46ac2ceccb3fad1cf0eea6411a5cbe6ff4c1ff8b2e516b5d650da79",
+    "campaign_raw_results_sha256": "255d6c18c7d56da385e9ab8aba53d83379a6156932b4d36e91c18bf2c5566c98",
+    "input_snapshots": {
+      "RELIANCE.NS": {
+        "snapshot_file": "reports\\experiments\\inputs\\RELIANCE.NS.parquet",
+        "sha256": "4825f3ac2b0217ddcfa30220b6feabe9daeed6ae4888d7aa4fcad332e4d09310",
+        "cutoff_date": "2025-12-31",
+        "start_date": "2000-01-03",
+        "end_date": "2025-12-31",
+        "row_count": 6485,
+        "zero_volume_bars_count": 58,
+        "zero_volume_dates": [
+          "2000-01-26",
+          "2000-03-17",
+          "2000-03-20",
+          "2000-04-14",
+          "2000-04-21",
+          "2000-05-01",
+          "2000-08-15",
+          "2000-09-01",
+          "2000-10-02",
+          "2000-12-25",
+          "2001-01-26",
+          "2001-03-06",
+          "2001-04-05",
+          "2001-04-13",
+          "2001-05-01",
+          "2001-08-15",
+          "2001-08-22",
+          "2001-10-02",
+          "2001-10-26",
+          "2001-11-16",
+          "2001-11-30",
+          "2001-12-17",
+          "2001-12-25",
+          "2002-03-25",
+          "2002-03-29",
+          "2002-05-01",
+          "2002-08-15",
+          "2002-09-10",
+          "2002-10-02",
+          "2002-10-15",
+          "2002-11-06",
+          "2002-11-19",
+          "2002-12-25",
+          "2003-02-13",
+          "2003-03-14",
+          "2003-03-18",
+          "2003-04-18",
+          "2003-05-01",
+          "2003-08-15",
+          "2003-10-02",
+          "2003-11-26",
+          "2003-12-25",
+          "2004-01-26",
+          "2004-02-02",
+          "2004-03-02",
+          "2004-04-09",
+          "2004-04-14",
+          "2004-10-22",
+          "2004-11-15",
+          "2004-11-26",
+          "2005-07-28",
+          "2005-11-04",
+          "2008-11-27",
+          "2009-04-30",
+          "2009-10-13",
+          "2014-04-24",
+          "2014-10-15",
+          "2025-03-18"
+        ]
+      },
+      "TCS.NS": {
+        "snapshot_file": "reports\\experiments\\inputs\\TCS.NS.parquet",
+        "sha256": "224aa2574e394306f3540612607dd6cf0a53304aaf7bbf53c36d2503b54452e8",
+        "cutoff_date": "2025-12-31",
+        "start_date": "2002-08-12",
+        "end_date": "2025-12-31",
+        "row_count": 5806,
+        "zero_volume_bars_count": 311,
+        "zero_volume_dates": [
+          "2002-08-15",
+          "2002-09-10",
+          "2002-10-02",
+          "2002-10-15",
+          "2002-11-06",
+          "2002-11-19",
+          "2002-11-29",
+          "2002-12-25",
+          "2003-02-13",
+          "2003-03-14",
+          "2003-03-18",
+          "2003-03-21",
+          "2003-04-02",
+          "2003-04-03",
+          "2003-04-04",
+          "2003-04-07",
+          "2003-04-08",
+          "2003-04-09",
+          "2003-04-10",
+          "2003-04-11",
+          "2003-04-14",
+          "2003-04-15",
+          "2003-04-16",
+          "2003-04-17",
+          "2003-04-18",
+          "2003-04-21",
+          "2003-04-22",
+          "2003-04-23",
+          "2003-04-24",
+          "2003-04-25",
+          "2003-04-28",
+          "2003-04-29",
+          "2003-04-30",
+          "2003-05-01",
+          "2003-05-02",
+          "2003-05-05",
+          "2003-05-06",
+          "2003-05-07",
+          "2003-05-08",
+          "2003-05-09",
+          "2003-05-12",
+          "2003-05-13",
+          "2003-05-14",
+          "2003-05-15",
+          "2003-05-16",
+          "2003-05-19",
+          "2003-05-20",
+          "2003-05-21",
+          "2003-05-22",
+          "2003-05-23",
+          "2003-05-26",
+          "2003-05-27",
+          "2003-05-28",
+          "2003-05-29",
+          "2003-05-30",
+          "2003-06-02",
+          "2003-06-03",
+          "2003-06-04",
+          "2003-06-05",
+          "2003-06-06",
+          "2003-06-09",
+          "2003-06-10",
+          "2003-06-11",
+          "2003-06-12",
+          "2003-06-13",
+          "2003-06-16",
+          "2003-06-17",
+          "2003-06-18",
+          "2003-06-19",
+          "2003-06-20",
+          "2003-06-23",
+          "2003-06-24",
+          "2003-06-25",
+          "2003-06-26",
+          "2003-06-27",
+          "2003-06-30",
+          "2003-07-01",
+          "2003-07-02",
+          "2003-07-03",
+          "2003-07-04",
+          "2003-07-07",
+          "2003-07-08",
+          "2003-07-09",
+          "2003-07-10",
+          "2003-07-11",
+          "2003-07-14",
+          "2003-07-15",
+          "2003-07-16",
+          "2003-07-17",
+          "2003-07-18",
+          "2003-07-21",
+          "2003-07-22",
+          "2003-07-23",
+          "2003-07-24",
+          "2003-07-25",
+          "2003-07-28",
+          "2003-07-29",
+          "2003-07-30",
+          "2003-07-31",
+          "2003-08-01",
+          "2003-08-04",
+          "2003-08-05",
+          "2003-08-06",
+          "2003-08-07",
+          "2003-08-08",
+          "2003-08-11",
+          "2003-08-12",
+          "2003-08-13",
+          "2003-08-14",
+          "2003-08-15",
+          "2003-08-18",
+          "2003-08-19",
+          "2003-08-20",
+          "2003-08-21",
+          "2003-08-22",
+          "2003-08-25",
+          "2003-08-26",
+          "2003-08-27",
+          "2003-08-28",
+          "2003-08-29",
+          "2003-09-01",
+          "2003-09-02",
+          "2003-09-03",
+          "2003-09-04",
+          "2003-09-05",
+          "2003-09-08",
+          "2003-09-09",
+          "2003-09-10",
+          "2003-09-11",
+          "2003-09-12",
+          "2003-09-15",
+          "2003-09-16",
+          "2003-09-17",
+          "2003-09-18",
+          "2003-09-19",
+          "2003-09-22",
+          "2003-09-23",
+          "2003-09-24",
+          "2003-09-25",
+          "2003-09-26",
+          "2003-09-29",
+          "2003-09-30",
+          "2003-10-01",
+          "2003-10-02",
+          "2003-10-03",
+          "2003-10-06",
+          "2003-10-07",
+          "2003-10-08",
+          "2003-10-09",
+          "2003-10-10",
+          "2003-10-13",
+          "2003-10-14",
+          "2003-10-15",
+          "2003-10-16",
+          "2003-10-17",
+          "2003-10-20",
+          "2003-10-21",
+          "2003-10-22",
+          "2003-10-23",
+          "2003-10-24",
+          "2003-10-27",
+          "2003-10-28",
+          "2003-10-29",
+          "2003-10-30",
+          "2003-10-31",
+          "2003-11-03",
+          "2003-11-04",
+          "2003-11-05",
+          "2003-11-06",
+          "2003-11-07",
+          "2003-11-10",
+          "2003-11-11",
+          "2003-11-12",
+          "2003-11-13",
+          "2003-11-14",
+          "2003-11-17",
+          "2003-11-18",
+          "2003-11-19",
+          "2003-11-20",
+          "2003-11-21",
+          "2003-11-24",
+          "2003-11-25",
+          "2003-11-26",
+          "2003-11-27",
+          "2003-11-28",
+          "2003-12-01",
+          "2003-12-02",
+          "2003-12-03",
+          "2003-12-04",
+          "2003-12-05",
+          "2003-12-08",
+          "2003-12-09",
+          "2003-12-10",
+          "2003-12-11",
+          "2003-12-12",
+          "2003-12-15",
+          "2003-12-16",
+          "2003-12-17",
+          "2003-12-18",
+          "2003-12-19",
+          "2003-12-22",
+          "2003-12-23",
+          "2003-12-24",
+          "2003-12-25",
+          "2003-12-26",
+          "2003-12-29",
+          "2003-12-30",
+          "2003-12-31",
+          "2004-01-01",
+          "2004-01-02",
+          "2004-01-05",
+          "2004-01-06",
+          "2004-01-07",
+          "2004-01-08",
+          "2004-01-09",
+          "2004-01-12",
+          "2004-01-13",
+          "2004-01-14",
+          "2004-01-15",
+          "2004-01-16",
+          "2004-01-19",
+          "2004-01-20",
+          "2004-01-21",
+          "2004-01-22",
+          "2004-01-23",
+          "2004-01-26",
+          "2004-01-27",
+          "2004-01-28",
+          "2004-01-29",
+          "2004-01-30",
+          "2004-02-02",
+          "2004-02-03",
+          "2004-02-04",
+          "2004-02-05",
+          "2004-02-06",
+          "2004-02-09",
+          "2004-02-10",
+          "2004-02-11",
+          "2004-02-12",
+          "2004-02-13",
+          "2004-02-16",
+          "2004-02-17",
+          "2004-02-18",
+          "2004-02-19",
+          "2004-02-20",
+          "2004-02-23",
+          "2004-02-24",
+          "2004-02-25",
+          "2004-02-26",
+          "2004-02-27",
+          "2004-03-01",
+          "2004-03-02",
+          "2004-03-03",
+          "2004-03-04",
+          "2004-03-05",
+          "2004-03-08",
+          "2004-03-09",
+          "2004-03-10",
+          "2004-03-11",
+          "2004-03-12",
+          "2004-03-15",
+          "2004-03-16",
+          "2004-03-17",
+          "2004-03-18",
+          "2004-03-19",
+          "2004-03-22",
+          "2004-03-23",
+          "2004-03-24",
+          "2004-03-25",
+          "2004-03-26",
+          "2004-03-29",
+          "2004-03-30",
+          "2004-03-31",
+          "2004-04-01",
+          "2004-04-02",
+          "2004-04-05",
+          "2004-04-06",
+          "2004-04-07",
+          "2004-04-08",
+          "2004-04-09",
+          "2004-04-12",
+          "2004-04-13",
+          "2004-04-14",
+          "2004-04-15",
+          "2004-04-16",
+          "2004-04-19",
+          "2004-04-20",
+          "2004-04-21",
+          "2004-04-22",
+          "2004-04-23",
+          "2004-04-26",
+          "2004-04-27",
+          "2004-04-28",
+          "2004-04-29",
+          "2004-04-30",
+          "2004-05-03",
+          "2004-05-04",
+          "2004-05-05",
+          "2004-07-27",
+          "2004-08-12",
+          "2004-10-22",
+          "2004-11-15",
+          "2004-11-26",
+          "2005-07-28",
+          "2005-11-04",
+          "2008-11-27",
+          "2009-04-30",
+          "2009-10-13",
+          "2014-04-24",
+          "2014-10-15",
+          "2025-03-18"
+        ]
+      },
+      "INFY.NS": {
+        "snapshot_file": "reports\\experiments\\inputs\\INFY.NS.parquet",
+        "sha256": "3404cf5c3affde3c05fc9475a70b51be736323fdf567a27b05c4bf972e298a00",
+        "cutoff_date": "2025-12-31",
+        "start_date": "2000-01-03",
+        "end_date": "2025-12-31",
+        "row_count": 6488,
+        "zero_volume_bars_count": 61,
+        "zero_volume_dates": [
+          "2000-01-26",
+          "2000-03-17",
+          "2000-03-20",
+          "2000-04-14",
+          "2000-04-21",
+          "2000-05-01",
+          "2000-08-15",
+          "2000-09-01",
+          "2000-10-02",
+          "2000-12-25",
+          "2001-01-26",
+          "2001-03-06",
+          "2001-04-05",
+          "2001-04-13",
+          "2001-05-01",
+          "2001-08-15",
+          "2001-08-22",
+          "2001-10-02",
+          "2001-10-26",
+          "2001-11-16",
+          "2001-11-30",
+          "2001-12-17",
+          "2001-12-25",
+          "2002-03-25",
+          "2002-03-29",
+          "2002-05-01",
+          "2002-08-15",
+          "2002-09-10",
+          "2002-10-02",
+          "2002-10-15",
+          "2002-11-06",
+          "2002-11-19",
+          "2002-12-25",
+          "2003-02-13",
+          "2003-03-14",
+          "2003-03-18",
+          "2003-04-14",
+          "2003-04-18",
+          "2003-05-01",
+          "2003-08-15",
+          "2003-10-02",
+          "2003-11-26",
+          "2003-12-25",
+          "2004-01-26",
+          "2004-02-02",
+          "2004-03-02",
+          "2004-04-09",
+          "2004-04-14",
+          "2004-04-26",
+          "2004-10-13",
+          "2004-10-22",
+          "2004-11-15",
+          "2004-11-26",
+          "2005-07-28",
+          "2005-11-04",
+          "2008-11-27",
+          "2009-04-30",
+          "2009-10-13",
+          "2014-04-24",
+          "2014-10-15",
+          "2025-03-18"
+        ]
+      }
+    },
+    "code_files_sha256": {
+      "src/rolling_runner.py": "c3cb97f8edf045818ff82401182a8d715982cc839b77341e2975b151bc2c1658",
+      "src/backtest_engine.py": "336b8d2bfaa7226a31b37f4839c3ad6615bca2389a2cc819af281aaddaebd328",
+      "src/evolutionary_core.py": "82bce9a63d41c87bf2fff401c6d87085d30ec7e7d09f090962eb1f924677a0a9",
+      "src/feature_pipeline.py": "1c20f24d419ce48e9804817e958943e5fd0d4fd2aac68cd204e4a58f5ba832b8",
+      "src/predictor.py": "485086a43b94ebc0566b73bdb0017eac2aedce43acbaa70c4f1ca4074241d90a",
+      "src/experiment_plots.py": "318bff0743705232ac0af7fdf3f75a3ee5014dfc2b7fb04c14e71cec2d9de40f",
+      "src/config.py": "c572a3392e07753a28868eb847c930739fff34fd1dcbc63b2e5add37e9dfd7c9"
+    }
+  },
+  "partition_accounting": {
+    "RELIANCE.NS": {
+      "2020": {
+        "train_raw_indices": [
+          3032,
+          4260
+        ],
+        "train_raw_dates": [
+          "2012-01-02",
+          "2016-12-30"
+        ],
+        "train_purged_indices": [
+          3032,
+          4257
+        ],
+        "train_purged_dates": [
+          "2012-01-02",
+          "2016-12-27"
+        ],
+        "val_raw_indices": [
+          4261,
+          4508
+        ],
+        "val_raw_dates": [
+          "2017-01-02",
+          "2017-12-29"
+        ],
+        "val_purged_indices": [
+          4261,
+          4505
+        ],
+        "val_purged_dates": [
+          "2017-01-02",
+          "2017-12-26"
+        ],
+        "dev_raw_indices": [
+          4509,
+          4997
+        ],
+        "dev_raw_dates": [
+          "2018-01-01",
+          "2019-12-31"
+        ],
+        "dev_purged_indices": [
+          4509,
+          4994
+        ],
+        "dev_purged_dates": [
+          "2018-01-01",
+          "2019-12-26"
+        ],
+        "test_indices": [
+          4998,
+          5248
+        ],
+        "test_dates": [
+          "2020-01-01",
+          "2020-12-31"
+        ],
+        "purged_bars_per_boundary": 3,
+        "scored_test_samples": 248,
+        "masked_test_samples": 3,
+        "first_scored_date": "2020-01-01",
+        "last_scored_date": "2020-12-28",
+        "preceding_signal_date": "2019-12-31",
+        "prefix_context": {
+          "prefix_p_up": 0.49865030002214666,
+          "prefix_atr": 12.679733747062098,
+          "prefix_regime_vol": 0,
+          "prefix_sma_signal": false
+        }
+      },
+      "2021": {
+        "train_raw_indices": [
+          3277,
+          4508
+        ],
+        "train_raw_dates": [
+          "2013-01-01",
+          "2017-12-29"
+        ],
+        "train_purged_indices": [
+          3277,
+          4505
+        ],
+        "train_purged_dates": [
+          "2013-01-01",
+          "2017-12-26"
+        ],
+        "val_raw_indices": [
+          4509,
+          4754
+        ],
+        "val_raw_dates": [
+          "2018-01-01",
+          "2018-12-31"
+        ],
+        "val_purged_indices": [
+          4509,
+          4751
+        ],
+        "val_purged_dates": [
+          "2018-01-01",
+          "2018-12-26"
+        ],
+        "dev_raw_indices": [
+          4755,
+          5248
+        ],
+        "dev_raw_dates": [
+          "2019-01-01",
+          "2020-12-31"
+        ],
+        "dev_purged_indices": [
+          4755,
+          5245
+        ],
+        "dev_purged_dates": [
+          "2019-01-01",
+          "2020-12-28"
+        ],
+        "test_indices": [
+          5249,
+          5496
+        ],
+        "test_dates": [
+          "2021-01-01",
+          "2021-12-31"
+        ],
+        "purged_bars_per_boundary": 3,
+        "scored_test_samples": 245,
+        "masked_test_samples": 3,
+        "first_scored_date": "2021-01-01",
+        "last_scored_date": "2021-12-28",
+        "preceding_signal_date": "2020-12-31",
+        "prefix_context": {
+          "prefix_p_up": 0.5652781380226943,
+          "prefix_atr": 21.33249658594296,
+          "prefix_regime_vol": 0,
+          "prefix_sma_signal": false
+        }
+      },
+      "2022": {
+        "train_raw_indices": [
+          3525,
+          4754
+        ],
+        "train_raw_dates": [
+          "2014-01-01",
+          "2018-12-31"
+        ],
+        "train_purged_indices": [
+          3525,
+          4751
+        ],
+        "train_purged_dates": [
+          "2014-01-01",
+          "2018-12-26"
+        ],
+        "val_raw_indices": [
+          4755,
+          4997
+        ],
+        "val_raw_dates": [
+          "2019-01-01",
+          "2019-12-31"
+        ],
+        "val_purged_indices": [
+          4755,
+          4994
+        ],
+        "val_purged_dates": [
+          "2019-01-01",
+          "2019-12-26"
+        ],
+        "dev_raw_indices": [
+          4998,
+          5496
+        ],
+        "dev_raw_dates": [
+          "2020-01-01",
+          "2021-12-31"
+        ],
+        "dev_purged_indices": [
+          4998,
+          5493
+        ],
+        "dev_purged_dates": [
+          "2020-01-01",
+          "2021-12-28"
+        ],
+        "test_indices": [
+          5497,
+          5744
+        ],
+        "test_dates": [
+          "2022-01-03",
+          "2022-12-30"
+        ],
+        "purged_bars_per_boundary": 3,
+        "scored_test_samples": 245,
+        "masked_test_samples": 3,
+        "first_scored_date": "2022-01-03",
+        "last_scored_date": "2022-12-27",
+        "preceding_signal_date": "2021-12-31",
+        "prefix_context": {
+          "prefix_p_up": 0.5377629136149589,
+          "prefix_atr": 22.632966324071667,
+          "prefix_regime_vol": 1,
+          "prefix_sma_signal": false
+        }
+      },
+      "2023": {
+        "train_raw_indices": [
+          3769,
+          4997
+        ],
+        "train_raw_dates": [
+          "2015-01-01",
+          "2019-12-31"
+        ],
+        "train_purged_indices": [
+          3769,
+          4994
+        ],
+        "train_purged_dates": [
+          "2015-01-01",
+          "2019-12-26"
+        ],
+        "val_raw_indices": [
+          4998,
+          5248
+        ],
+        "val_raw_dates": [
+          "2020-01-01",
+          "2020-12-31"
+        ],
+        "val_purged_indices": [
+          4998,
+          5245
+        ],
+        "val_purged_dates": [
+          "2020-01-01",
+          "2020-12-28"
+        ],
+        "dev_raw_indices": [
+          5249,
+          5744
+        ],
+        "dev_raw_dates": [
+          "2021-01-01",
+          "2022-12-30"
+        ],
+        "dev_purged_indices": [
+          5249,
+          5741
+        ],
+        "dev_purged_dates": [
+          "2021-01-01",
+          "2022-12-27"
+        ],
+        "test_indices": [
+          5745,
+          5989
+        ],
+        "test_dates": [
+          "2023-01-02",
+          "2023-12-29"
+        ],
+        "purged_bars_per_boundary": 3,
+        "scored_test_samples": 242,
+        "masked_test_samples": 3,
+        "first_scored_date": "2023-01-02",
+        "last_scored_date": "2023-12-26",
+        "preceding_signal_date": "2022-12-30",
+        "prefix_context": {
+          "prefix_p_up": 0.5476518498128733,
+          "prefix_atr": 20.17516112680419,
+          "prefix_regime_vol": 0,
+          "prefix_sma_signal": false
+        }
+      },
+      "2024": {
+        "train_raw_indices": [
+          4015,
+          5248
+        ],
+        "train_raw_dates": [
+          "2016-01-01",
+          "2020-12-31"
+        ],
+        "train_purged_indices": [
+          4015,
+          5245
+        ],
+        "train_purged_dates": [
+          "2016-01-01",
+          "2020-12-28"
+        ],
+        "val_raw_indices": [
+          5249,
+          5496
+        ],
+        "val_raw_dates": [
+          "2021-01-01",
+          "2021-12-31"
+        ],
+        "val_purged_indices": [
+          5249,
+          5493
+        ],
+        "val_purged_dates": [
+          "2021-01-01",
+          "2021-12-28"
+        ],
+        "dev_raw_indices": [
+          5497,
+          5989
+        ],
+        "dev_raw_dates": [
+          "2022-01-03",
+          "2023-12-29"
+        ],
+        "dev_purged_indices": [
+          5497,
+          5986
+        ],
+        "dev_purged_dates": [
+          "2022-01-03",
+          "2023-12-26"
+        ],
+        "test_indices": [
+          5990,
+          6235
+        ],
+        "test_dates": [
+          "2024-01-01",
+          "2024-12-31"
+        ],
+        "purged_bars_per_boundary": 3,
+        "scored_test_samples": 243,
+        "masked_test_samples": 3,
+        "first_scored_date": "2024-01-01",
+        "last_scored_date": "2024-12-26",
+        "preceding_signal_date": "2023-12-29",
+        "prefix_context": {
+          "prefix_p_up": 0.5454445128465205,
+          "prefix_atr": 19.373524131973145,
+          "prefix_regime_vol": 0,
+          "prefix_sma_signal": true
+        }
+      },
+      "2025": {
+        "train_raw_indices": [
+          4261,
+          5496
+        ],
+        "train_raw_dates": [
+          "2017-01-02",
+          "2021-12-31"
+        ],
+        "train_purged_indices": [
+          4261,
+          5493
+        ],
+        "train_purged_dates": [
+          "2017-01-02",
+          "2021-12-28"
+        ],
+        "val_raw_indices": [
+          5497,
+          5744
+        ],
+        "val_raw_dates": [
+          "2022-01-03",
+          "2022-12-30"
+        ],
+        "val_purged_indices": [
+          5497,
+          5741
+        ],
+        "val_purged_dates": [
+          "2022-01-03",
+          "2022-12-27"
+        ],
+        "dev_raw_indices": [
+          5745,
+          6235
+        ],
+        "dev_raw_dates": [
+          "2023-01-02",
+          "2024-12-31"
+        ],
+        "dev_purged_indices": [
+          5745,
+          6232
+        ],
+        "dev_purged_dates": [
+          "2023-01-02",
+          "2024-12-26"
+        ],
+        "test_indices": [
+          6236,
+          6484
+        ],
+        "test_dates": [
+          "2025-01-01",
+          "2025-12-31"
+        ],
+        "purged_bars_per_boundary": 3,
+        "scored_test_samples": 246,
+        "masked_test_samples": 3,
+        "first_scored_date": "2025-01-01",
+        "last_scored_date": "2025-12-26",
+        "preceding_signal_date": "2024-12-31",
+        "prefix_context": {
+          "prefix_p_up": 0.560498330832896,
+          "prefix_atr": 19.541917771592303,
+          "prefix_regime_vol": 0,
+          "prefix_sma_signal": false
+        }
+      }
+    },
+    "TCS.NS": {
+      "2020": {
+        "train_raw_indices": [
+          2353,
+          3581
+        ],
+        "train_raw_dates": [
+          "2012-01-02",
+          "2016-12-30"
+        ],
+        "train_purged_indices": [
+          2353,
+          3578
+        ],
+        "train_purged_dates": [
+          "2012-01-02",
+          "2016-12-27"
+        ],
+        "val_raw_indices": [
+          3582,
+          3829
+        ],
+        "val_raw_dates": [
+          "2017-01-02",
+          "2017-12-29"
+        ],
+        "val_purged_indices": [
+          3582,
+          3826
+        ],
+        "val_purged_dates": [
+          "2017-01-02",
+          "2017-12-26"
+        ],
+        "dev_raw_indices": [
+          3830,
+          4318
+        ],
+        "dev_raw_dates": [
+          "2018-01-01",
+          "2019-12-31"
+        ],
+        "dev_purged_indices": [
+          3830,
+          4315
+        ],
+        "dev_purged_dates": [
+          "2018-01-01",
+          "2019-12-26"
+        ],
+        "test_indices": [
+          4319,
+          4569
+        ],
+        "test_dates": [
+          "2020-01-01",
+          "2020-12-31"
+        ],
+        "purged_bars_per_boundary": 3,
+        "scored_test_samples": 248,
+        "masked_test_samples": 3,
+        "first_scored_date": "2020-01-01",
+        "last_scored_date": "2020-12-28",
+        "preceding_signal_date": "2019-12-31",
+        "prefix_context": {
+          "prefix_p_up": 0.5368822318159837,
+          "prefix_atr": 43.43892792681989,
+          "prefix_regime_vol": 1,
+          "prefix_sma_signal": true
+        }
+      },
+      "2021": {
+        "train_raw_indices": [
+          2598,
+          3829
+        ],
+        "train_raw_dates": [
+          "2013-01-01",
+          "2017-12-29"
+        ],
+        "train_purged_indices": [
+          2598,
+          3826
+        ],
+        "train_purged_dates": [
+          "2013-01-01",
+          "2017-12-26"
+        ],
+        "val_raw_indices": [
+          3830,
+          4075
+        ],
+        "val_raw_dates": [
+          "2018-01-01",
+          "2018-12-31"
+        ],
+        "val_purged_indices": [
+          3830,
+          4072
+        ],
+        "val_purged_dates": [
+          "2018-01-01",
+          "2018-12-26"
+        ],
+        "dev_raw_indices": [
+          4076,
+          4569
+        ],
+        "dev_raw_dates": [
+          "2019-01-01",
+          "2020-12-31"
+        ],
+        "dev_purged_indices": [
+          4076,
+          4566
+        ],
+        "dev_purged_dates": [
+          "2019-01-01",
+          "2020-12-28"
+        ],
+        "test_indices": [
+          4570,
+          4817
+        ],
+        "test_dates": [
+          "2021-01-01",
+          "2021-12-31"
+        ],
+        "purged_bars_per_boundary": 3,
+        "scored_test_samples": 245,
+        "masked_test_samples": 3,
+        "first_scored_date": "2021-01-01",
+        "last_scored_date": "2021-12-28",
+        "preceding_signal_date": "2020-12-31",
+        "prefix_context": {
+          "prefix_p_up": 0.5452289188672488,
+          "prefix_atr": 46.082266615371545,
+          "prefix_regime_vol": 0,
+          "prefix_sma_signal": true
+        }
+      },
+      "2022": {
+        "train_raw_indices": [
+          2846,
+          4075
+        ],
+        "train_raw_dates": [
+          "2014-01-01",
+          "2018-12-31"
+        ],
+        "train_purged_indices": [
+          2846,
+          4072
+        ],
+        "train_purged_dates": [
+          "2014-01-01",
+          "2018-12-26"
+        ],
+        "val_raw_indices": [
+          4076,
+          4318
+        ],
+        "val_raw_dates": [
+          "2019-01-01",
+          "2019-12-31"
+        ],
+        "val_purged_indices": [
+          4076,
+          4315
+        ],
+        "val_purged_dates": [
+          "2019-01-01",
+          "2019-12-26"
+        ],
+        "dev_raw_indices": [
+          4319,
+          4817
+        ],
+        "dev_raw_dates": [
+          "2020-01-01",
+          "2021-12-31"
+        ],
+        "dev_purged_indices": [
+          4319,
+          4814
+        ],
+        "dev_purged_dates": [
+          "2020-01-01",
+          "2021-12-28"
+        ],
+        "test_indices": [
+          4818,
+          5065
+        ],
+        "test_dates": [
+          "2022-01-03",
+          "2022-12-30"
+        ],
+        "purged_bars_per_boundary": 3,
+        "scored_test_samples": 245,
+        "masked_test_samples": 3,
+        "first_scored_date": "2022-01-03",
+        "last_scored_date": "2022-12-27",
+        "preceding_signal_date": "2021-12-31",
+        "prefix_context": {
+          "prefix_p_up": 0.5268126415925635,
+          "prefix_atr": 46.822547489631816,
+          "prefix_regime_vol": 0,
+          "prefix_sma_signal": true
+        }
+      },
+      "2023": {
+        "train_raw_indices": [
+          3090,
+          4318
+        ],
+        "train_raw_dates": [
+          "2015-01-01",
+          "2019-12-31"
+        ],
+        "train_purged_indices": [
+          3090,
+          4315
+        ],
+        "train_purged_dates": [
+          "2015-01-01",
+          "2019-12-26"
+        ],
+        "val_raw_indices": [
+          4319,
+          4569
+        ],
+        "val_raw_dates": [
+          "2020-01-01",
+          "2020-12-31"
+        ],
+        "val_purged_indices": [
+          4319,
+          4566
+        ],
+        "val_purged_dates": [
+          "2020-01-01",
+          "2020-12-28"
+        ],
+        "dev_raw_indices": [
+          4570,
+          5065
+        ],
+        "dev_raw_dates": [
+          "2021-01-01",
+          "2022-12-30"
+        ],
+        "dev_purged_indices": [
+          4570,
+          5062
+        ],
+        "dev_purged_dates": [
+          "2021-01-01",
+          "2022-12-27"
+        ],
+        "test_indices": [
+          5066,
+          5310
+        ],
+        "test_dates": [
+          "2023-01-02",
+          "2023-12-29"
+        ],
+        "purged_bars_per_boundary": 3,
+        "scored_test_samples": 242,
+        "masked_test_samples": 3,
+        "first_scored_date": "2023-01-02",
+        "last_scored_date": "2023-12-26",
+        "preceding_signal_date": "2022-12-30",
+        "prefix_context": {
+          "prefix_p_up": 0.590785682191758,
+          "prefix_atr": 48.12972851605257,
+          "prefix_regime_vol": 0,
+          "prefix_sma_signal": false
+        }
+      },
+      "2024": {
+        "train_raw_indices": [
+          3336,
+          4569
+        ],
+        "train_raw_dates": [
+          "2016-01-01",
+          "2020-12-31"
+        ],
+        "train_purged_indices": [
+          3336,
+          4566
+        ],
+        "train_purged_dates": [
+          "2016-01-01",
+          "2020-12-28"
+        ],
+        "val_raw_indices": [
+          4570,
+          4817
+        ],
+        "val_raw_dates": [
+          "2021-01-01",
+          "2021-12-31"
+        ],
+        "val_purged_indices": [
+          4570,
+          4814
+        ],
+        "val_purged_dates": [
+          "2021-01-01",
+          "2021-12-28"
+        ],
+        "dev_raw_indices": [
+          4818,
+          5310
+        ],
+        "dev_raw_dates": [
+          "2022-01-03",
+          "2023-12-29"
+        ],
+        "dev_purged_indices": [
+          4818,
+          5307
+        ],
+        "dev_purged_dates": [
+          "2022-01-03",
+          "2023-12-26"
+        ],
+        "test_indices": [
+          5311,
+          5556
+        ],
+        "test_dates": [
+          "2024-01-01",
+          "2024-12-31"
+        ],
+        "purged_bars_per_boundary": 3,
+        "scored_test_samples": 243,
+        "masked_test_samples": 3,
+        "first_scored_date": "2024-01-01",
+        "last_scored_date": "2024-12-26",
+        "preceding_signal_date": "2023-12-29",
+        "prefix_context": {
+          "prefix_p_up": 0.4570488780972675,
+          "prefix_atr": 76.56449427216815,
+          "prefix_regime_vol": 1,
+          "prefix_sma_signal": true
+        }
+      },
+      "2025": {
+        "train_raw_indices": [
+          3582,
+          4817
+        ],
+        "train_raw_dates": [
+          "2017-01-02",
+          "2021-12-31"
+        ],
+        "train_purged_indices": [
+          3582,
+          4814
+        ],
+        "train_purged_dates": [
+          "2017-01-02",
+          "2021-12-28"
+        ],
+        "val_raw_indices": [
+          4818,
+          5065
+        ],
+        "val_raw_dates": [
+          "2022-01-03",
+          "2022-12-30"
+        ],
+        "val_purged_indices": [
+          4818,
+          5062
+        ],
+        "val_purged_dates": [
+          "2022-01-03",
+          "2022-12-27"
+        ],
+        "dev_raw_indices": [
+          5066,
+          5556
+        ],
+        "dev_raw_dates": [
+          "2023-01-02",
+          "2024-12-31"
+        ],
+        "dev_purged_indices": [
+          5066,
+          5553
+        ],
+        "dev_purged_dates": [
+          "2023-01-02",
+          "2024-12-26"
+        ],
+        "test_indices": [
+          5557,
+          5805
+        ],
+        "test_dates": [
+          "2025-01-01",
+          "2025-12-31"
+        ],
+        "purged_bars_per_boundary": 3,
+        "scored_test_samples": 246,
+        "masked_test_samples": 3,
+        "first_scored_date": "2025-01-01",
+        "last_scored_date": "2025-12-26",
+        "preceding_signal_date": "2024-12-31",
+        "prefix_context": {
+          "prefix_p_up": 0.5840772488886111,
+          "prefix_atr": 84.10880722496884,
+          "prefix_regime_vol": 0,
+          "prefix_sma_signal": false
+        }
+      }
+    },
+    "INFY.NS": {
+      "2020": {
+        "train_raw_indices": [
+          3035,
+          4263
+        ],
+        "train_raw_dates": [
+          "2012-01-02",
+          "2016-12-30"
+        ],
+        "train_purged_indices": [
+          3035,
+          4260
+        ],
+        "train_purged_dates": [
+          "2012-01-02",
+          "2016-12-27"
+        ],
+        "val_raw_indices": [
+          4264,
+          4511
+        ],
+        "val_raw_dates": [
+          "2017-01-02",
+          "2017-12-29"
+        ],
+        "val_purged_indices": [
+          4264,
+          4508
+        ],
+        "val_purged_dates": [
+          "2017-01-02",
+          "2017-12-26"
+        ],
+        "dev_raw_indices": [
+          4512,
+          5000
+        ],
+        "dev_raw_dates": [
+          "2018-01-01",
+          "2019-12-31"
+        ],
+        "dev_purged_indices": [
+          4512,
+          4997
+        ],
+        "dev_purged_dates": [
+          "2018-01-01",
+          "2019-12-26"
+        ],
+        "test_indices": [
+          5001,
+          5251
+        ],
+        "test_dates": [
+          "2020-01-01",
+          "2020-12-31"
+        ],
+        "purged_bars_per_boundary": 3,
+        "scored_test_samples": 248,
+        "masked_test_samples": 3,
+        "first_scored_date": "2020-01-01",
+        "last_scored_date": "2020-12-28",
+        "preceding_signal_date": "2019-12-31",
+        "prefix_context": {
+          "prefix_p_up": 0.5106501815890709,
+          "prefix_atr": 9.474027330280624,
+          "prefix_regime_vol": 0,
+          "prefix_sma_signal": false
+        }
+      },
+      "2021": {
+        "train_raw_indices": [
+          3280,
+          4511
+        ],
+        "train_raw_dates": [
+          "2013-01-01",
+          "2017-12-29"
+        ],
+        "train_purged_indices": [
+          3280,
+          4508
+        ],
+        "train_purged_dates": [
+          "2013-01-01",
+          "2017-12-26"
+        ],
+        "val_raw_indices": [
+          4512,
+          4757
+        ],
+        "val_raw_dates": [
+          "2018-01-01",
+          "2018-12-31"
+        ],
+        "val_purged_indices": [
+          4512,
+          4754
+        ],
+        "val_purged_dates": [
+          "2018-01-01",
+          "2018-12-26"
+        ],
+        "dev_raw_indices": [
+          4758,
+          5251
+        ],
+        "dev_raw_dates": [
+          "2019-01-01",
+          "2020-12-31"
+        ],
+        "dev_purged_indices": [
+          4758,
+          5248
+        ],
+        "dev_purged_dates": [
+          "2019-01-01",
+          "2020-12-28"
+        ],
+        "test_indices": [
+          5252,
+          5499
+        ],
+        "test_dates": [
+          "2021-01-01",
+          "2021-12-31"
+        ],
+        "purged_bars_per_boundary": 3,
+        "scored_test_samples": 245,
+        "masked_test_samples": 3,
+        "first_scored_date": "2021-01-01",
+        "last_scored_date": "2021-12-28",
+        "preceding_signal_date": "2020-12-31",
+        "prefix_context": {
+          "prefix_p_up": 0.5434714102229543,
+          "prefix_atr": 21.806526001429663,
+          "prefix_regime_vol": 0,
+          "prefix_sma_signal": true
+        }
+      },
+      "2022": {
+        "train_raw_indices": [
+          3528,
+          4757
+        ],
+        "train_raw_dates": [
+          "2014-01-01",
+          "2018-12-31"
+        ],
+        "train_purged_indices": [
+          3528,
+          4754
+        ],
+        "train_purged_dates": [
+          "2014-01-01",
+          "2018-12-26"
+        ],
+        "val_raw_indices": [
+          4758,
+          5000
+        ],
+        "val_raw_dates": [
+          "2019-01-01",
+          "2019-12-31"
+        ],
+        "val_purged_indices": [
+          4758,
+          4997
+        ],
+        "val_purged_dates": [
+          "2019-01-01",
+          "2019-12-26"
+        ],
+        "dev_raw_indices": [
+          5001,
+          5499
+        ],
+        "dev_raw_dates": [
+          "2020-01-01",
+          "2021-12-31"
+        ],
+        "dev_purged_indices": [
+          5001,
+          5496
+        ],
+        "dev_purged_dates": [
+          "2020-01-01",
+          "2021-12-28"
+        ],
+        "test_indices": [
+          5500,
+          5747
+        ],
+        "test_dates": [
+          "2022-01-03",
+          "2022-12-30"
+        ],
+        "purged_bars_per_boundary": 3,
+        "scored_test_samples": 245,
+        "masked_test_samples": 3,
+        "first_scored_date": "2022-01-03",
+        "last_scored_date": "2022-12-27",
+        "preceding_signal_date": "2021-12-31",
+        "prefix_context": {
+          "prefix_p_up": 0.535602968267989,
+          "prefix_atr": 30.992717618078846,
+          "prefix_regime_vol": 0,
+          "prefix_sma_signal": true
+        }
+      },
+      "2023": {
+        "train_raw_indices": [
+          3772,
+          5000
+        ],
+        "train_raw_dates": [
+          "2015-01-01",
+          "2019-12-31"
+        ],
+        "train_purged_indices": [
+          3772,
+          4997
+        ],
+        "train_purged_dates": [
+          "2015-01-01",
+          "2019-12-26"
+        ],
+        "val_raw_indices": [
+          5001,
+          5251
+        ],
+        "val_raw_dates": [
+          "2020-01-01",
+          "2020-12-31"
+        ],
+        "val_purged_indices": [
+          5001,
+          5248
+        ],
+        "val_purged_dates": [
+          "2020-01-01",
+          "2020-12-28"
+        ],
+        "dev_raw_indices": [
+          5252,
+          5747
+        ],
+        "dev_raw_dates": [
+          "2021-01-01",
+          "2022-12-30"
+        ],
+        "dev_purged_indices": [
+          5252,
+          5744
+        ],
+        "dev_purged_dates": [
+          "2021-01-01",
+          "2022-12-27"
+        ],
+        "test_indices": [
+          5748,
+          5992
+        ],
+        "test_dates": [
+          "2023-01-02",
+          "2023-12-29"
+        ],
+        "purged_bars_per_boundary": 3,
+        "scored_test_samples": 242,
+        "masked_test_samples": 3,
+        "first_scored_date": "2023-01-02",
+        "last_scored_date": "2023-12-26",
+        "preceding_signal_date": "2022-12-30",
+        "prefix_context": {
+          "prefix_p_up": 0.5394637158919166,
+          "prefix_atr": 23.962202024149455,
+          "prefix_regime_vol": 0,
+          "prefix_sma_signal": false
+        }
+      },
+      "2024": {
+        "train_raw_indices": [
+          4018,
+          5251
+        ],
+        "train_raw_dates": [
+          "2016-01-01",
+          "2020-12-31"
+        ],
+        "train_purged_indices": [
+          4018,
+          5248
+        ],
+        "train_purged_dates": [
+          "2016-01-01",
+          "2020-12-28"
+        ],
+        "val_raw_indices": [
+          5252,
+          5499
+        ],
+        "val_raw_dates": [
+          "2021-01-01",
+          "2021-12-31"
+        ],
+        "val_purged_indices": [
+          5252,
+          5496
+        ],
+        "val_purged_dates": [
+          "2021-01-01",
+          "2021-12-28"
+        ],
+        "dev_raw_indices": [
+          5500,
+          5992
+        ],
+        "dev_raw_dates": [
+          "2022-01-03",
+          "2023-12-29"
+        ],
+        "dev_purged_indices": [
+          5500,
+          5989
+        ],
+        "dev_purged_dates": [
+          "2022-01-03",
+          "2023-12-26"
+        ],
+        "test_indices": [
+          5993,
+          6238
+        ],
+        "test_dates": [
+          "2024-01-01",
+          "2024-12-31"
+        ],
+        "purged_bars_per_boundary": 3,
+        "scored_test_samples": 243,
+        "masked_test_samples": 3,
+        "first_scored_date": "2024-01-01",
+        "last_scored_date": "2024-12-26",
+        "preceding_signal_date": "2023-12-29",
+        "prefix_context": {
+          "prefix_p_up": 0.5631262852172108,
+          "prefix_atr": 34.11027644051563,
+          "prefix_regime_vol": 1,
+          "prefix_sma_signal": true
+        }
+      },
+      "2025": {
+        "train_raw_indices": [
+          4264,
+          5499
+        ],
+        "train_raw_dates": [
+          "2017-01-02",
+          "2021-12-31"
+        ],
+        "train_purged_indices": [
+          4264,
+          5496
+        ],
+        "train_purged_dates": [
+          "2017-01-02",
+          "2021-12-28"
+        ],
+        "val_raw_indices": [
+          5500,
+          5747
+        ],
+        "val_raw_dates": [
+          "2022-01-03",
+          "2022-12-30"
+        ],
+        "val_purged_indices": [
+          5500,
+          5744
+        ],
+        "val_purged_dates": [
+          "2022-01-03",
+          "2022-12-27"
+        ],
+        "dev_raw_indices": [
+          5748,
+          6238
+        ],
+        "dev_raw_dates": [
+          "2023-01-02",
+          "2024-12-31"
+        ],
+        "dev_purged_indices": [
+          5748,
+          6235
+        ],
+        "dev_purged_dates": [
+          "2023-01-02",
+          "2024-12-26"
+        ],
+        "test_indices": [
+          6239,
+          6487
+        ],
+        "test_dates": [
+          "2025-01-01",
+          "2025-12-31"
+        ],
+        "purged_bars_per_boundary": 3,
+        "scored_test_samples": 246,
+        "masked_test_samples": 3,
+        "first_scored_date": "2025-01-01",
+        "last_scored_date": "2025-12-26",
+        "preceding_signal_date": "2024-12-31",
+        "prefix_context": {
+          "prefix_p_up": 0.590237005406698,
+          "prefix_atr": 38.675846456597064,
+          "prefix_regime_vol": 0,
+          "prefix_sma_signal": true
+        }
+      }
+    }
+  }
+}

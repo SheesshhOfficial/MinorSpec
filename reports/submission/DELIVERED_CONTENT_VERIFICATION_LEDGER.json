@@ -1,0 +1,1552 @@
+[
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Table 1 (Page 4) Row 1",
+    "item": "RELIANCE.NS Mean AUC",
+    "document_value": "0.5469",
+    "artifact_value": "0.5468755676862941",
+    "difference": "0.000024",
+    "tolerance": "0.0001",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Table 1 (Page 4) Row 1",
+    "item": "RELIANCE.NS Min AUC",
+    "document_value": "0.4415",
+    "artifact_value": "0.4414787798408488",
+    "difference": "0.000021",
+    "tolerance": "0.0001",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Table 1 (Page 4) Row 1",
+    "item": "RELIANCE.NS Max AUC",
+    "document_value": "0.6246",
+    "artifact_value": "0.6246199557766722",
+    "difference": "0.000020",
+    "tolerance": "0.0001",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Table 1 (Page 4) Row 1",
+    "item": "RELIANCE.NS Test Accuracy (%)",
+    "document_value": "52.01",
+    "artifact_value": "52.006956396022865",
+    "difference": "0.003044",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Table 1 (Page 4) Row 1",
+    "item": "RELIANCE.NS Base Accuracy (%)",
+    "document_value": "52.21",
+    "artifact_value": "52.214329667912274",
+    "difference": "0.004330",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Table 1 (Page 4) Row 1",
+    "item": "RELIANCE.NS Brier Score",
+    "document_value": "0.2494",
+    "artifact_value": "0.24939537218196053",
+    "difference": "0.000005",
+    "tolerance": "0.0001",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Table 1 (Page 4) Row 2",
+    "item": "TCS.NS Mean AUC",
+    "document_value": "0.5304",
+    "artifact_value": "0.5303926473074198",
+    "difference": "0.000007",
+    "tolerance": "0.0001",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Table 1 (Page 4) Row 2",
+    "item": "TCS.NS Min AUC",
+    "document_value": "0.4774",
+    "artifact_value": "0.4773587456069206",
+    "difference": "0.000041",
+    "tolerance": "0.0001",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Table 1 (Page 4) Row 2",
+    "item": "TCS.NS Max AUC",
+    "document_value": "0.6182",
+    "artifact_value": "0.6181946025580928",
+    "difference": "0.000005",
+    "tolerance": "0.0001",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Table 1 (Page 4) Row 2",
+    "item": "TCS.NS Test Accuracy (%)",
+    "document_value": "50.91",
+    "artifact_value": "50.91212475459105",
+    "difference": "0.002125",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Table 1 (Page 4) Row 2",
+    "item": "TCS.NS Base Accuracy (%)",
+    "document_value": "50.78",
+    "artifact_value": "50.77937543393733",
+    "difference": "0.000625",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Table 1 (Page 4) Row 2",
+    "item": "TCS.NS Brier Score",
+    "document_value": "0.2516",
+    "artifact_value": "0.2516474250709482",
+    "difference": "0.000047",
+    "tolerance": "0.0001",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Table 1 (Page 4) Row 3",
+    "item": "INFY.NS Mean AUC",
+    "document_value": "0.5199",
+    "artifact_value": "0.5199212365900918",
+    "difference": "0.000021",
+    "tolerance": "0.0001",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Table 1 (Page 4) Row 3",
+    "item": "INFY.NS Min AUC",
+    "document_value": "0.4509",
+    "artifact_value": "0.4509105846912227",
+    "difference": "0.000011",
+    "tolerance": "0.0001",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Table 1 (Page 4) Row 3",
+    "item": "INFY.NS Max AUC",
+    "document_value": "0.5766",
+    "artifact_value": "0.5765746934225194",
+    "difference": "0.000025",
+    "tolerance": "0.0001",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Table 1 (Page 4) Row 3",
+    "item": "INFY.NS Test Accuracy (%)",
+    "document_value": "55.12",
+    "artifact_value": "55.12460005068643",
+    "difference": "0.004600",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Table 1 (Page 4) Row 3",
+    "item": "INFY.NS Base Accuracy (%)",
+    "document_value": "54.99",
+    "artifact_value": "54.98854562891773",
+    "difference": "0.001454",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Table 1 (Page 4) Row 3",
+    "item": "INFY.NS Brier Score",
+    "document_value": "0.2493",
+    "artifact_value": "0.24928631195692283",
+    "difference": "0.000014",
+    "tolerance": "0.0001",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.1 (Page 10) Row 1",
+    "item": "RELIANCE.NS Mean AUC",
+    "document_value": "0.5469",
+    "artifact_value": "0.5468755676862941",
+    "difference": "0.000024",
+    "tolerance": "0.0001",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.1 (Page 10) Row 1",
+    "item": "RELIANCE.NS Min AUC",
+    "document_value": "0.4415",
+    "artifact_value": "0.4414787798408488",
+    "difference": "0.000021",
+    "tolerance": "0.0001",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.1 (Page 10) Row 1",
+    "item": "RELIANCE.NS Max AUC",
+    "document_value": "0.6246",
+    "artifact_value": "0.6246199557766722",
+    "difference": "0.000020",
+    "tolerance": "0.0001",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.1 (Page 10) Row 1",
+    "item": "RELIANCE.NS Test Accuracy (%)",
+    "document_value": "52.01",
+    "artifact_value": "52.006956396022865",
+    "difference": "0.003044",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.1 (Page 10) Row 1",
+    "item": "RELIANCE.NS Base Accuracy (%)",
+    "document_value": "52.21",
+    "artifact_value": "52.214329667912274",
+    "difference": "0.004330",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.1 (Page 10) Row 1",
+    "item": "RELIANCE.NS Brier Score",
+    "document_value": "0.2494",
+    "artifact_value": "0.24939537218196053",
+    "difference": "0.000005",
+    "tolerance": "0.0001",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.1 (Page 10) Row 2",
+    "item": "TCS.NS Mean AUC",
+    "document_value": "0.5304",
+    "artifact_value": "0.5303926473074198",
+    "difference": "0.000007",
+    "tolerance": "0.0001",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.1 (Page 10) Row 2",
+    "item": "TCS.NS Min AUC",
+    "document_value": "0.4774",
+    "artifact_value": "0.4773587456069206",
+    "difference": "0.000041",
+    "tolerance": "0.0001",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.1 (Page 10) Row 2",
+    "item": "TCS.NS Max AUC",
+    "document_value": "0.6182",
+    "artifact_value": "0.6181946025580928",
+    "difference": "0.000005",
+    "tolerance": "0.0001",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.1 (Page 10) Row 2",
+    "item": "TCS.NS Test Accuracy (%)",
+    "document_value": "50.91",
+    "artifact_value": "50.91212475459105",
+    "difference": "0.002125",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.1 (Page 10) Row 2",
+    "item": "TCS.NS Base Accuracy (%)",
+    "document_value": "50.78",
+    "artifact_value": "50.77937543393733",
+    "difference": "0.000625",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.1 (Page 10) Row 2",
+    "item": "TCS.NS Brier Score",
+    "document_value": "0.2516",
+    "artifact_value": "0.2516474250709482",
+    "difference": "0.000047",
+    "tolerance": "0.0001",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.1 (Page 10) Row 3",
+    "item": "INFY.NS Mean AUC",
+    "document_value": "0.5199",
+    "artifact_value": "0.5199212365900918",
+    "difference": "0.000021",
+    "tolerance": "0.0001",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.1 (Page 10) Row 3",
+    "item": "INFY.NS Min AUC",
+    "document_value": "0.4509",
+    "artifact_value": "0.4509105846912227",
+    "difference": "0.000011",
+    "tolerance": "0.0001",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.1 (Page 10) Row 3",
+    "item": "INFY.NS Max AUC",
+    "document_value": "0.5766",
+    "artifact_value": "0.5765746934225194",
+    "difference": "0.000025",
+    "tolerance": "0.0001",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.1 (Page 10) Row 3",
+    "item": "INFY.NS Test Accuracy (%)",
+    "document_value": "55.12",
+    "artifact_value": "55.12460005068643",
+    "difference": "0.004600",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.1 (Page 10) Row 3",
+    "item": "INFY.NS Base Accuracy (%)",
+    "document_value": "54.99",
+    "artifact_value": "54.98854562891773",
+    "difference": "0.001454",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.1 (Page 10) Row 3",
+    "item": "INFY.NS Brier Score",
+    "document_value": "0.2493",
+    "artifact_value": "0.24928631195692283",
+    "difference": "0.000014",
+    "tolerance": "0.0001",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Table 2 (Page 5) Row 1",
+    "item": "RELIANCE B&H Return (%)",
+    "document_value": "128.74",
+    "artifact_value": "128.73967932876425",
+    "difference": "0.000321",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Table 2 (Page 5) Row 1",
+    "item": "RELIANCE B&H CAGR (%)",
+    "document_value": "15.05",
+    "artifact_value": "15.0527884001913",
+    "difference": "0.002788",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Table 2 (Page 5) Row 1",
+    "item": "RELIANCE B&H MaxDD (%)",
+    "document_value": "44.08",
+    "artifact_value": "44.08284239250412",
+    "difference": "0.002842",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Table 2 (Page 5) Row 1",
+    "item": "RELIANCE B&H Terminal \u20b9",
+    "document_value": "228740.0",
+    "artifact_value": "228739.67932876424",
+    "difference": "0.320671",
+    "tolerance": "1.0",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Table 2 (Page 5) Row 2",
+    "item": "RELIANCE Hybrid Median Return (%)",
+    "document_value": "-0.35",
+    "artifact_value": "-0.34801721689629",
+    "difference": "0.001983",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Table 2 (Page 5) Row 2",
+    "item": "RELIANCE Hybrid Median MaxDD (%)",
+    "document_value": "23.01",
+    "artifact_value": "23.01406915305964",
+    "difference": "0.004069",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Table 2 (Page 5) Row 2",
+    "item": "RELIANCE Hybrid Median Terminal \u20b9",
+    "document_value": "99652.0",
+    "artifact_value": "99651.98278310373",
+    "difference": "0.017217",
+    "tolerance": "1.0",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Table 2 (Page 5) Row 5",
+    "item": "TCS B&H Return (%)",
+    "document_value": "65.13",
+    "artifact_value": "65.13352980755691",
+    "difference": "0.003530",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Table 2 (Page 5) Row 5",
+    "item": "TCS B&H CAGR (%)",
+    "document_value": "8.87",
+    "artifact_value": "8.87201611718979",
+    "difference": "0.002016",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Table 2 (Page 5) Row 5",
+    "item": "TCS B&H MaxDD (%)",
+    "document_value": "34.57",
+    "artifact_value": "34.57353915960921",
+    "difference": "0.003539",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Table 2 (Page 5) Row 5",
+    "item": "TCS B&H Terminal \u20b9",
+    "document_value": "165134.0",
+    "artifact_value": "165133.52980755692",
+    "difference": "0.470192",
+    "tolerance": "1.0",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Table 2 (Page 5) Row 6",
+    "item": "TCS Hybrid Median Return (%)",
+    "document_value": "25.6",
+    "artifact_value": "25.60006380742787",
+    "difference": "0.000064",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Table 2 (Page 5) Row 6",
+    "item": "TCS Hybrid Median MaxDD (%)",
+    "document_value": "28.66",
+    "artifact_value": "28.663906222639202",
+    "difference": "0.003906",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Table 2 (Page 5) Row 6",
+    "item": "TCS Hybrid Median Terminal \u20b9",
+    "document_value": "125600.0",
+    "artifact_value": "125600.06380742788",
+    "difference": "0.063807",
+    "tolerance": "1.0",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Table 2 (Page 5) Row 9",
+    "item": "INFY B&H Return (%)",
+    "document_value": "152.78",
+    "artifact_value": "152.78290071028385",
+    "difference": "0.002901",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Table 2 (Page 5) Row 9",
+    "item": "INFY B&H CAGR (%)",
+    "document_value": "17.02",
+    "artifact_value": "17.01812623740868",
+    "difference": "0.001874",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Table 2 (Page 5) Row 9",
+    "item": "INFY B&H MaxDD (%)",
+    "document_value": "35.93",
+    "artifact_value": "35.932328016635914",
+    "difference": "0.002328",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Table 2 (Page 5) Row 9",
+    "item": "INFY B&H Terminal \u20b9",
+    "document_value": "252783.0",
+    "artifact_value": "252782.90071028384",
+    "difference": "0.099290",
+    "tolerance": "1.0",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Table 2 (Page 5) Row 10",
+    "item": "INFY Hybrid Median Return (%)",
+    "document_value": "9.1",
+    "artifact_value": "9.10306690233377",
+    "difference": "0.003067",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Table 2 (Page 5) Row 10",
+    "item": "INFY Hybrid Median MaxDD (%)",
+    "document_value": "37.16",
+    "artifact_value": "37.15824633997054",
+    "difference": "0.001754",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Table 2 (Page 5) Row 10",
+    "item": "INFY Hybrid Median Terminal \u20b9",
+    "document_value": "109103.0",
+    "artifact_value": "109103.06690233375",
+    "difference": "0.066902",
+    "tolerance": "1.0",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.2 (Page 10) Row 1",
+    "item": "RELIANCE B&H Return (%)",
+    "document_value": "128.74",
+    "artifact_value": "128.73967932876425",
+    "difference": "0.000321",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.2 (Page 10) Row 1",
+    "item": "RELIANCE B&H CAGR (%)",
+    "document_value": "15.05",
+    "artifact_value": "15.0527884001913",
+    "difference": "0.002788",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.2 (Page 10) Row 1",
+    "item": "RELIANCE B&H MaxDD (%)",
+    "document_value": "44.08",
+    "artifact_value": "44.08284239250412",
+    "difference": "0.002842",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.2 (Page 10) Row 1",
+    "item": "RELIANCE B&H Terminal \u20b9",
+    "document_value": "228740.0",
+    "artifact_value": "228739.67932876424",
+    "difference": "0.320671",
+    "tolerance": "1.0",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.2 (Page 10) Row 2",
+    "item": "RELIANCE Hybrid Median Return (%)",
+    "document_value": "-0.35",
+    "artifact_value": "-0.34801721689629",
+    "difference": "0.001983",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.2 (Page 10) Row 2",
+    "item": "RELIANCE Hybrid Median MaxDD (%)",
+    "document_value": "23.01",
+    "artifact_value": "23.01406915305964",
+    "difference": "0.004069",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.2 (Page 10) Row 2",
+    "item": "RELIANCE Hybrid Median Terminal \u20b9",
+    "document_value": "99652.0",
+    "artifact_value": "99651.98278310373",
+    "difference": "0.017217",
+    "tolerance": "1.0",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.2 (Page 10) Row 5",
+    "item": "TCS B&H Return (%)",
+    "document_value": "65.13",
+    "artifact_value": "65.13352980755691",
+    "difference": "0.003530",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.2 (Page 10) Row 5",
+    "item": "TCS B&H CAGR (%)",
+    "document_value": "8.87",
+    "artifact_value": "8.87201611718979",
+    "difference": "0.002016",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.2 (Page 10) Row 5",
+    "item": "TCS B&H MaxDD (%)",
+    "document_value": "34.57",
+    "artifact_value": "34.57353915960921",
+    "difference": "0.003539",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.2 (Page 10) Row 5",
+    "item": "TCS B&H Terminal \u20b9",
+    "document_value": "165134.0",
+    "artifact_value": "165133.52980755692",
+    "difference": "0.470192",
+    "tolerance": "1.0",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.2 (Page 10) Row 6",
+    "item": "TCS Hybrid Median Return (%)",
+    "document_value": "25.6",
+    "artifact_value": "25.60006380742787",
+    "difference": "0.000064",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.2 (Page 10) Row 6",
+    "item": "TCS Hybrid Median MaxDD (%)",
+    "document_value": "28.66",
+    "artifact_value": "28.663906222639202",
+    "difference": "0.003906",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.2 (Page 10) Row 6",
+    "item": "TCS Hybrid Median Terminal \u20b9",
+    "document_value": "125600.0",
+    "artifact_value": "125600.06380742788",
+    "difference": "0.063807",
+    "tolerance": "1.0",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.2 (Page 10) Row 9",
+    "item": "INFY B&H Return (%)",
+    "document_value": "152.78",
+    "artifact_value": "152.78290071028385",
+    "difference": "0.002901",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.2 (Page 10) Row 9",
+    "item": "INFY B&H CAGR (%)",
+    "document_value": "17.02",
+    "artifact_value": "17.01812623740868",
+    "difference": "0.001874",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.2 (Page 10) Row 9",
+    "item": "INFY B&H MaxDD (%)",
+    "document_value": "35.93",
+    "artifact_value": "35.932328016635914",
+    "difference": "0.002328",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.2 (Page 10) Row 9",
+    "item": "INFY B&H Terminal \u20b9",
+    "document_value": "252783.0",
+    "artifact_value": "252782.90071028384",
+    "difference": "0.099290",
+    "tolerance": "1.0",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.2 (Page 10) Row 10",
+    "item": "INFY Hybrid Median Return (%)",
+    "document_value": "9.1",
+    "artifact_value": "9.10306690233377",
+    "difference": "0.003067",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.2 (Page 10) Row 10",
+    "item": "INFY Hybrid Median MaxDD (%)",
+    "document_value": "37.16",
+    "artifact_value": "37.15824633997054",
+    "difference": "0.001754",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.2 (Page 10) Row 10",
+    "item": "INFY Hybrid Median Terminal \u20b9",
+    "document_value": "109103.0",
+    "artifact_value": "109103.06690233375",
+    "difference": "0.066902",
+    "tolerance": "1.0",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.4 Row 1",
+    "item": "RELIANCE Seed 42 1x Ret",
+    "document_value": "-6.58",
+    "artifact_value": "-6.58",
+    "difference": "0.000000",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.4 Row 1",
+    "item": "RELIANCE Seed 42 2x Ret",
+    "document_value": "-25.41",
+    "artifact_value": "-25.41",
+    "difference": "0.000000",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.4 Row 1",
+    "item": "RELIANCE Seed 42 Diff",
+    "document_value": "-18.83",
+    "artifact_value": "-18.83",
+    "difference": "0.000000",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.4 Row 2",
+    "item": "TCS Seed 43 1x Ret",
+    "document_value": "25.6",
+    "artifact_value": "25.6",
+    "difference": "0.000000",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.4 Row 2",
+    "item": "TCS Seed 43 2x Ret",
+    "document_value": "19.61",
+    "artifact_value": "19.61",
+    "difference": "0.000000",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.4 Row 2",
+    "item": "TCS Seed 43 Diff",
+    "document_value": "-5.99",
+    "artifact_value": "-5.99",
+    "difference": "0.000000",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.4 Row 3",
+    "item": "INFY Seed 44 1x Ret",
+    "document_value": "27.88",
+    "artifact_value": "27.88",
+    "difference": "0.000000",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.4 Row 3",
+    "item": "INFY Seed 44 2x Ret",
+    "document_value": "-7.97",
+    "artifact_value": "-7.97",
+    "difference": "0.000000",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.4 Row 3",
+    "item": "INFY Seed 44 Diff",
+    "document_value": "-35.85",
+    "artifact_value": "-35.85",
+    "difference": "0.000000",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.3 Row 1",
+    "item": "RELIANCE.NS 2020 B&H",
+    "document_value": "32.3",
+    "artifact_value": "32.3",
+    "difference": "0.000000",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.3 Row 1",
+    "item": "RELIANCE.NS 2020 Hyb",
+    "document_value": "0.0",
+    "artifact_value": "0.0",
+    "difference": "0.000000",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.3 Row 1",
+    "item": "RELIANCE.NS 2020 Diff",
+    "document_value": "-32.3",
+    "artifact_value": "-32.3",
+    "difference": "0.000000",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.3 Row 2",
+    "item": "RELIANCE.NS 2022 B&H",
+    "document_value": "7.84",
+    "artifact_value": "7.84",
+    "difference": "0.000000",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.3 Row 2",
+    "item": "RELIANCE.NS 2022 Hyb",
+    "document_value": "-12.07",
+    "artifact_value": "-12.07",
+    "difference": "0.000000",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.3 Row 2",
+    "item": "RELIANCE.NS 2022 Diff",
+    "document_value": "-19.9",
+    "artifact_value": "-19.9",
+    "difference": "0.000000",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.3 Row 3",
+    "item": "RELIANCE.NS 2023 B&H",
+    "document_value": "10.0",
+    "artifact_value": "10.0",
+    "difference": "0.000000",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.3 Row 3",
+    "item": "RELIANCE.NS 2023 Hyb",
+    "document_value": "12.0",
+    "artifact_value": "12.0",
+    "difference": "0.000000",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.3 Row 3",
+    "item": "RELIANCE.NS 2023 Diff",
+    "document_value": "2.0",
+    "artifact_value": "2.0",
+    "difference": "0.000000",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.3 Row 4",
+    "item": "TCS.NS 2022 B&H",
+    "document_value": "-12.13",
+    "artifact_value": "-12.13",
+    "difference": "0.000000",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.3 Row 4",
+    "item": "TCS.NS 2022 Hyb",
+    "document_value": "4.41",
+    "artifact_value": "4.41",
+    "difference": "0.000000",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.3 Row 4",
+    "item": "TCS.NS 2022 Diff",
+    "document_value": "16.55",
+    "artifact_value": "16.55",
+    "difference": "0.000000",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.3 Row 5",
+    "item": "TCS.NS 2023 B&H",
+    "document_value": "20.24",
+    "artifact_value": "20.24",
+    "difference": "0.000000",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.3 Row 5",
+    "item": "TCS.NS 2023 Hyb",
+    "document_value": "24.16",
+    "artifact_value": "24.16",
+    "difference": "0.000000",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.3 Row 5",
+    "item": "TCS.NS 2023 Diff",
+    "document_value": "3.92",
+    "artifact_value": "3.92",
+    "difference": "0.000000",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.3 Row 6",
+    "item": "INFY.NS 2022 B&H",
+    "document_value": "-18.54",
+    "artifact_value": "-18.54",
+    "difference": "0.000000",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.3 Row 6",
+    "item": "INFY.NS 2022 Hyb",
+    "document_value": "-7.1",
+    "artifact_value": "-7.1",
+    "difference": "0.000000",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Table 6.3 Row 6",
+    "item": "INFY.NS 2022 Diff",
+    "document_value": "11.44",
+    "artifact_value": "11.44",
+    "difference": "0.000000",
+    "tolerance": "0.05",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Prose Body",
+    "item": "GBDT max rounds",
+    "document_value": "True",
+    "artifact_value": "True",
+    "difference": "N/A",
+    "tolerance": "exact",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Prose Body",
+    "item": "GBDT max rounds",
+    "document_value": "True",
+    "artifact_value": "True",
+    "difference": "N/A",
+    "tolerance": "exact",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Prose Body",
+    "item": "Early stopping rounds",
+    "document_value": "True",
+    "artifact_value": "True",
+    "difference": "N/A",
+    "tolerance": "exact",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Prose Body",
+    "item": "Early stopping rounds",
+    "document_value": "True",
+    "artifact_value": "True",
+    "difference": "N/A",
+    "tolerance": "exact",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Prose Body",
+    "item": "Learning rate",
+    "document_value": "True",
+    "artifact_value": "True",
+    "difference": "N/A",
+    "tolerance": "exact",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Prose Body",
+    "item": "Learning rate",
+    "document_value": "True",
+    "artifact_value": "True",
+    "difference": "N/A",
+    "tolerance": "exact",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Prose Body",
+    "item": "Max tree depth",
+    "document_value": "True",
+    "artifact_value": "True",
+    "difference": "N/A",
+    "tolerance": "exact",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Prose Body",
+    "item": "Max tree depth",
+    "document_value": "True",
+    "artifact_value": "True",
+    "difference": "N/A",
+    "tolerance": "exact",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Prose Body",
+    "item": "Num leaves",
+    "document_value": "True",
+    "artifact_value": "True",
+    "difference": "N/A",
+    "tolerance": "exact",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Prose Body",
+    "item": "Num leaves",
+    "document_value": "True",
+    "artifact_value": "True",
+    "difference": "N/A",
+    "tolerance": "exact",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Prose Body",
+    "item": "Crossover probability",
+    "document_value": "True",
+    "artifact_value": "True",
+    "difference": "N/A",
+    "tolerance": "exact",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Prose Body",
+    "item": "Crossover probability",
+    "document_value": "True",
+    "artifact_value": "True",
+    "difference": "N/A",
+    "tolerance": "exact",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Prose Body",
+    "item": "SBX distribution index",
+    "document_value": "True",
+    "artifact_value": "True",
+    "difference": "N/A",
+    "tolerance": "exact",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Prose Body",
+    "item": "SBX distribution index",
+    "document_value": "True",
+    "artifact_value": "True",
+    "difference": "N/A",
+    "tolerance": "exact",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Prose Body",
+    "item": "Polynomial mutation per-gene prob",
+    "document_value": "True",
+    "artifact_value": "True",
+    "difference": "N/A",
+    "tolerance": "exact",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Prose Body",
+    "item": "Polynomial mutation per-gene prob",
+    "document_value": "True",
+    "artifact_value": "True",
+    "difference": "N/A",
+    "tolerance": "exact",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Prose Body",
+    "item": "Mutation distribution index",
+    "document_value": "True",
+    "artifact_value": "True",
+    "difference": "N/A",
+    "tolerance": "exact",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Prose Body",
+    "item": "Mutation distribution index",
+    "document_value": "True",
+    "artifact_value": "True",
+    "difference": "N/A",
+    "tolerance": "exact",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Prose Body",
+    "item": "Inactivity Sharpe penalty",
+    "document_value": "True",
+    "artifact_value": "True",
+    "difference": "N/A",
+    "tolerance": "exact",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Prose Body",
+    "item": "Inactivity Sharpe penalty",
+    "document_value": "True",
+    "artifact_value": "True",
+    "difference": "N/A",
+    "tolerance": "exact",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Prose Body",
+    "item": "Inactivity MaxDD floor",
+    "document_value": "True",
+    "artifact_value": "True",
+    "difference": "N/A",
+    "tolerance": "exact",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Prose Body",
+    "item": "Inactivity MaxDD floor",
+    "document_value": "True",
+    "artifact_value": "True",
+    "difference": "N/A",
+    "tolerance": "exact",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Prose Body",
+    "item": "Standard friction per side",
+    "document_value": "True",
+    "artifact_value": "True",
+    "difference": "N/A",
+    "tolerance": "exact",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Prose Body",
+    "item": "Standard friction per side",
+    "document_value": "True",
+    "artifact_value": "True",
+    "difference": "N/A",
+    "tolerance": "exact",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Prose Body",
+    "item": "Standard friction RT",
+    "document_value": "True",
+    "artifact_value": "True",
+    "difference": "N/A",
+    "tolerance": "exact",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Prose Body",
+    "item": "Standard friction RT",
+    "document_value": "True",
+    "artifact_value": "True",
+    "difference": "N/A",
+    "tolerance": "exact",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Prose Body",
+    "item": "Doubled friction per side",
+    "document_value": "True",
+    "artifact_value": "True",
+    "difference": "N/A",
+    "tolerance": "exact",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Prose Body",
+    "item": "Doubled friction per side",
+    "document_value": "True",
+    "artifact_value": "True",
+    "difference": "N/A",
+    "tolerance": "exact",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Prose Body",
+    "item": "Doubled friction total per side",
+    "document_value": "True",
+    "artifact_value": "True",
+    "difference": "N/A",
+    "tolerance": "exact",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Prose Body",
+    "item": "Doubled friction total per side",
+    "document_value": "True",
+    "artifact_value": "True",
+    "difference": "N/A",
+    "tolerance": "exact",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Prose Body",
+    "item": "Doubled friction RT",
+    "document_value": "True",
+    "artifact_value": "True",
+    "difference": "N/A",
+    "tolerance": "exact",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Prose Body",
+    "item": "Doubled friction RT",
+    "document_value": "True",
+    "artifact_value": "True",
+    "difference": "N/A",
+    "tolerance": "exact",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Prose Body",
+    "item": "Drawdown reduction folds",
+    "document_value": "True",
+    "artifact_value": "True",
+    "difference": "N/A",
+    "tolerance": "exact",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Prose Body",
+    "item": "Drawdown reduction folds",
+    "document_value": "True",
+    "artifact_value": "True",
+    "difference": "N/A",
+    "tolerance": "exact",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Prose Body",
+    "item": "B&H outperformance folds",
+    "document_value": "True",
+    "artifact_value": "True",
+    "difference": "N/A",
+    "tolerance": "exact",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Prose Body",
+    "item": "B&H outperformance folds",
+    "document_value": "True",
+    "artifact_value": "True",
+    "difference": "N/A",
+    "tolerance": "exact",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Prose Body",
+    "item": "Positive hybrid folds",
+    "document_value": "True",
+    "artifact_value": "True",
+    "difference": "N/A",
+    "tolerance": "exact",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Prose Body",
+    "item": "Positive hybrid folds",
+    "document_value": "True",
+    "artifact_value": "True",
+    "difference": "N/A",
+    "tolerance": "exact",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Prose Body",
+    "item": "Hybrid outperformance folds",
+    "document_value": "True",
+    "artifact_value": "True",
+    "difference": "N/A",
+    "tolerance": "exact",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Prose Body",
+    "item": "Hybrid outperformance folds",
+    "document_value": "True",
+    "artifact_value": "True",
+    "difference": "N/A",
+    "tolerance": "exact",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Prose Body",
+    "item": "Diagnostic hybrid wins",
+    "document_value": "True",
+    "artifact_value": "True",
+    "difference": "N/A",
+    "tolerance": "exact",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Prose Body",
+    "item": "Diagnostic hybrid wins",
+    "document_value": "True",
+    "artifact_value": "True",
+    "difference": "N/A",
+    "tolerance": "exact",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Prose Body",
+    "item": "Diagnostic exposure B&H wins",
+    "document_value": "True",
+    "artifact_value": "True",
+    "difference": "N/A",
+    "tolerance": "exact",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Prose Body",
+    "item": "Diagnostic exposure B&H wins",
+    "document_value": "True",
+    "artifact_value": "True",
+    "difference": "N/A",
+    "tolerance": "exact",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Prose Body",
+    "item": "Diagnostic cash ties",
+    "document_value": "True",
+    "artifact_value": "True",
+    "difference": "N/A",
+    "tolerance": "exact",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Prose Body",
+    "item": "Diagnostic cash ties",
+    "document_value": "True",
+    "artifact_value": "True",
+    "difference": "N/A",
+    "tolerance": "exact",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Prose Body",
+    "item": "Diagnostic exposure lower DD",
+    "document_value": "True",
+    "artifact_value": "True",
+    "difference": "N/A",
+    "tolerance": "exact",
+    "status": "PASS"
+  },
+  {
+    "document": "COLLEGE_PROJECT_REPORT",
+    "location": "Prose Body",
+    "item": "Diagnostic exposure lower DD",
+    "document_value": "True",
+    "artifact_value": "True",
+    "difference": "N/A",
+    "tolerance": "exact",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Section 5.2",
+    "item": "Figure 2 reference (not Figure 3)",
+    "document_value": "True",
+    "artifact_value": "True",
+    "difference": "N/A",
+    "tolerance": "exact",
+    "status": "PASS"
+  },
+  {
+    "document": "RESEARCH_PAPER_DRAFT",
+    "location": "Figure Cross-Ref",
+    "item": "No stray Figures 2 and 3",
+    "document_value": "True",
+    "artifact_value": "True",
+    "difference": "N/A",
+    "tolerance": "exact",
+    "status": "PASS"
+  }
+]

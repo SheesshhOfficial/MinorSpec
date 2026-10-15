@@ -1,0 +1,20 @@
+# Codex review P002 - 12 October 2026
+
+Outcome: CHANGES REQUIRED. Campaign tables/figures/conclusions are provisional; do not use them in the final paper.
+
+## Independently verified
+python -m pytest tests -q: 20 passed, one warning, 16.87s. Raw campaign contains all 3 assets, 6 years each, seeds 42/43/44. Snapshot hashes checked by suite. Source evolves and selects using development data rather than test metrics. These are useful foundations, but existing tests miss the defects below.
+
+## Blocking accounting and evaluation findings
+1. Both rolling_runner.stitch_equity_curves and experiment_plots.build_stitched_equity_curves scale folds by eq[0], the first CLOSE after entry, instead of the fold's pre-trade initial capital. This discards first-day price returns and entry friction. Offline reproduction: two equity paths [90,99] with fold starting capital 100 become [100,110,110,121]; correct terminal wealth is 98.01. For saved B&H curves, product of actual annual returns gives terminal RELIANCE 228739.6793 vs published 223403.2038; TCS 165133.5298 vs 158908.5114; INFY 252782.9007 vs 246962.6461. Recompute ALL curves/tables/figures after fixing shared logic.
+2. Test classification scores unknown labels. The final three 2025 forward returns are NaN, yet target_direction is 0, and run_fold scores them as negatives. Mask unknown labels and record scored sample count. Also specify treatment of year-end labels whose horizon extends into next year; use within-fold known outcomes for annual classification while retaining full trading dates.
+3. Exposure diagnostic starts equity at initial capital instead of blending the first B&H return relative to pre-trade capital. Offline input B&H [90,99], allocation .25 yields 102.5 while correct blended terminal is 99.875. compute_performance_metrics converts allocations to positions>0, so .25 reports exposure=1.0. Binary time-in-market is not invested capital exposure; distinguish these and choose an actual development capital-weight measure for the matching diagnostic, including intraday trades.
+4. First test bar has no preceding signal because all signal simulators start evaluation with i=0 and no prefix context, while B&H enters at first open. Provide the last completed pre-test bar's information without allocating prior development positions or reading future data. First-day return must appear in return/volatility/Sharpe/drawdown metrics via explicit initial-capital baseline.
+5. simulate_sma_baseline counts entries and exits as trades, unlike hybrid completed round trips. B&H ignores zero-volume execution policy. Zero-volume final-bar positions can remain open and lose terminal liquidation costs when folds reset. Define comparable completed trade counts and deterministic tradable terminal policy with reconciled logs.
+
+## Evidence and reporting omissions
+Campaign raw output does not serialize trade logs, partition dates/indices, development probabilities, protocol/code hashes or complete environment/cost provenance per run. No saved rerun comparison evidence found. New isolation test rebuilds partitions independently rather than exercising runner; no test-perturbation selection test. Development partition is not tail-purged as requested; enforce and record horizon rules on actual indices.
+
+RESULTS.md also mislabels the earlier SPY DEVELOPMENT Sharpe 1.35/MDD 5% as test performance (approved test Sharpe .3388/MDD 14.98%). Doubled .10% commission plus .10% slippage is approximately .20% PER SIDE, .40% round trip, not .20% round trip. Claims about ~15% aggregate drawdown, local Pareto optima, production ensembles and causes of drawdown reduction exceed demonstrated evidence. Summary mixes different illustrative seeds and seed-42 ablations against median hybrid. Use paired same-seed comparisons and all-seed medians/ranges; avoid selecting illustrative winners. Annual return differences are not estimated risk-adjusted alpha.
+
+Next task P002-R1 fixes calculations, completes evidence and regenerates findings. Do not expand tuning or alter algorithm budgets based on observed outcomes.

@@ -1,0 +1,42 @@
+{
+  "RESEARCH_PAPER_DRAFT.docx": {
+    "size_bytes": 1724464,
+    "sha256": "3a99b983f954f0ddd45a9ccff2d5d8b8cc3b70003fdad08a0cc43409cd2e4ad0"
+  },
+  "RESEARCH_PAPER_DRAFT.pdf": {
+    "size_bytes": 754549,
+    "sha256": "78e50fed72f34b3bd5f9344a8c1388d54475d54f8c9f1bbfdda978997f30df8a"
+  },
+  "COLLEGE_PROJECT_REPORT.docx": {
+    "size_bytes": 2176731,
+    "sha256": "f785002d6538dadfe11f527bc29e45e9716ca33bff5c5f17637c92d28f259427"
+  },
+  "COLLEGE_PROJECT_REPORT.pdf": {
+    "size_bytes": 932373,
+    "sha256": "8fabde0c9f467fbab2a9dea26696932bac4392d77728a44987868ad648cda1b0"
+  },
+  "REFERENCE_LEDGER.md": {
+    "size_bytes": 8893,
+    "sha256": "4f9534f78001a55514c679cb9b6f6177b3396c77982017e8df8af4215da2faea"
+  },
+  "NUMERICAL_VERIFICATION_LEDGER.md": {
+    "size_bytes": 8720,
+    "sha256": "334dcbaea40bbdd128a3c5920f5baa09c27d2648d188f3ce0f73c94296b6b8c6"
+  },
+  "DELIVERED_CONTENT_VERIFICATION_LEDGER.md": {
+    "size_bytes": 17320,
+    "sha256": "af300c4d3baf5cab8f3e6933b554c45ecbc86aaf173a898ef6694855ecdff0c2"
+  },
+  "SUBMISSION_CHECKLIST.md": {
+    "size_bytes": 3208,
+    "sha256": "d14ae1693f57350712ee821f99eda3ec074885003f4ab8e2acd81ac176462ff7"
+  },
+  "REPRODUCIBILITY_GUIDE.md": {
+    "size_bytes": 7331,
+    "sha256": "dbfe6e7463013e602691082084b9cee24f20f1df3ca174ead1c7a1bdc373d612"
+  },
+  "VIVA_DEFENSE_NOTES.md": {
+    "size_bytes": 8745,
+    "sha256": "fd6f48346cf5a689af0ab15915e6a9093c46cff0d0cc44fe5f0280444be7f639"
+  }
+}

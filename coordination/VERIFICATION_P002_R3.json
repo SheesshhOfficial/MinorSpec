@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "campaign_repeat_mismatches": 0,
+  "independent_checks": {
+    "folds": 18,
+    "variants": 288,
+    "trade_logs": 234
+  },
+  "provenance_hashes_verified": true,
+  "raw_results_sha256": "255d6c18c7d56da385e9ab8aba53d83379a6156932b4d36e91c18bf2c5566c98"
+}

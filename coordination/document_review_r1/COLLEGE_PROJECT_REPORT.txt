@@ -1,0 +1,606 @@
+PAGE 1
+Minor Specialization Project Report | MIT Manipal (Computer Science) 
+Department of Computer Science, Manipal Institute of Technology — October 2026 
+MANIPAL INSTITUTE OF TECHNOLOGY 
+DEPARTMENT OF COMPUTER SCIENCE 
+B.Tech in Computer Science — Minor Specialization in Computational Intelligence 
+A Multi-Objective Evolutionary and Machine Learning 
+Hybrid Framework for Risk-Constrained Algorithmic Trading: 
+A Retrospective Walk-Forward Study on NSE Equities 
+A Minor Specialization Capstone Project Report Submitted in Partial Fulfillment 
+of the Requirements for the Degree of Bachelor of Technology in Computer Science 
+Submitted by: 
+ 
+Ashish Ranjan 
+Khuushi Maheshwari 
+Satyanarayan H. 
+ 
+Department of Computer Science 
+Project Supervisor: 
+ 
+_____________________________________ 
+ 
+Department of Computer Science 
+Manipal Institute of Technology 
+October 2026 
+ 
+
+PAGE 2
+Minor Specialization Project Report | MIT Manipal (Computer Science) 
+Department of Computer Science, Manipal Institute of Technology — October 2026 
+[DRAFT SUBMISSION NOTICE] 
+OPTIONAL DRAFT TEMPLATE (NOT CERTIFIED / UNSIGNED). The following certificate and declaration pages are 
+uncertified draft templates provided solely for administrative review. Official institutional certification requires 
+formal signature and departmental approval. 
+ 
+CERTIFICATE OF APPROVAL 
+(DRAFT TEMPLATE — NOT SIGNED) 
+This is to certify that the Minor Specialization Capstone Project Report entitled 'A Multi-Objective Evolutionary and 
+Machine Learning Hybrid Framework for Risk-Constrained Algorithmic Trading: A Retrospective Walk-Forward 
+Study on NSE Equities' is a draft record of work carried out by Ashish Ranjan, Khuushi Maheshwari, and 
+Satyanarayan H. in partial fulfillment of the requirements for the award of the degree of Bachelor of Technology in 
+Computer Science (Minor Specialization in Computational Intelligence) at the Manipal Institute of Technology, 
+Manipal, during the academic year 2026. 
+Project Supervisor:                                                   Head of Department: 
+ 
+_______________________                                               _______________________ 
+ 
+ 
+Internal Examiner:                                                    External Examiner: 
+ 
+_______________________                                               _______________________ 
+ 
+ 
+
+PAGE 3
+Minor Specialization Project Report | MIT Manipal (Computer Science) 
+Department of Computer Science, Manipal Institute of Technology — October 2026 
+CANDIDATES' DECLARATION 
+(DRAFT TEMPLATE — NOT SIGNED) 
+We hereby declare that this project report titled 'A Multi-Objective Evolutionary and Machine Learning Hybrid 
+Framework for Risk-Constrained Algorithmic Trading' submitted to the Department of Computer Science, Manipal 
+Institute of Technology, represents academic project work executed by us. All literature sources, primary academic 
+citations, and open-source computational tools used in this study have been referenced and acknowledged. We 
+confirm that all reported experimental metrics, tables, and figures have been strictly generated from executable 
+code and local data snapshots, without manual falsification, statistical fabrication, or plagiarism. 
+Ashish Ranjan 
+Khuushi Maheshwari 
+Satyanarayan H. 
+ 
+Department of Computer Science 
+Manipal Institute of Technology, October 2026 
+ACKNOWLEDGEMENTS 
+We express our gratitude to the Department of Computer Science, Manipal Institute of Technology, for providing 
+the academic infrastructure and computational environment required to complete this minor specialization 
+research capstone. We thank our faculty mentors and peers for constructive discussions on quantitative finance, 
+multi-objective optimization, and empirical research integrity. We also acknowledge the open-source scientific 
+Python community for maintaining foundational software libraries—including LightGBM, Numba, NumPy, Pandas, 
+Scikit-learn, and Streamlit—which made high-performance, reproducible simulation possible. 
+ 
+
+PAGE 4
+Minor Specialization Project Report | MIT Manipal (Computer Science) 
+Department of Computer Science, Manipal Institute of Technology — October 2026 
+PROJECT ABSTRACT 
+Modern computational intelligence systems in quantitative finance face severe real-world challenges stemming 
+from non-stationary market regimes, low signal-to-noise ratios, and the divergence between statistical 
+classification loss and portfolio equity dynamics. This minor specialization capstone project presents a 
+comprehensive, reproducible Two-Tier Computational Intelligence (CI) system evaluated through a retrospective 6-
+year walk-forward campaign across three large-cap National Stock Exchange of India (NSE) equities: Reliance 
+Industries (RELIANCE.NS), Tata Consultancy Services (TCS.NS), and Infosys (INFY.NS) over 2020–2025 (1,487 trading 
+days per asset). 
+In Tier 1, a LightGBM gradient-boosted decision tree is trained on 20 technical momentum, trend, volatility, and 
+volume indicators to forecast 3-day forward directional returns with market volatility regime detection. In Tier 2, 
+the Non-dominated Sorting Genetic Algorithm II (NSGA-II) evolves continuous trading rule chromosomes 
+(entry/exit probability hurdles, dynamic ATR stop-loss and take-profit multipliers, trailing stops, and volatility-
+conditioned position sizing) to simultaneously optimize Annualized Sharpe Ratio and Maximum Drawdown. A 
+custom vectorized simulator enforces strict next-bar Open execution, commissions and slippage (0.05% 
+commission + 0.05% slippage per side, approximately 10 bps per side, 20 bps round-trip; 40 bps doubled 
+sensitivity), opening gaps, conservative intrabar bracket conflict resolution, horizon purging, and scheduled fold-
+end liquidation barring final-day entries. 
+The empirical results provide key scientific insights: LightGBM achieves an average out-of-sample directional AUC 
+of 0.5324 and test accuracy of 52.68% (vs training-class base rate 52.66%), confirming that machine learning offers 
+modest statistical discrimination in liquid equity markets. The Full Hybrid strategy dampens annual maximum 
+drawdown in 17 out of 18 folds (94.4%). However, by remaining defensively in cash during multi-month 
+expansions, the Hybrid underperforms Buy & Hold in 13 out of 18 folds (72.2%), compounding 6-year seed-median 
+returns of -0.35% (RELIANCE.NS), +25.60% (TCS.NS), and +9.10% (INFY.NS), compared to Buy & Hold compound 
+growth of +128.74%, +65.13%, and +152.78%, respectively. An evolutionary ablation without ML signals yields 
+comparable or higher returns. These findings document the profound opportunity costs of defensive capital 
+allocation and establish the necessity of reproducible, causal simulation in financial AI. 
+ 
+
+PAGE 5
+Minor Specialization Project Report | MIT Manipal (Computer Science) 
+Department of Computer Science, Manipal Institute of Technology — October 2026 
+TABLE OF CONTENTS 
+CHAPTER 1 Introduction & Problem Definition..................................................................................................................6 
+CHAPTER 2 Literature Review & Theoretical Foundations.............................................................................................6 
+CHAPTER 3 System Architecture & Mathematical Formulation...................................................................................7 
+CHAPTER 4 Data Engineering & Walk-Forward Protocol ................................................................................................8 
+CHAPTER 5 High-Performance Vectorized Simulator Mechanics ................................................................................9 
+CHAPTER 6 Empirical Results & Comparative Evaluation ...............................................................................................9 
+CHAPTER 7 Automated Verification, Unit Testing & Reproducibility ...................................................................... 13 
+CHAPTER 8 Methodological Limitations & Research Boundaries ............................................................................. 13 
+CHAPTER 9 Conclusion & Future Directions ..................................................................................................................... 14 
+REFERENCES................................................................................................................................................................................. 14 
+ 
+ 
+
+PAGE 6
+Minor Specialization Project Report | MIT Manipal (Computer Science) 
+Department of Computer Science, Manipal Institute of Technology — October 2026 
+CHAPTER 1 
+Introduction & Problem Definition 
+1.1 Background & Motivation 
+Financial market forecasting represents one of the most intellectually challenging domains in computational 
+intelligence. Unlike computer vision or speech recognition where underlying data-generating distributions remain 
+stationary over time, financial time-series are characterized by time-varying dynamics, extreme noise, structural 
+regime shifts, and reflexive feedback loops [1], [5]. A common pitfall in applied computer science projects is 
+treating stock trading as a pure supervised regression or classification problem. In practice, a predictive model 
+achieving 55% directional accuracy will rapidly deplete portfolio equity if position sizing, trade timing, stop-loss 
+mechanics, and transaction friction are unmanaged [3]. 
+Conversely, pure rule-based algorithmic trading strategies rely on static technical indicators that suffer 
+catastrophic drawdowns during macroeconomic shocks. What is required is a dual architecture: statistical machine 
+learning to extract subtle probabilistic edges from high-dimensional indicators, coupled with multi-objective 
+metaheuristics to evolve dynamic risk-management policies that directly optimize the portfolio equity trajectory. 
+1.2 Objectives of the Capstone Study 
+This project pursues four core engineering and scientific objectives: (1) Build an auditable feature engineering 
+pipeline extracting 20 momentum, trend, volatility, and volume indicators alongside an expanding-window 
+volatility regime detector; (2) Implement a LightGBM gradient-boosted classifier to estimate forward 3-day 
+directional probabilities with validation early stopping; (3) Implement an NSGA-II multi-objective genetic algorithm 
+that evolves 7-dimensional real-valued chromosomes optimizing Annualized Sharpe Ratio and Maximum 
+Drawdown; (4) Execute a rigorous retrospective walk-forward evaluation across six annual folds (2020–2025) on 
+three NSE equities (RELIANCE.NS, TCS.NS, INFY.NS) with complete offline reproducibility, transaction costs, and 
+horizon purging. 
+CHAPTER 2 
+Literature Review & Theoretical Foundations 
+2.1 Market Efficiency & Technical Predictability 
+The theoretical foundation of market predictability is rooted in Eugene Fama's Efficient Market Hypothesis (EMH) 
+[6]. Under the weak-form EMH, current asset prices fully reflect all information contained in historical trading data. 
+Consequently, technical analysis rules cannot consistently generate risk-adjusted excess returns (alpha) net of 
+transaction costs. In modern econometric literature, Halbert White [5] demonstrated that apparent historical 
+outperformance is frequently an artifact of data snooping bias: when researchers evaluate thousands of rule 
+combinations, the best-performing rule often reflects luck rather than predictive skill. Bailey and López de Prado 
+[4] formalized this phenomenon through the Deflated Sharpe Ratio (DSR), which statistically adjusts observed 
+performance for selection bias and non-normal return distributions. 
+2.2 Purging, Embargoing & Causal Simulation Integrity 
+In Advances in Financial Machine Learning, Marcos López de Prado [3] identified temporal leakage as the primary 
+reason why financial machine learning models collapse when deployed out-of-sample. When multi-day forward 
+targets are assigned to daily bars, consecutive samples share overlapping information. Traditional random k-fold 
+
+PAGE 7
+Minor Specialization Project Report | MIT Manipal (Computer Science) 
+Department of Computer Science, Manipal Institute of Technology — October 2026 
+cross-validation leaks forward-looking information into the training set. To enforce causal integrity, chronological 
+train/validation/test splits must incorporate horizon purging: dropping trailing samples equal to the forward label 
+horizon (H=3) prior to split boundaries. 
+2.3 Evolutionary Multi-Objective Optimization & Gradient Boosting 
+The Non-dominated Sorting Genetic Algorithm II (NSGA-II) developed by Deb et al. [1] represents a benchmark 
+standard in multi-objective evolutionary computation. NSGA-II addresses the computational bottlenecks of early 
+genetic algorithms through fast non-dominated sorting, elitist parent-offspring combining, and a parameter-less 
+crowding distance operator that preserves population diversity along the Pareto front. In tabular machine learning, 
+Ke et al. [2] introduced LightGBM, which leverages Gradient-based One-Side Sampling (GOSS) and Exclusive 
+Feature Bundling (EFB) to deliver rapid, memory-efficient tree boosting, making it an ideal candidate for low-
+latency financial signal generation. 
+CHAPTER 3 
+System Architecture & Mathematical Formulation 
+3.1 Two-Tier Computational Intelligence Architecture 
+The system decouples directional prediction from risk-constrained decision execution across two computational 
+tiers: Tier 1 functions as a statistical feature extractor and probabilistic classifier, producing conditional directional 
+probabilities p_hat_t = P(y_t = 1 | x_t). Tier 2 acts as a metaheuristic policy engine, searching continuous trading 
+rule parameters to balance risk and return directly on portfolio equity. 
+ 
+Figure 3.1. Two-Tier Computational Intelligence system architecture: Data engineering with purged splits (H=3), Tier 1 LightGBM 
+classifier, Tier 2 NSGA-II optimizer, and causal backtest engine. 
+3.2 Chromosome Encoding & Parameter Bounds 
+Each candidate trading strategy is represented as a real-valued chromosome of length 7: g = [p_entry, p_exit, SL, 
+TP, Trail, VolAlloc, MaxHold], bounded strictly by domain constraints: 
+
+PAGE 8
+Minor Specialization Project Report | MIT Manipal (Computer Science) 
+Department of Computer Science, Manipal Institute of Technology — October 2026 
+Gene Index 
+Parameter Name 
+Valid Bounds 
+Operational Function 
+g_0 
+p_entry 
+[0.52, 0.85] 
+Model probability hurdle required to 
+queue a long entry 
+g_1 
+p_exit 
+[0.35, 0.50] 
+Model probability threshold triggering 
+queued exit 
+g_2 
+SL Multiplier 
+[1.0, 4.5] x ATR 
+Dynamic ATR stop-loss distance below 
+fill price 
+g_3 
+TP Multiplier 
+[1.5, 7.0] x ATR 
+Dynamic ATR take-profit target above 
+fill price 
+g_4 
+Trailing Stop 
+[0.01, 0.06] 
+Peak-profit trailing stop-loss fraction 
+(1% to 6%) 
+g_5 
+VolAlloc 
+[0.10, 1.00] 
+Capital allocation multiplier in high-
+volatility regimes 
+g_6 
+MaxHold 
+[5.0, 45.0] Bars 
+Maximum time-based holding 
+duration in sessions 
+3.3 Bi-Objective Optimization Formulation & Operators 
+NSGA-II evaluates each candidate chromosome across the 2-year Development partition under two conflicting 
+objective functions: (1) Maximize Annualized Sharpe Ratio f_1 = (mu_r / sigma_r) * sqrt(252) (assuming a 0.0% 
+risk-free rate); (2) Minimize Maximum Drawdown f_2 = max_t ((Peak_t - Equity_t) / Peak_t). A candidate solution a 
+Pareto-dominates solution b (a dominates b) if f_1(a) >= f_1(b) and f_2(a) <= f_2(b), with at least one strict 
+inequality. 
+Evolutionary search uses population size N=30 across G=10 generations. Variation operators comprise Simulated 
+Binary Crossover (SBX, crossover probability pc=0.85, distribution index eta_c=15) and Polynomial Mutation (per -
+gene mutation probability pm = 1/7, distribution index eta_m=20). To penalize inactivity during development, 
+candidate rules generating fewer than 5 completed trades receive a fitness penalty: Sharpe is decremented by 2.0 
+(Sharpe -= 2.0) and Maximum Drawdown is floored at 0.5 (MaxDD = max(MaxDD, 0.5)). Following search, the 
+solution with the highest penalized development Sharpe ratio is selected. If no candidate completes >= 5 trades, 
+the system defaults to 100% Cash during test evaluation. 
+CHAPTER 4 
+Data Engineering & Walk-Forward Protocol 
+4.1 Data Acquisition & Snapshot Manifest 
+To guarantee complete offline reproducibility, historical daily OHLCV series for Reliance Industries (RELIANCE.NS), 
+Tata Consultancy Services (TCS.NS), and Infosys (INFY.NS) were cached in immutable Apache Parquet format under 
+reports/experiments/inputs/. Cryptographic SHA-256 hashes for all snapshots are tracked in manifest.json. 
+Historical prices reflect Yahoo Finance dividend- and split-adjusted series (auto_adjust=True), ensuring corporate 
+actions do not induce artificial price discontinuities. 
+4.2 20 Engineered Technical Indicators 
+The feature pipeline computes 20 technical and regime indicators matching FEATURE_COLUMNS in 
+rolling_runner.py: (1) Trend Distances: percentage distances to 10-day, 50-day, and 200-day Simple Moving 
+Averages (dist_sma_10, dist_sma_50, dist_sma_200); (2) Momentum Indicators: MACD ratio (macd / close), MACD 
+
+PAGE 9
+Minor Specialization Project Report | MIT Manipal (Computer Science) 
+Department of Computer Science, Manipal Institute of Technology — October 2026 
+histogram, 14-day RSI (rsi_14), Stochastic %K and %D (stoch_k, stoch_d), and Rate of Change over 5, 10, and 20 
+days (roc_5, roc_10, roc_20); (3) Volatility Indicators: ATR percentage (atr_14 / close), 20-day and 60-day 
+annualized realized return volatility (volatility_20, volatility_60), Bollinger Bands %B (bb_pct_b), and Bandwidth 
+(bb_width); (4) Volume Indicators: 20-day volume z-score (volume_zscore) and 5-day On-Balance Volume Rate of 
+Change (obv_roc_5); (5) Market Regimes: Volatility Regime flag (regime_high_vol = 1 if volatility_20 exceeds its 
+rolling 100-day median, else 0) and Trend Regime flag (regime_trend = 1 if Close > SMA50 > SMA200; -1 if Close < 
+SMA50 < SMA200; 0 otherwise). No stationarity transformations or unit root tests are claimed; features are fed 
+directly as continuous inputs. 
+4.3 Chronological Partitions & Horizon Purging 
+For each test year Y in [2020, 2025], data partitions are strictly partitioned: Training [Y-8, Y-4] (5 years, trailing 3 
+bars purged); Validation [Y-3] (1 year, trailing 3 bars purged); Development [Y-2, Y-1] (2 years, NSGA-II search, 
+trailing 3 bars purged); and Test [Y] (1 year, out-of-sample). Purging the trailing 3 bars of training and validation 
+prevents the 3-day forward target from overlapping into adjacent out-of-sample sets. On the test partition, the 
+final 3 bars are masked from classification scoring because their forward targets resolve after the test window. 
+CHAPTER 5 
+High-Performance Vectorized Simulator Mechanics 
+5.1 Next-Bar Execution & Causal Timing 
+The backtest engine executes strictly on the Open price following signal generation: if LightGBM probability 
+p_hat_t >= p_entry at bar t Close, a long position is queued and filled at bar t+1 Open at price P_entry = 
+Open_{t+1} * (1 + slip). Same-bar fill prices are prohibited. The first trade on test bar 0 utilizes causal prefix context 
+(probability and regime state) evaluated at the final session of the Development partition (t=-1), ensuring seamless 
+multi-year continuity. 
+5.2 Intrabar Bracket Ordering & Friction Policies 
+To avoid optimistic fill bias, the simulator enforces strict intraday priority rules: (1) Stop-Loss Priority: If the session 
+Low touches the stop-loss and the session High touches the take-profit on the same day, the stop-loss is 
+prioritized; (2) Opening Gaps: Opening gap downs below the stop price execute at the open price with slippage 
+penalty; (3) Zero-Volume Prohibition: Zero-volume bars cannot execute trades; (4) Scheduled Fold-End Liquidation: 
+Prohibits new position entries on the final tradable session (i < last_tradable_idx) and liquidates open positions at 
+final session Close; (5) Transaction Costs: Standard friction is 0.05% commission and 0.05% slippage per side 
+(approximately 10 bps per side, 20 bps round-trip); sensitivity tests double friction to 0.10% per side 
+(approximately 40 bps round-trip). 
+CHAPTER 6 
+Empirical Results & Comparative Evaluation 
+6.1 Classification Performance & Model Diagnostics 
+All LightGBM classifiers were fitted with model_seed=42, max_depth=5, num_leaves=24, and learning_rate=0.03, 
+utilizing validation early stopping (30 rounds, max 250 boosting rounds). The final 3 bars of each annual test fold 
+were masked from classification scoring because their 3-day forward targets extend beyond the fold window. 
+
+PAGE 10
+Minor Specialization Project Report | MIT Manipal (Computer Science) 
+Department of Computer Science, Manipal Institute of Technology — October 2026 
+Table 6.1 details out-of-sample classification performance across all 18 annual folds. Across the entire campaign, 
+the classifier achieved an average out-of-sample AUC of 0.5324, an accuracy of 52.68% (compared to the training-
+class base rate of 52.66%), and a Brier score of 0.2501 (vs baseline 0.2500). Asset-specific mean AUCs were 0.5469 
+for RELIANCE.NS, 0.5304 for TCS.NS, and 0.5199 for INFY.NS. These metrics confirm that tabular gradient boosting 
+achieves only a modest statistical edge over naive base rates in liquid Indian equity markets. 
+Asset 
+Mean AUC 
+Min AUC 
+Max AUC 
+Test Acc 
+Base Acc 
+Brier 
+Scored N 
+RELIANCE.NS 
+0.5469 
+0.4415 
+0.6246 
+52.01% 
+52.21% 
+0.2494 
+244.8 
+TCS.NS 
+0.5304 
+0.4774 
+0.6182 
+50.91% 
+50.78% 
+0.2516 
+244.8 
+INFY.NS 
+0.5199 
+0.4509 
+0.5766 
+55.12% 
+54.99% 
+0.2493 
+244.8 
+Table 6.1. LightGBM out-of-sample directional classification performance across 18 annual folds (2020–2025). 
+6.2 Stitched Multi-Year Compounded Returns 
+Stitched multi-year curves carry capital forward across test folds by compounding annual net wealth ratios starting 
+from ₹100,000 on 2020-01-01 across 1,487 trading bars through 2025-12-31. Note that Buy & Hold is evaluated 
+under an annually liquidated and re-entered convention at fold boundaries matching the strategy's annual 
+evaluation, incurring transaction friction each year. Table 6.2 reports terminal compound performance. Multi-seed 
+variants present medians and min-max ranges across all three evolutionary seeds (42, 43, 44). Across all three 
+assets, Buy & Hold compounded significantly higher final wealth than the Full Hybrid: RELIANCE.NS Buy & Hold 
+grew +128.74% (₹228,740) vs Hybrid Seed Median -0.35% (₹99,652); TCS.NS Buy & Hold grew +65.13% (₹165,134) 
+vs Hybrid Seed Median +25.60% (₹125,600); and INFY.NS Buy & Hold grew +152.78% (₹252,783) vs Hybrid Seed 
+Median +9.10% (₹109,103). 
+Asset 
+Strategy Variant 
+Total Ret 
+CAGR 
+Sharpe 
+MaxDD 
+Terminal ₹ 
+RELIANCE.NS 
+Buy & Hold 
++128.74% 
+15.05% 
+0.64 
+44.08% 
+₹228,740 
+ 
+Full Hybrid (Median) 
+-0.35% 
+-0.06% 
+0.04 
+23.01% 
+₹99,652 
+ 
+Full Hybrid (Range) 
+[-6.58%, 
++5.18%] 
+[-1.15%, 
++0.86%] 
+[-0.07, 0.14] 
+[21.88%, 
+26.18%] 
+[₹93k, 
+₹105k] 
+ 
+No-ML Ablation (Median) 
++42.42% 
+6.18% 
+0.45 
+20.03% 
+₹142,415 
+TCS.NS 
+Buy & Hold 
++65.13% 
+8.87% 
+0.48 
+34.57% 
+₹165,134 
+ 
+Full Hybrid (Median) 
++25.60% 
+3.94% 
+0.44 
+28.66% 
+₹125,600 
+ 
+Full Hybrid (Range) 
+[+10.60%, 
++41.86%] 
+[+1.72%, 
++6.10%] 
+[0.21, 0.54] 
+[18.29%, 
+30.12%] 
+[₹111k, 
+₹142k] 
+ 
+No-ML Ablation (Median) 
++47.37% 
+6.79% 
+0.50 
+31.62% 
+₹147,369 
+INFY.NS 
+Buy & Hold 
++152.78% 
+17.02% 
+0.71 
+35.93% 
+₹252,783 
+ 
+Full Hybrid (Median) 
++9.10% 
+1.49% 
+0.18 
+37.16% 
+₹109,103 
+Table 6.2. Stitched 6-year compounded performance summary (2020–2025, 1,487 trading sessions). 
+
+PAGE 11
+Minor Specialization Project Report | MIT Manipal (Computer Science) 
+Department of Computer Science, Manipal Institute of Technology — October 2026 
+ 
+Figure 6.1. Stitched 6-year compounded equity curves (left) and underwater drawdown profiles (right) across 2020–2025 for Buy & Hold 
+vs. individual Full Hybrid seeds (42, 43, 44) and No-ML Ablation (Seed 42). 
+6.3 Annual Paired Scorecard & Drawdown Dampening 
+The annual scorecard across 18 test folds reveals the structural trade-off of risk-constrained trading: - Positive 
+Hybrid Return: 10 / 18 folds (55.6%); - Hybrid Outperformed Buy & Hold: 5 / 18 folds (27.8%)—specifically in 
+down/choppy markets (TCS 2022 +16.55% diff; INFY 2022 +11.44% diff; RELIANCE 2023 +2.00% diff; TCS 2023 
++3.92% diff; RELIANCE 2024 +1.97% diff); - Buy & Hold Outperformed Hybrid: 13 / 18 folds (72.2%)—concentrated 
+in bull markets (e.g., INFY 2020 B&H +74.69% vs Hyb +27.83%); - Lower Maximum Drawdown: Hybrid achieved 
+lower annual drawdown in 17 / 18 folds (94.4%). The sole exception was RELIANCE.NS in 2022, where Buy & Hold 
+had a 17.27% drawdown vs Hybrid median drawdown of 17.45%. 
+Asset 
+Year 
+B&H Return 
+Hyb Median 
+Return Diff 
+Ablation Med 
+RELIANCE.NS 
+2020 
++32.30% 
+0.00% (Cash) 
+-32.30% 
++9.89% 
+ 
+2022 
++7.84% 
+-12.07% 
+-19.90% 
+-7.36% 
+ 
+2023 
++10.00% 
++12.00% 
++2.00% 
++7.60% 
+TCS.NS 
+2022 
+-12.13% 
++4.41% 
++16.55% 
+-2.44% 
+ 
+2023 
++20.24% 
++24.16% 
++3.92% 
++10.97% 
+INFY.NS 
+2022 
+-18.54% 
+-7.10% 
++11.44% 
+-9.69% 
+Table 6.3. Representative annual paired comparisons illustrating market-stress outperformance vs bull-market drag. 
+
+PAGE 12
+Minor Specialization Project Report | MIT Manipal (Computer Science) 
+Department of Computer Science, Manipal Institute of Technology — October 2026 
+6.4 Ablation and Exposure-Matched Diagnostic 
+When NSGA-II evolved rules with a constant probability (p=0.60, omitting ML features), the Ablation achieved 6-
+year stitched returns of +42.42% for RELIANCE.NS, +47.37% for TCS.NS, and +18.69% for INFY.NS—exceeding the 
+Full Hybrid on all assets. Furthermore, an Exposure-Matched Buy & Hold diagnostic blending passive holding with 
+cash based on the Hybrid's development exposure fraction (w_dev) outperformed the Full Hybrid in 29 of 54 runs 
+(53.7%), while the Hybrid outperformed in 22 runs (40.7%), with 3 ties (RELIANCE 2020 cash fallbacks). Exposure-
+Matched Buy & Hold exhibited lower maximum drawdown than the Full Hybrid in 43 of 54 runs (79.6%). This 
+diagnostic assumes daily frictionless rebalancing and 0% cash return. This indicates that defensive metaheuristic 
+rules provide robust risk containment, but the ML signal added no measurable excess return over technical 
+filtering. 
+6.5 Transaction Cost Sensitivity & Slippage Shift 
+Under doubled transaction friction (0.10% commission + 0.10% slippage per side, 40 bps round-trip), total returns 
+dropped sharply: RELIANCE.NS Seed 42 fell from -6.58% to -25.41% (-18.83 pp), TCS.NS Seed 43 fell from +25.60% 
+to +19.61% (-5.99 pp), and INFY.NS Seed 44 declined from +27.88% to -7.97% (-35.85 pp) (Table 6.4). Slippage 
+operates non-linearly: higher entry prices elevate absolute ATR stop prices, causing intrabar stops to trigger on 
+sessions that would have otherwise remained open. 
+Asset 
+GA Seed 
+1x Total Ret 
+2x Total Ret 
+Return Diff 
+1x Sharpe 
+RELIANCE.NS 
+42 
+-6.58% 
+-25.41% 
+-18.83 pp 
+-0.07 
+TCS.NS 
+43 
++25.60% 
++19.61% 
+-5.99 pp 
++0.44 
+INFY.NS 
+44 
++27.88% 
+-7.97% 
+-35.85 pp 
++0.36 
+Table 6.4. Transaction cost sensitivity under standard (20 bps) vs doubled (40 bps) round-trip friction. 
+ 
+Figure 6.2. Multi-seed performance distributions (Seeds 42, 43, 44) across strategy variants. 
+
+PAGE 13
+Minor Specialization Project Report | MIT Manipal (Computer Science) 
+Department of Computer Science, Manipal Institute of Technology — October 2026 
+ 
+Figure 6.3. Annual fold risk-return scatter (Annualized Sharpe vs Total Return). 
+CHAPTER 7 
+Automated Verification, Unit Testing & Reproducibility 
+7.1 Regression Test Suite 
+The project includes an automated pytest suite covering Numba simulator execution timing, gap handling, stop-
+loss priority, chronological split purging, real-fold offline reproducibility, trailing zero-volume liquidation, and final-
+day entry prohibition. All tests pass offline in ~8 seconds with zero network calls. 
+7.2 Campaign-Wide Automated Reproducibility Audit 
+A standalone verification script (scripts/audit_campaign_reproducibility.py) re-runs all 18 annual folds across all 3 
+seeds with monkeypatched yfinance download blockers, asserting that chosen chromosome genes match saved 
+artifacts within 10^-12 and equity curves match within 10^-7. The audit evaluated 306 assertions with zero 
+mismatches, confirming complete bit-level code reproducibility. Furthermore, scripts/verify_numerical_claims.py 
+programmatically asserts all 47 quantitative claims reported across this capstone report against the underlying 
+experiment CSV and JSON files with 100% pass rate. 
+CHAPTER 8 
+Methodological Limitations & Research Boundaries 
+The empirical conclusions are bounded by four key constraints: (1) Single-Asset Isolated Evaluation: Strategies are 
+evaluated on individual stocks; cross-asset portfolio diversification and risk parity are not modeled; (2) Multi-Year 
+vs Annual Drawdown Asymmetry: Lower annual drawdowns in 17 of 18 folds do not guarantee lower multi-year 
+
+PAGE 14
+Minor Specialization Project Report | MIT Manipal (Computer Science) 
+Department of Computer Science, Manipal Institute of Technology — October 2026 
+risk. On INFY.NS, the Hybrid 6-year maximum drawdown reached 37.16% compared to 35.93% for Buy & Hold, 
+illustrating how compounded capital erosion can produce deeper multi-year drawdowns; (3) Survivorship Bias: The 
+universe is limited to large-cap equities surviving through 2025; (4) Corporate Action Adjusted Data: Backward-
+adjusted OHLC series from Yahoo Finance are used rather than raw exchange order books; (5) Retrospective 
+Protocol Corrections: The walk-forward protocol was refined through versioned retrospective audit corrections 
+(v1.1.0 in protocol_correction.json). 
+CHAPTER 9 
+Conclusion & Future Directions 
+This capstone project engineered and validated a Two-Tier Computational Intelligence trading system combining 
+LightGBM and NSGA-II. Through strict walk-forward evaluation on three NSE equities over 2020–2025, the 
+research established that while evolutionary rules successfully dampen annual drawdowns in 94.4% of folds, 
+defensive cash-holding imposes heavy opportunity costs during secular bull regimes, resulting in lower multi-year 
+compounded wealth than Buy & Hold. Technical parameter search without ML signals produced equivalent or 
+superior returns. Future research will explore cross-asset portfolio allocation, macroeconomic conditioning, and 
+intraday tick-level execution models. 
+REFERENCES 
+[1] K. Deb, A. Pratap, S. Agarwal, and T. Meyarivan, "A fast and elitist multiobjective genetic algorithm: NSGA-II," IEEE Transactions on 
+Evolutionary Computation, vol. 6, no. 2, pp. 182–197, Apr. 2002. DOI: 10.1109/4235.996017. 
+[2] G. Ke, Q. Meng, T. Finley, T. Wang, W. Chen, W. Ma, Q. Ye, and T.-Y. Liu, "LightGBM: A highly efficient gradient boosting decision 
+tree," in Advances in Neural Information Processing Systems 30 (NIPS 2017), Long Beach, CA, USA, 2017, pp. 3146 –3154. 
+[3] M. López de Prado, Advances in Financial Machine Learning. Hoboken, NJ, USA: John Wiley & Sons, 2018. ISBN: 978 -1119482086. 
+[4] D. H. Bailey and M. López de Prado, "The deflated Sharpe ratio: Correcting for selection bias, backtest overfitting and n on-
+normality," The Journal of Portfolio Management, vol. 40, no. 5, pp. 94–107, 2014. DOI: 10.3905/jpm.2014.40.5.094. 
+[5] H. White, "A reality check for data snooping," Econometrica, vol. 68, no. 5, pp. 1097 –1126, Sep. 2000. DOI: 10.1111/1468-
+0262.00152. 
+[6] E. F. Fama, "Efficient capital markets: A review of theory and empirical work," The Journal of Finance, vol. 25, no. 2, p p. 383–417, 
+May 1970. DOI: 10.2307/2325486. 
+[7] R. Aroussi et al., "yfinance: Download market data from Yahoo! Finance," Python package documentation, 2024 –2026. [Online]. 
+Available: https://github.com/ranaroussi/yfinance. 

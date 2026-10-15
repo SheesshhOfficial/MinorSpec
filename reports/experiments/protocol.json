@@ -1,0 +1,97 @@
+{
+  "title": "Retrospective Rolling NSE Research Protocol (LightGBM + NSGA-II)",
+  "task": "P002",
+  "status": "FROZEN_BEFORE_CAMPAIGN",
+  "created_at": "2026-10-12",
+  "nature": "Retrospective (earlier single-split results have been inspected; results remain exploratory historical evidence)",
+  "research_question": "Does a hybrid predictive classifier (LightGBM) combined with multi-objective evolutionary strategy optimization (NSGA-II) discover trading policies that offer a superior or useful risk/return trade-off across Indian equities and temporal market regimes compared to standard benchmarks and ablations?",
+  "universe": [
+    "RELIANCE.NS",
+    "TCS.NS",
+    "INFY.NS"
+  ],
+  "portfolio_presentation": "Assets evaluated strictly individually; no portfolio blending or cross-asset diversification is claimed.",
+  "fixed_date_cutoff": "2025-12-31",
+  "test_years": [2020, 2021, 2022, 2023, 2024, 2025],
+  "fold_window_structure": {
+    "train_calendar_years": 5,
+    "validation_calendar_years": 1,
+    "development_calendar_years": 2,
+    "test_calendar_years": 1,
+    "annual_shift": 1,
+    "description": "Each annual fold shifts forward by 1 year. E.g. Test 2020 uses Train 2012-2016, Val 2017, Dev 2018-2019, Test 2020."
+  },
+  "purging_and_isolation": {
+    "prediction_horizon_bars": 3,
+    "warmup_policy": "Technical indicators computed over available historical prefix; initial 200 bars dropped for indicator stabilization.",
+    "purge_policy": "At chronological boundaries (Train -> Val, Val -> Dev, Dev -> Test), trailing 3 bars whose forward targets overlap subsequent partitions are purged from supervised datasets.",
+    "test_isolation": "Test partition prices, indicators, predictions, and returns are strictly unavailable during model fitting, early stopping, NSGA-II evolution, and representative strategy selection. Test labels are used exclusively for post-hoc evaluation."
+  },
+  "model_specification": {
+    "architecture": "LightGBM GBDT Binary Classifier",
+    "features_count": 20,
+    "target": "target_direction = 1 if Close[t+3]/Close[t] - 1 > 0 else 0",
+    "hyperparameters": {
+      "boosting_type": "gbdt",
+      "objective": "binary",
+      "learning_rate": 0.03,
+      "max_depth": 5,
+      "num_leaves": 24,
+      "feature_fraction": 0.8,
+      "bagging_fraction": 0.8,
+      "bagging_freq": 1,
+      "num_boost_round": 250,
+      "early_stopping_rounds": 30
+    },
+    "fixed_model_seed": 42
+  },
+  "evolutionary_specification": {
+    "algorithm": "NSGA-II (Deb et al., 2002)",
+    "population_size": 30,
+    "generations": 10,
+    "crossover_probability": 0.85,
+    "mutation_probability": 0.20,
+    "eta_crossover": 15.0,
+    "eta_mutation": 20.0,
+    "objectives": [
+      "Maximize Sharpe Ratio (with GA inactivity penalty if trades < 5)",
+      "Minimize Maximum Drawdown (with GA inactivity penalty if trades < 5)"
+    ],
+    "chromosome_genes": [
+      {"name": "p_entry_threshold", "bounds": [0.52, 0.85]},
+      {"name": "p_exit_threshold", "bounds": [0.35, 0.50]},
+      {"name": "stop_loss_atr_mult", "bounds": [1.0, 4.5]},
+      {"name": "take_profit_atr_mult", "bounds": [1.5, 7.0]},
+      {"name": "trailing_stop_pct", "bounds": [0.01, 0.06]},
+      {"name": "regime_vol_discount", "bounds": [0.10, 1.00]},
+      {"name": "max_holding_period", "bounds": [5.0, 45.0]}
+    ],
+    "evolution_seeds": [42, 43, 44],
+    "selection_rule": "Highest Development Sharpe among strategies with Dev trades >= 5. If none meet >= 5 trades, hold cash (100% cash, 0 trades) and record infeasibility."
+  },
+  "market_frictions": {
+    "commission_pct": 0.0005,
+    "slippage_pct": 0.0005,
+    "initial_capital": 100000.0,
+    "cost_sensitivity_multiplier": 2.0
+  },
+  "benchmarks_and_ablations": {
+    "buy_and_hold": "Full exposure entering at first test bar Open with commission and slippage, liquidating at final test bar Close.",
+    "cash_baseline": "100% cash allocation earning 0.0% nominal return (risk-free rate = 0).",
+    "sma_50_200": "Long when Close[t-1] > SMA50[t-1] and SMA50[t-1] > SMA200[t-1]; cash otherwise. Enters/exits at Open with standard friction.",
+    "fixed_gene_hybrid": "LightGBM model with fixed unoptimized chromosome [0.55, 0.45, 2.0, 3.5, 0.03, 0.5, 15.0].",
+    "constant_prob_ablation": "NSGA-II strategy evolved without ML by substituting constant p_up = 0.60 across Dev and Test.",
+    "exposure_matched_bh": "Diagnostic blending Buy & Hold daily returns with cash using the hybrid strategy's DEVELOPMENT exposure fraction."
+  },
+  "metrics_reported": [
+    "total_return",
+    "cagr",
+    "sharpe_ratio",
+    "max_drawdown",
+    "annualized_volatility",
+    "trade_count",
+    "win_rate",
+    "exposure_fraction",
+    "terminal_equity"
+  ]
+}

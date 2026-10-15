@@ -1,0 +1,25 @@
+# Codex review P003 - 12 October 2026
+
+Outcome: CHANGES REQUIRED. Approved experiment source/data hashes remain unchanged and deliverable manifest hashes match. PDFs are 8 and 13 pages, with correct author names, but manuscript methods do not describe implemented experiments accurately.
+
+## Independent inspection
+Extracted PDF text and rendered all 21 pages to coordination/document_review/. Viewed full contact sheets; methods/equations visibly contain raw dollar signs and malformed TeX, and college contents page numbers are fabricated/outdated (references page 20 in a 13-page PDF). Bundled Python lacked fitz; available local PyMuPDF used for PDF read/render only. No document authoring performed by Codex.
+
+## Blocking factual corrections
+Paper pages 2-3 and college methods invent Williams %R, CMF, OBV20 slope, SMA20 ratios and expanding60-day median. Actual FEATURE_COLUMNS is the 20-input list in rolling_runner.py: SMA10/50/200 distances; macd_ratio/macd_hist; RSI14; stoch_k/d; ROC5/10/20; ATR%; volatility20/60; bb_pct_b/width; volume_zscore; obv_roc_5; high-vol and trend regimes. Vol regime is volatility20 above rolling100-day median. No stationarity tests justify 'stationary features'.
+Paper says n_estimators=300, calibration, different gene bounds, different penalties, crossover=.90, mutation=1/7. Actual num_boost_round=250 maximum, early stopping30; no explicit calibration; bounds [(.52,.85),(.35,.50),(1,4.5),(1.5,7),(.01,.06),(.10,1),(5,45)]; inactive fitness subtracts2 from Sharpe and floors DD at .5, not Sharpe=-10/DD=1; crossover .85; mutation uses implemented operator (do not infer from unused config); read actual polynomial_mutation to state exact per-gene chance.
+Standard .05% commission+.05% slippage PER SIDE is approximately10bps per side,20bps round trip. Abstract/body/college/viva incorrectly say10bps round trip. Doubled costs approximately40bps round trip.
+Paper table1 asset mean AUCs incorrect: actual RELIANCE .5468755677; TCS .5303926473; INFY .5199212366. Compute ALL table cells from artifact, not old pasted values. Mean overall .5324 remains correct.
+Numerical ledger misidentifies the sole median annual-DD nonwin as INFY2025; actual RELIANCE2022. Baseline Brier actual mean .25001353199 is training-prior-dependent, not a guaranteed .25 or fixed p=.5. Several claimed terminal decimals differ from CSV despite YES labels; use rounding and actual comparison tolerances.
+Figure1 caption claims median and seed envelope but image contains individual seeds and seed42 ablation. Methods refer to Figure1 as architecture although it is equity. Fix captions/cross-references to actual plots.
+Paper does not clearly explain annually liquidated/reentered B&H, fitness-vs-raw scores, feasibility cash fallback, hypothetical diagnostic rebalancing and six-year INFY median DD37.16% exceeding B&H35.93%. Include them; stop claiming robust tail-risk/causal cash attribution on these data.
+
+## Draft metadata and formatting
+Supervisor title-page designation/signature placeholders violate requested blank supervisor field. Remove all supervisor-specific placeholders; leave blank field. Remove invented student email-domain placeholders; unspecified emails may be omitted or blank. Certificate/declaration asserts institutional approval, bona fide/original student work and factual acknowledgements without confirmation. Remove certificate and declaration by default, or clearly mark unsigned OPTIONAL TEMPLATE NOT CERTIFIED/NOT SIGNED and require students/faculty to review the wording. No asserted departmental format: none supplied.
+College TOC must be a real updated Word contents field or actual page map, not arbitrary planned page numbers. Render equations as OMML or readable plain notation, no raw TeX. Academic headings should use black. Show readable chart labels at final printed size; reformat tall 3-panel figure if necessary. Author names remain Ashish Ranjan, Khuushi Maheshwari, Satyanarayan H.; MIT; B.Tech Computer Science.
+Repro guide falsely says all steps offline; Streamlit dashboard uses age-refreshing downloader. Clearly separate offline snapshot campaign/audit from potentially network-dependent dashboard. Requirements use lower bounds, not pinned dependencies; distinguish observed versions from lockfile and avoid unsupported Python/platform compatibility guarantees.
+
+## References
+Independently confirmed LightGBM metadata from the official NeurIPS2017 proceedings. IEEE NSGA DOI resolves but robots barrier; DSR publisher returned403 in this review. Do not present restricted-content claims as independently checked. Reference [1] NSGA-II is incorrectly cited to support market noise in intro; map claims to appropriate actual references. EMH does not prove all technical rules unprofitable, and White does not guarantee a profitable strategy in every random search. Bound statements. Verify bibliography and claim support, recording accessible primary URLs and limitations.
+
+Next task P003-R1 repairs documents and ledgers ONLY, preserves approved experiments, regenerates DOCX/PDF and manifests, and performs actual page-by-page visual QA. No new experiments/tuning needed.

@@ -226,3 +226,29 @@ def test_empty_filtered_journal_keeps_complete_download(app_factory):
     labels = [element.proto.label for element in app.get("download_button")]
     assert any("Complete Log (2 trades" in label for label in labels)
     assert not any("Filtered Log" in label for label in labels)
+
+
+@pytest.mark.parametrize("viewport_width", [360, 1280])
+def test_equity_chart_reserves_separate_title_and_wrapping_legend_bands(viewport_width):
+    """Layout contract at mobile/desktop widths; this is not a rendered-pixel test."""
+    results = create_deterministic_mock_results()
+    sim = results["detailed_test_result"]
+    fig = create_equity_drawdown_chart(sim, "RELIANCE.NS", results["splits"]["test"])
+    assert fig.layout.width is None  # Streamlit controls the responsive container width.
+    fig.update_layout(width=viewport_width)
+
+    title = fig.layout.annotations[0]
+    assert "<br>" in title.text
+    assert title.y >= 1
+    assert title.yanchor == "bottom"
+    assert title.xanchor == "left"
+    assert title.font.size <= 13
+    assert fig.layout.legend.orientation == "h"
+    assert fig.layout.legend.yanchor == "top"
+    assert fig.layout.legend.y < 0
+    assert fig.layout.margin.t >= 70
+    assert fig.layout.margin.b >= 140  # Space for four wrapped entries plus date ticks.
+    assert fig.layout.height - fig.layout.margin.t - fig.layout.margin.b >= 380
+    # Layout changes must not alter either return/equity path.
+    np.testing.assert_array_equal(fig.data[0].y, sim["equity"])
+    np.testing.assert_array_equal(fig.data[1].y, sim["benchmark_equity"])

@@ -171,7 +171,7 @@ def create_equity_drawdown_chart(
         shared_xaxes=True,
         vertical_spacing=0.08,
         subplot_titles=(
-            f"Portfolio · {initial_label} starting capital",
+            f"Portfolio<br>{initial_label} initial",
             "Drawdown from peak (%)",
         ),
         row_heights=[0.68, 0.32],
@@ -215,18 +215,27 @@ def create_equity_drawdown_chart(
         hovertemplate="<b>Benchmark DD</b>: %{y:.2f}%<extra></extra>",
     ), row=2, col=1)
 
+    # Keep the title and legend in separate bands. The horizontal legend wraps
+    # naturally as the container narrows; reserve enough bottom space for all
+    # four entries on separate rows rather than letting them cover a subplot.
+    equity_layout = dict(CHART_LAYOUT_DEFAULTS)
+    equity_layout["margin"] = dict(l=48, r=24, t=75, b=150)
     fig.update_layout(
-        **CHART_LAYOUT_DEFAULTS,
+        **equity_layout,
         hovermode="x unified",
         legend=dict(
             orientation="h",
-            yanchor="bottom",
-            y=1.02,
+            yanchor="top",
+            y=-0.16,
             xanchor="left",
             x=0,
             font=dict(size=11),
         ),
-        height=480,
+        height=620,
+    )
+    fig.update_annotations(
+        x=0, xanchor="left", yanchor="bottom", yshift=8,
+        font=dict(size=13),
     )
     fig.update_yaxes(title_text=f"Portfolio ({currency_code})", gridcolor="#263247", row=1, col=1)
     fig.update_yaxes(title_text="Drawdown %", gridcolor="#263247", row=2, col=1)

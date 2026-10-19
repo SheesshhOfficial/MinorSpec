@@ -9,6 +9,7 @@ import hashlib
 import json
 import platform
 import sys
+import shlex
 from pathlib import Path
 import numpy as np
 import pandas as pd
@@ -21,7 +22,9 @@ from src.config import (
     DEFAULT_SLIPPAGE_PCT,
     INITIAL_CAPITAL,
 )
+from src.backtest_engine import ENGINE_ACCOUNTING_VERSION
 from src.pipeline import run_experiment_pipeline
+from src.data_loader import ticker_cache_key
 
 
 def _compute_sha256(file_path: Path) -> str:
@@ -59,10 +62,24 @@ def main():
     parser.add_argument("--seed", type=int, default=42, help="Random seed for reproducibility")
     parser.add_argument("--save-baseline", action="store_true", help="Save machine-readable results to reports/baseline/")
     parser.add_argument("--force-refresh", action="store_true", help="Force re-download of raw market data")
+    parser.add_argument("--offline", action="store_true", help="Use an existing snapshot without any network request; report its actual date coverage")
     args = parser.parse_args()
 
-    clean_ticker = args.ticker.upper().replace("^", "")
+    clean_ticker = ticker_cache_key(args.ticker)
     raw_file = RAW_DATA_DIR / f"{clean_ticker}.parquet"
+
+    baseline_dir = REPORTS_DIR / "baseline" / f"engine_v{ENGINE_ACCOUNTING_VERSION}"
+    out_file = baseline_dir / f"baseline_{clean_ticker}_seed{args.seed}.json"
+    if args.save_baseline and out_file.exists():
+        raise FileExistsError(f"Refusing to overwrite recorded results: {out_file}")
+    command_parts = ["python", "-m", "src.walk_forward", "--ticker", args.ticker,
+                     "--pop-size", str(args.pop_size), "--generations", str(args.generations), "--seed", str(args.seed)]
+    if args.save_baseline:
+        command_parts.append("--save-baseline")
+    if args.force_refresh:
+        command_parts.append("--force-refresh")
+    if args.offline:
+        command_parts.append("--offline")
 
     print("=" * 65)
     print(f"RUNNING SINGLE-SPLIT CHRONOLOGICAL EXPERIMENT FOR {args.ticker}")
@@ -75,6 +92,7 @@ def main():
         num_generations=args.generations,
         seed=args.seed,
         force_refresh=args.force_refresh,
+        offline=args.offline,
     )
 
     splits = results["splits"]
@@ -110,9 +128,7 @@ def main():
     print(f"Benchmark Test Max DD  : {detailed['benchmark_max_drawdown']*100:.2f}%")
 
     if args.save_baseline:
-        baseline_dir = REPORTS_DIR / "baseline"
         baseline_dir.mkdir(parents=True, exist_ok=True)
-        out_file = baseline_dir / f"baseline_{clean_ticker}_seed{args.seed}.json"
 
         # Compute dataset hashes
         raw_sha256 = _compute_sha256(raw_file) if raw_file.exists() else "not_found"
@@ -144,8 +160,11 @@ def main():
         artifact = {
             "metadata": {
                 "ticker": args.ticker,
-                "command": f"python -m src.walk_forward --ticker {args.ticker} --pop-size {args.pop_size} --generations {args.generations} --seed {args.seed} --save-baseline",
+                "command": shlex.join(command_parts),
+                "engine_accounting_version": ENGINE_ACCOUNTING_VERSION,
                 "seed": args.seed,
+                "model_seed": results["model_seed"],
+                "data_request": results["data_provenance"],
                 "provider": "yfinance",
                 "adjustment": "auto_adjust=True (splits & dividends adjusted)",
                 "costs": {
@@ -214,7 +233,7 @@ def main():
             "equity_curve": equity_series,
         }
 
-        with open(out_file, "w") as f:
+        with open(out_file, "x") as f:
             json.dump(artifact, f, indent=2)
         print(f"\n[Saved Baseline Artifact with SHA-256 and Full Provenance] -> {out_file}")
 
@@ -223,3 +242,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

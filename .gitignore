@@ -1,0 +1,10 @@
+# Existing tracked historical artifacts are deliberately retained.
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.nbc
+*.nbi
+.pytest_cache/
+node_modules/
+.DS_Store

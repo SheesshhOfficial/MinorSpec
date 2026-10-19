@@ -18,12 +18,11 @@ Contract:
    - The test partition is evaluated once on the frozen representative strategy.
    - Exploratory inspection of the full front on test is kept clearly separate.
 3. Reproducibility:
-   - An explicit integer seed ensures reproducible random numbers, model fitting, and GA populations.
+   - The search seed controls GA populations; the model seed is fixed at 42.
 """
 from typing import Dict, List, Optional, Tuple
 import numpy as np
 import pandas as pd
-import random
 
 from src.config import PREDICTION_HORIZON_BARS, BENCHMARK_TICKER
 from src.data_loader import fetch_and_cache_ticker
@@ -47,7 +46,16 @@ def create_purged_splits(
     Creates four strictly chronologically ordered partitions with purged gap horizons.
     train -> [purge] -> val -> [purge] -> dev -> [purge] -> test
     """
+    if isinstance(horizon_bars, (bool, np.bool_)) or not isinstance(horizon_bars, (int, np.integer)) or horizon_bars < 0:
+        raise ValueError("horizon_bars must be a nonnegative integer")
+    fractions = np.asarray([train_frac, val_frac, dev_frac], dtype=float)
+    if not np.isfinite(fractions).all() or (fractions <= 0).any() or fractions.sum() >= 1:
+        raise ValueError("Split fractions must be positive, finite, and sum to less than one")
+    if "Date" not in df or df["Date"].isna().any() or df["Date"].duplicated().any() or not df["Date"].is_monotonic_increasing:
+        raise ValueError("Split dates must be nonmissing, unique, and chronologically increasing")
     n = len(df)
+    if any(int(n * frac) < 1 for frac in fractions):
+        raise ValueError("Dataset too small to give every split at least one row")
     n_train = int(n * train_frac)
     n_val = int(n * val_frac)
     n_dev = int(n * dev_frac)
@@ -76,6 +84,11 @@ def create_purged_splits(
         raise ValueError("Dataset too small for test split after purging.")
     test_df = df.iloc[test_start:].copy().reset_index(drop=True)
 
+    if "target_end_date" in df:
+        for earlier, later in ((train_df, val_df), (val_df, dev_df), (dev_df, test_df)):
+            if earlier["target_end_date"].max() >= later["Date"].min():
+                raise ValueError("Label horizons overlap the next split; increase horizon_bars")
+
     return {
         "train": train_df,
         "val": val_df,
@@ -98,17 +111,14 @@ def run_experiment_pipeline(
     seed: int = 42,
     force_refresh: bool = False,
     progress_callback = None,
+    offline: bool = False,
 ) -> Dict:
     """
     Runs the complete single-split chronological evaluation experiment.
     Used identically by the CLI and Streamlit app.
     """
-    # Set explicit random seeds
-    random.seed(seed)
-    np.random.seed(seed)
-
     # 1. Fetch & Prepare Data
-    raw_df = fetch_and_cache_ticker(ticker, force_refresh=force_refresh)
+    raw_df = fetch_and_cache_ticker(ticker, force_refresh=force_refresh, offline=offline)
     proc_df, feature_cols = prepare_feature_dataset(raw_df, ticker, save_processed=True)
 
     # 2. Purged Chronological Splits
@@ -135,6 +145,7 @@ def run_experiment_pipeline(
     low_dev = dev_df["Low"].to_numpy(dtype=np.float64)
     atr_dev = dev_df["atr_14"].to_numpy(dtype=np.float64)
     reg_vol_dev = dev_df["regime_high_vol"].to_numpy(dtype=np.int32)
+    volume_dev = dev_df["Volume"].to_numpy(dtype=np.float64)
 
     optimizer = NSGA2Optimizer(
         open_prices=open_dev,
@@ -147,6 +158,7 @@ def run_experiment_pipeline(
         pop_size=pop_size,
         num_generations=num_generations,
         seed=seed,
+        volume=volume_dev,
     )
     pareto_solutions = optimizer.run(progress_callback=progress_callback)
 
@@ -156,7 +168,7 @@ def run_experiment_pipeline(
     for idx, sol in enumerate(pareto_solutions):
         sh, mdd, ret, trades, to = run_vectorized_simulation_fast(
             open_dev, close_dev, high_dev, low_dev, p_up_dev, atr_dev, reg_vol_dev,
-            sol.genes, apply_penalty=False
+            sol.genes, apply_penalty=False, volume=volume_dev
         )
         dev_summary_rows.append({
             "id": idx + 1,
@@ -178,7 +190,7 @@ def run_experiment_pipeline(
         selected_dev_strat = valid_dev.sort_values("dev_sharpe", ascending=False).iloc[0]
 
     frozen_strategy_id = int(selected_dev_strat["id"])
-    frozen_genes = selected_dev_strat["genes"]
+    frozen_genes = selected_dev_strat["genes"].copy()
 
     # 6. Evaluate Frozen Representative Strategy on Out-of-Sample Test
     open_test = test_df["Open"].to_numpy(dtype=np.float64)
@@ -187,13 +199,13 @@ def run_experiment_pipeline(
     low_test = test_df["Low"].to_numpy(dtype=np.float64)
     atr_test = test_df["atr_14"].to_numpy(dtype=np.float64)
     reg_vol_test = test_df["regime_high_vol"].to_numpy(dtype=np.int32)
+    volume_test = test_df["Volume"].to_numpy(dtype=np.float64)
 
     detailed_test_result = get_detailed_simulation_results(test_df, p_up_test, frozen_genes)
 
     # Benchmark test performance
-    test_benchmark_ret = (close_test[-1] / close_test[0]) - 1.0
-    b_peak = np.maximum.accumulate(close_test)
-    test_benchmark_mdd = float(np.max((b_peak - close_test) / b_peak))
+    test_benchmark_ret = detailed_test_result["benchmark_return"]
+    test_benchmark_mdd = detailed_test_result["benchmark_max_drawdown"]
 
     # 7. Exploratory Inspection: evaluate full Pareto front on Test
     # (Explicitly marked as exploratory)
@@ -201,7 +213,7 @@ def run_experiment_pipeline(
     for idx, sol in enumerate(pareto_solutions):
         sh, mdd, ret, trades, to = run_vectorized_simulation_fast(
             open_test, close_test, high_test, low_test, p_up_test, atr_test, reg_vol_test,
-            sol.genes, apply_penalty=False
+            sol.genes, apply_penalty=False, volume=volume_test
         )
         exploratory_test_rows.append({
             "id": idx + 1,
@@ -218,6 +230,8 @@ def run_experiment_pipeline(
     return {
         "ticker": ticker,
         "seed": seed,
+        "model_seed": predictor.model_seed,
+        "data_provenance": raw_df.attrs.get("data_provenance", {}),
         "pop_size": pop_size,
         "num_generations": num_generations,
         "feature_cols": feature_cols,
@@ -232,3 +246,4 @@ def run_experiment_pipeline(
         "test_benchmark_ret": float(test_benchmark_ret),
         "test_benchmark_mdd": float(test_benchmark_mdd),
     }
+

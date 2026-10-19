@@ -1,0 +1,25 @@
+{
+  "baseline_commit": "c8c400e286178201377b98fabbfb0fefa4f5f097",
+  "engine_accounting_version": 2,
+  "pytest": {
+    "passed": 148,
+    "skipped": 2,
+    "seconds": 21.29,
+    "warnings": 2,
+    "command": "python -m pytest tests -q -ra",
+    "runtime_note": "Target-directory Streamlit install initialized hidden global.developmentMode=false via config options before pytest"
+  },
+  "skips": [
+    "Explicit legacy v1 exact-equity replay incompatible with accounting v2; original assertions retained",
+    "Archived 9MB JSON unavailable locally; expected Git blob c6646b348649e5c3b145ef052f75944ee379ec5a checked remotely after push"
+  ],
+  "compileall": "passed",
+  "diff_check": "passed",
+  "real_offline_apptest": "passed; 0 exceptions",
+  "visual_browser_qa": "not performed; browser startup blocked",
+  "live_provider_test": "not performed; network calls mocked",
+  "research_campaign": "not rerun; original artifacts preserved",
+  "independent_review": "No blocking defects;106 focused tests plus50 benchmark cross-checks reported passed",
+  "final_log_sha256": "2677ff59106908546435b4830012a2b6e8229d687913b17e4e51f06b35400f29",
+  "security_configuration": "Owner-approved enableCORS=true; enableXsrfProtection=true preserved; regression and real AppTest passed"
+}

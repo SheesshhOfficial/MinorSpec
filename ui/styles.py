@@ -258,5 +258,54 @@ CUSTOM_CSS = """
     div[data-testid="stSidebarNav"] {
         background-color: #0B1020;
     }
+
+    /* Compact, quiet research workspace. */
+    .block-container { max-width: 1440px; padding-top: 1.5rem; padding-bottom: 2rem; }
+    .eml-header { padding-bottom: 20px; margin-bottom: 18px; }
+    .eml-title { font-size: 1.7rem; letter-spacing: -0.045em; flex-wrap: wrap; }
+    .eml-title-badge { font-size: .61rem; letter-spacing: .12em; padding: 4px 8px; }
+    .eml-subtitle { font-size: .82rem; line-height: 1.55; }
+    .eml-chip-bar { gap: 7px; margin-bottom: 16px; }
+    .eml-chip { padding: 5px 9px; font-size: .72rem; border-color: rgba(148,163,184,.16); }
+    .eml-kpi-grid { gap: 12px; margin-top: 16px; }
+    .eml-kpi-card { padding: 18px 16px; border-color: rgba(148,163,184,.18); border-radius: 14px; background: linear-gradient(145deg, #152136, #111a2b); }
+    .eml-kpi-label { font-size: .67rem; letter-spacing: .055em; display: flex; align-items: center; gap: 6px; }
+    .eml-kpi-value { font-size: 1.65rem; font-weight: 650; letter-spacing: -.035em; padding: 5px 0; }
+    .eml-kpi-subtext { color: #94a3b8; }
+    .eml-section-title { font-size: 1rem; font-weight: 600; letter-spacing: -.02em; color: #e2e8f0; display: flex; align-items: center; gap: 7px; margin: 14px 0 14px; }
+    .eml-strat-status { padding: 9px 12px; font-size: .78rem; }
+    .eml-empty-card { padding: 42px 30px; border: 1px solid rgba(148,163,184,.18); border-radius: 18px; background: linear-gradient(135deg, #152136, #10182a); }
+    .eml-empty-title { font-size: 1.6rem; letter-spacing: -.035em; }
+    .eml-empty-desc { margin-bottom: 28px; }
+    .eml-step-item { border-color: rgba(148,163,184,.12); border-radius: 10px; background: rgba(11,16,32,.5); }
+    .eml-step-num { font-size: .65rem; letter-spacing: .04em; }
+    .eml-step-desc { font-size: .78rem; }
+    section[data-testid="stSidebar"] { background: #101827; border-right: 1px solid rgba(148,163,184,.15); }
+    section[data-testid="stSidebar"] .block-container { padding-top: 1.5rem; }
+    div[data-baseweb="tab-list"] { gap: 22px; }
+    button[data-baseweb="tab"] { font-size: .85rem; }
+
+    /* Native details gives hover, click/touch and keyboard access to explanations. */
+    .eml-info { position: relative; display: inline-block; flex: 0 0 auto; line-height: 1; text-transform: none; letter-spacing: normal; }
+    .eml-info > summary { display: inline-flex; align-items: center; justify-content: center; list-style: none; cursor: help; color: #94a3b8; width: 20px; height: 20px; border-radius: 50%; font-size: .9rem; font-weight: 400; }
+    .eml-info > summary::-webkit-details-marker { display: none; }
+    .eml-info > summary:hover, .eml-info > summary:focus-visible { color: #67e8f9; background: rgba(103,232,249,.08); outline: 2px solid #0ea5e9; outline-offset: 2px; }
+    .eml-info > .eml-tooltip { display: none; position: absolute; z-index: 1000; top: calc(100% + 7px); left: 0; width: min(320px, calc(100vw - 56px)); padding: 12px 14px; color: #e2e8f0; background: #1b2940; border: 1px solid #475569; border-radius: 10px; box-shadow: 0 12px 32px rgba(0,0,0,.4); font-size: .78rem; font-weight: 400; line-height: 1.6; text-align: left; text-transform: none; letter-spacing: normal; }
+    .eml-info:hover > .eml-tooltip, .eml-info:focus-within > .eml-tooltip, .eml-info[open] > .eml-tooltip { display: block; }
+    .eml-kpi-card:nth-child(n+3) .eml-tooltip { left: auto; right: 0; }
+    @media (max-width: 760px) {
+        .block-container { padding-left: 1rem; padding-right: 1rem; }
+        .eml-title { font-size: 1.4rem; }
+        .eml-kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+        .eml-kpi-card { padding: 14px 12px; }
+        .eml-kpi-value { font-size: 1.4rem; }
+        .eml-empty-card { padding: 28px 18px; }
+        .eml-steps-grid { grid-template-columns: 1fr; }
+        .eml-empty-title { font-size: 1.3rem; }
+        .eml-kpi-card:nth-child(odd) .eml-tooltip { left: -12px; right: auto; }
+        .eml-kpi-card:nth-child(even) .eml-tooltip { left: auto; right: -12px; }
+    }
+
 </style>
 """
+

@@ -20,6 +20,7 @@ from src.config import INITIAL_CAPITAL, DEFAULT_COMMISSION_PCT, DEFAULT_SLIPPAGE
 from src.feature_pipeline import compute_technical_indicators
 from src.backtest_engine import (
     run_vectorized_simulation_fast,
+    ENGINE_ACCOUNTING_VERSION,
     get_detailed_simulation_results,
 )
 from src.rolling_runner import (
@@ -299,6 +300,7 @@ def test_feasible_test_perturbation_selection_invariance():
     assert res_clean["prefix_context"]["prefix_p_up"] == pytest.approx(res_pert["prefix_context"]["prefix_p_up"], rel=1e-12)
 
 
+@pytest.mark.skipif(ENGINE_ACCOUNTING_VERSION != 1, reason="Archived campaign equity uses v1 approximate fee sizing; reproduce with the archived v1 source. Current v2 replay is checked separately.")
 def test_offline_feasible_fold_rerun_against_saved_artifact(monkeypatch):
     """
     Verify offline execution of a real feasible fold (TCS.NS 2021, seed 42) executes
@@ -381,7 +383,7 @@ def test_trailing_zero_volume_scheduled_fold_end_liquidation():
     # Hybrid Detailed: use wide bracket so position is held until final scheduled liquidation at bar 2
     p_up = np.full(5, 0.70)
     genes_wide = np.array([0.55, 0.45, 5.0, 10.0, 0.10, 0.5, 15.0])
-    det = get_detailed_simulation_results(df, p_up, genes_wide, prefix_p_up=0.70)
+    det = get_detailed_simulation_results(df, p_up, genes_wide, prefix_p_up=0.70, prefix_atr=2.0)
     assert det["positions"][-1] == 0.0
     assert len(det["trade_log"]) == 1
     last_exit = det["trade_log"].iloc[-1]["exit_date"]
@@ -393,7 +395,7 @@ def test_trailing_zero_volume_scheduled_fold_end_liquidation():
     sh, mdd, ret, trades, to = run_vectorized_simulation_fast(
         df["Open"].values, df["Close"].values, df["High"].values, df["Low"].values,
         p_up, df["atr_14"].values, df["regime_high_vol"].values, genes_wide,
-        prefix_p_up=0.70, volume=df["Volume"].values
+        prefix_p_up=0.70, prefix_atr=2.0, volume=df["Volume"].values
     )
     assert trades > 0
 
@@ -462,3 +464,52 @@ def test_final_tradable_day_entry_prohibition():
 
 
 
+
+
+
+def test_repaired_v2_offline_fold_replays_versioned_fixture(monkeypatch, tmp_path):
+    """Current code replays a separate repaired fixture, without changing archives."""
+    import yfinance as yf
+    from src.rolling_runner import RollingNSEExperimentRunner
+
+    def forbidden_call(*args, **kwargs):
+        raise AssertionError("Fixture replay must use immutable offline inputs")
+
+    monkeypatch.setattr(yf, "Ticker", forbidden_call)
+    monkeypatch.setattr(yf, "download", forbidden_call)
+    fixture_path = PROJECT_ROOT / "reports/verification/repaired_tcs_2021_seed42.json"
+    with fixture_path.open() as handle:
+        fixture = json.load(handle)
+    metadata = fixture["metadata"]
+    assert metadata["engine_accounting_version"] == ENGINE_ACCOUNTING_VERSION == 2
+    assert metadata["input_sha256"] == compute_sha256(INPUTS_DIR / "TCS.NS.parquet")
+    assert metadata["protocol_sha256"] == compute_sha256(PROJECT_ROOT / "reports/experiments/protocol.json")
+    assert metadata["model_seed"] == 42 and metadata["ga_seeds"] == [42]
+    archive_path = PROJECT_ROOT / "reports/experiments/results/campaign_raw_results.json"
+    archive_hash_before = compute_sha256(archive_path) if archive_path.exists() else None
+    runner = RollingNSEExperimentRunner(
+        inputs_dir=INPUTS_DIR, output_dir=tmp_path,
+        protocol_path=PROJECT_ROOT / "reports/experiments/protocol.json",
+        test_years=[2021], universe=["TCS.NS"], ga_seeds=[42], model_seed=42,
+    )
+    fold = runner.run_fold("TCS.NS", runner.load_processed_asset("TCS.NS"), 2021)
+    actual, saved = fold["ga_runs"]["42"]["hybrid"], fixture["hybrid"]
+    assert actual["is_feasible"] is saved["is_feasible"] is True
+    np.testing.assert_allclose(actual["genes"], saved["genes"], atol=1e-12, rtol=1e-12)
+    np.testing.assert_allclose(actual["equity"], saved["equity"], atol=1e-7, rtol=1e-7)
+    for name in ("total_return", "max_drawdown", "sharpe_ratio", "capital_exposure"):
+        assert actual["metrics"][name] == pytest.approx(saved["metrics"][name], rel=1e-9, abs=1e-12)
+    if archive_hash_before is not None:
+        assert compute_sha256(archive_path) == archive_hash_before
+
+
+def test_archived_v1_campaign_blob_integrity():
+    """Archived research evidence is separate from the repaired engine replay."""
+    import hashlib
+    archive = PROJECT_ROOT / "reports/experiments/results/campaign_raw_results.json"
+    if not archive.exists():
+        pytest.skip("Full archived v1 campaign JSON is absent from this partial checkout; remote Git blob preservation must be verified separately")
+    raw = archive.read_bytes()
+    assert len(raw) == 9020452
+    git_object = b"blob " + str(len(raw)).encode() + b"\0" + raw
+    assert hashlib.sha1(git_object).hexdigest() == "c6646b348649e5c3b145ef052f75944ee379ec5a"

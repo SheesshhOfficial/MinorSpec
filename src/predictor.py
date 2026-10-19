@@ -9,12 +9,13 @@ import lightgbm as lgb
 from sklearn.metrics import roc_auc_score, accuracy_score, brier_score_loss
 
 from src.config import MODELS_DIR
+from src.data_loader import ticker_cache_key
 
 
 class MarketPredictor:
     """
     Gradient-boosted decision engine that estimates directional probability P(Up)
-    and confidence calibrated across market features.
+    from market features. These estimates are not probability-calibrated.
     """
 
     def __init__(self, ticker: str, feature_cols: List[str], model_seed: int = 42):
@@ -37,6 +38,22 @@ class MarketPredictor:
         """
         Trains LightGBM classifier with early stopping on validation split.
         """
+        for name, frame in (("train", train_df), ("validation", val_df)):
+            if frame is None:
+                continue
+            if frame.empty:
+                raise ValueError(f"{name} data must not be empty")
+            labels = frame["target_direction"].to_numpy(dtype=float)
+            if not np.isfinite(labels).all() or not np.isin(labels, [0.0, 1.0]).all():
+                raise ValueError(f"{name} target_direction must contain only observed binary labels")
+            features = frame[self.feature_cols].to_numpy(dtype=float)
+            if np.isinf(features).any():
+                raise ValueError(f"{name} features cannot contain infinite values")
+        if val_df is not None and "Date" in train_df and "Date" in val_df:
+            if train_df["Date"].max() >= val_df["Date"].min():
+                raise ValueError("Training dates must strictly precede validation dates")
+            if "target_end_date" in train_df and train_df["target_end_date"].max() >= val_df["Date"].min():
+                raise ValueError("Training label horizons overlap validation dates; purge the boundary")
         seed_to_use = model_seed if model_seed is not None else self.model_seed
         X_train = train_df[self.feature_cols].values
         y_train = train_df["target_direction"].values
@@ -83,10 +100,10 @@ class MarketPredictor:
             X_val = val_df[self.feature_cols].values
             y_val = val_df["target_direction"].values
             preds_val = self.model.predict(X_val)
-            auc = roc_auc_score(y_val, preds_val) if len(np.unique(y_val)) > 1 else 0.5
+            auc = roc_auc_score(y_val, preds_val) if len(np.unique(y_val)) > 1 else float("nan")
             acc = accuracy_score(y_val, (preds_val > 0.5).astype(int))
             brier = brier_score_loss(y_val, preds_val)
-            self.metrics = {"val_auc": float(auc), "val_acc": float(acc), "val_brier": float(brier)}
+            self.metrics = {"val_auc": float(auc), "val_auc_defined": bool(len(np.unique(y_val)) > 1), "val_acc": float(acc), "val_brier": float(brier)}
             print(f"[{self.ticker} Predictor] Validation AUC: {auc:.4f} | Accuracy: {acc:.4f} | Brier: {brier:.4f}")
         else:
             self.metrics = {"train_status": "fitted_without_val"}
@@ -95,7 +112,7 @@ class MarketPredictor:
 
     def predict_proba(self, df: pd.DataFrame) -> np.ndarray:
         """
-        Returns array of calibrated probabilities P(Price Up).
+        Returns model probability estimates P(Price Up), without calibration.
         """
         if self.model is None:
             raise ValueError("Predictor model has not been trained yet.")
@@ -117,13 +134,15 @@ class MarketPredictor:
 
     def save(self, model_path: Optional[Path] = None) -> Path:
         if model_path is None:
-            model_path = MODELS_DIR / f"{self.ticker}_lgb.txt"
+            model_path = MODELS_DIR / f"{ticker_cache_key(self.ticker)}_lgb.txt"
+        if self.model is None:
+            raise ValueError("Model is not trained.")
         self.model.save_model(str(model_path))
         return model_path
 
     def load(self, model_path: Optional[Path] = None):
         if model_path is None:
-            model_path = MODELS_DIR / f"{self.ticker}_lgb.txt"
+            model_path = MODELS_DIR / f"{ticker_cache_key(self.ticker)}_lgb.txt"
         self.model = lgb.Booster(model_file=str(model_path))
 
 
@@ -136,7 +155,8 @@ if __name__ == "__main__":
     
     # Train / Test split by time (80% train, 20% val)
     split_idx = int(len(proc_df) * 0.8)
-    train_df = proc_df.iloc[:split_idx]
+    from src.config import PREDICTION_HORIZON_BARS
+    train_df = proc_df.iloc[:split_idx - PREDICTION_HORIZON_BARS]
     val_df = proc_df.iloc[split_idx:]
 
     predictor = MarketPredictor("SPY", feats)
@@ -145,3 +165,4 @@ if __name__ == "__main__":
     importances = predictor.get_feature_importances()
     print("\nTop 5 Most Important Features:")
     print(importances.head(5))
+

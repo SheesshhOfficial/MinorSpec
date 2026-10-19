@@ -1,0 +1,354 @@
+{
+  "baseline_commit": "c8c400e286178201377b98fabbfb0fefa4f5f097",
+  "engine_accounting_version": 2,
+  "protocol": "single chronological split; not rolling campaign",
+  "data_mode": "offline bundled snapshot",
+  "dataset_path": "data/raw/RELIANCE.NS.parquet",
+  "dataset_sha256": "4e237b08835bd25c064c1cb1e4833dbf759b8c47f54226334f11a588aa76a14a",
+  "settings": {
+    "population": 40,
+    "generations": 15,
+    "search_seeds": [
+      42,
+      43
+    ],
+    "model_seed": 42
+  },
+  "reproduce": "run_experiment_pipeline(\"RELIANCE.NS\",40,15,seed,offline=True) for seed in [42,43]",
+  "dependencies": {
+    "numpy": "2.5.4",
+    "pandas": "3.0.6",
+    "numba": "0.68.0",
+    "lightgbm": "4.7.0",
+    "streamlit": "1.66.0"
+  },
+  "python": "3.12.14",
+  "runs": [
+    {
+      "seed": 42,
+      "validation": {
+        "val_auc": 0.5469486558797299,
+        "val_auc_defined": true,
+        "val_acc": 0.5478887744593203,
+        "val_brier": 0.24851912025434938
+      },
+      "primary_id": 1,
+      "genes": [
+        0.6095611985604312,
+        0.398570209447908,
+        1.1293906146537793,
+        2.78000767645802,
+        0.011610311277614414,
+        0.3965383169601842,
+        30.42769694177996
+      ],
+      "pareto_count": 13,
+      "test_start": "2021-07-28 00:00:00",
+      "test_end": "2026-10-09 00:00:00",
+      "test_bars": 1287,
+      "metrics": {
+        "engine_accounting_version": 2,
+        "initial_capital": 100000.0,
+        "benchmark_max_drawdown": 0.2717574559326851,
+        "sharpe_ratio": -0.017462035378407275,
+        "max_drawdown": 0.007103760634009831,
+        "total_return": -0.0004006054974065032,
+        "benchmark_return": 0.25303670278881496,
+        "total_trades": 5,
+        "win_rate": 0.6,
+        "turnover": 0.9790209790209791,
+        "time_in_market": 0.005439005439005439,
+        "capital_exposure": 0.0020545686284532123
+      },
+      "development": [
+        {
+          "id": 1,
+          "dev_sharpe": 1.0971284915417452,
+          "dev_mdd": 0.024441443000319786,
+          "dev_ret": 0.21903249378322998,
+          "dev_trades": 15,
+          "dev_turnover": 3.8928939237899076
+        },
+        {
+          "id": 2,
+          "dev_sharpe": 1.0946545127417193,
+          "dev_mdd": 0.023792064078156133,
+          "dev_ret": 0.21595728691887683,
+          "dev_trades": 15,
+          "dev_turnover": 3.8928939237899076
+        },
+        {
+          "id": 3,
+          "dev_sharpe": 1.0876480115578222,
+          "dev_mdd": 0.022729380770003922,
+          "dev_ret": 0.2102096449169648,
+          "dev_trades": 15,
+          "dev_turnover": 3.8928939237899076
+        },
+        {
+          "id": 4,
+          "dev_sharpe": 1.0771472594103761,
+          "dev_mdd": 0.02168956819211444,
+          "dev_ret": 0.20404697972438934,
+          "dev_trades": 15,
+          "dev_turnover": 3.8928939237899076
+        },
+        {
+          "id": 5,
+          "dev_sharpe": 1.0503540075358968,
+          "dev_mdd": 0.01860253404213656,
+          "dev_ret": 0.18697909544061742,
+          "dev_trades": 15,
+          "dev_turnover": 3.8928939237899076
+        },
+        {
+          "id": 6,
+          "dev_sharpe": 1.0350280356320836,
+          "dev_mdd": 0.017619020319178384,
+          "dev_ret": 0.18426821947570815,
+          "dev_trades": 15,
+          "dev_turnover": 3.8928939237899076
+        },
+        {
+          "id": 7,
+          "dev_sharpe": 1.0189588627057895,
+          "dev_mdd": 0.017361078188124976,
+          "dev_ret": 0.17831908934882623,
+          "dev_trades": 15,
+          "dev_turnover": 3.8928939237899076
+        },
+        {
+          "id": 8,
+          "dev_sharpe": 1.0189588627057895,
+          "dev_mdd": 0.017361078188124976,
+          "dev_ret": 0.17831908934882623,
+          "dev_trades": 15,
+          "dev_turnover": 3.8928939237899076
+        },
+        {
+          "id": 9,
+          "dev_sharpe": 0.9684714923980413,
+          "dev_mdd": 0.01385553117485789,
+          "dev_ret": 0.1583701150210659,
+          "dev_trades": 15,
+          "dev_turnover": 3.8928939237899076
+        },
+        {
+          "id": 10,
+          "dev_sharpe": 0.9642191666000764,
+          "dev_mdd": 0.013854338751026813,
+          "dev_ret": 0.15751468777545807,
+          "dev_trades": 15,
+          "dev_turnover": 3.8928939237899076
+        },
+        {
+          "id": 11,
+          "dev_sharpe": 0.96390462546329,
+          "dev_mdd": 0.013854338751026797,
+          "dev_ret": 0.15745472524743875,
+          "dev_trades": 15,
+          "dev_turnover": 3.8928939237899076
+        },
+        {
+          "id": 12,
+          "dev_sharpe": 0.9604318226090943,
+          "dev_mdd": 0.013849465640871979,
+          "dev_ret": 0.1561701589390696,
+          "dev_trades": 15,
+          "dev_turnover": 3.8928939237899076
+        },
+        {
+          "id": 13,
+          "dev_sharpe": 0.9570720774429339,
+          "dev_mdd": 0.013844261739370258,
+          "dev_ret": 0.1548624864440582,
+          "dev_trades": 15,
+          "dev_turnover": 3.8928939237899076
+        }
+      ],
+      "trade_rows": [
+        {
+          "entry_date": "2022-05-16",
+          "exit_date": "2022-05-17",
+          "entry_price": "1103.157420246584",
+          "exit_price": "1102.3488232702482",
+          "pnl": "-65.23706648669031",
+          "pnl_pct": "-0.0017317518475440385",
+          "holding_bars": "1",
+          "exit_reason": "Gap Down Stop Loss"
+        },
+        {
+          "entry_date": "2024-10-14",
+          "exit_date": "2024-10-15",
+          "entry_price": "1368.3228924318294",
+          "exit_price": "1346.2198601197179",
+          "pnl": "-645.1389969143638",
+          "pnl_pct": "-0.017136729589471544",
+          "holding_bars": "1",
+          "exit_reason": "Gap Down Stop Loss"
+        },
+        {
+          "entry_date": "2024-10-16",
+          "exit_date": "2024-10-18",
+          "entry_price": "1329.1912665022444",
+          "exit_price": "1339.9273270587357",
+          "pnl": "264.4266765377979",
+          "pnl_pct": "0.007069564098934666",
+          "holding_bars": "2",
+          "exit_reason": "Gap Down Stop Loss"
+        }
+      ]
+    },
+    {
+      "seed": 43,
+      "validation": {
+        "val_auc": 0.5469486558797299,
+        "val_auc_defined": true,
+        "val_acc": 0.5478887744593203,
+        "val_brier": 0.24851912025434938
+      },
+      "primary_id": 1,
+      "genes": [
+        0.605028371773319,
+        0.4129839160794689,
+        1.4824922631707333,
+        2.234604280966334,
+        0.03914304831904409,
+        0.5684400474272326,
+        14.37118994543862
+      ],
+      "pareto_count": 10,
+      "test_start": "2021-07-28 00:00:00",
+      "test_end": "2026-10-09 00:00:00",
+      "test_bars": 1287,
+      "metrics": {
+        "engine_accounting_version": 2,
+        "initial_capital": 100000.0,
+        "benchmark_max_drawdown": 0.2717574559326851,
+        "sharpe_ratio": -0.49599576822278435,
+        "max_drawdown": 0.06862001917105216,
+        "total_return": -0.04767816590596541,
+        "benchmark_return": 0.25303670278881496,
+        "total_trades": 4,
+        "win_rate": 0.25,
+        "turnover": 0.7832167832167832,
+        "time_in_market": 0.01554001554001554,
+        "capital_exposure": 0.008378349442638839
+      },
+      "development": [
+        {
+          "id": 1,
+          "dev_sharpe": 1.0708166545685414,
+          "dev_mdd": 0.06096390803775575,
+          "dev_ret": 0.30334769175538523,
+          "dev_trades": 15,
+          "dev_turnover": 3.8928939237899076
+        },
+        {
+          "id": 2,
+          "dev_sharpe": 1.0285819296431855,
+          "dev_mdd": 0.05382062936403952,
+          "dev_ret": 0.2702472177278008,
+          "dev_trades": 15,
+          "dev_turnover": 3.8928939237899076
+        },
+        {
+          "id": 3,
+          "dev_sharpe": 0.8456076210632814,
+          "dev_mdd": 0.024544347334687442,
+          "dev_ret": 0.14658297219971206,
+          "dev_trades": 17,
+          "dev_turnover": 4.411946446961895
+        },
+        {
+          "id": 4,
+          "dev_sharpe": 0.8271275873924689,
+          "dev_mdd": 0.020054433238902648,
+          "dev_ret": 0.1316288924287341,
+          "dev_trades": 17,
+          "dev_turnover": 4.411946446961895
+        },
+        {
+          "id": 5,
+          "dev_sharpe": 0.8048531179180285,
+          "dev_mdd": 0.020054433238902554,
+          "dev_ret": 0.12785917143610104,
+          "dev_trades": 17,
+          "dev_turnover": 4.411946446961895
+        },
+        {
+          "id": 6,
+          "dev_sharpe": 0.8000633021235137,
+          "dev_mdd": 0.01744487571974988,
+          "dev_ret": 0.12585410399111185,
+          "dev_trades": 14,
+          "dev_turnover": 3.6333676622039137
+        },
+        {
+          "id": 7,
+          "dev_sharpe": 0.7766394073663403,
+          "dev_mdd": 0.01744487571974985,
+          "dev_ret": 0.12232143663803852,
+          "dev_trades": 14,
+          "dev_turnover": 3.6333676622039137
+        },
+        {
+          "id": 8,
+          "dev_sharpe": 0.7744581573639763,
+          "dev_mdd": 0.017444875719749713,
+          "dev_ret": 0.12199328346735339,
+          "dev_trades": 14,
+          "dev_turnover": 3.6333676622039137
+        },
+        {
+          "id": 9,
+          "dev_sharpe": 0.7565597177633794,
+          "dev_mdd": 0.01693574546126301,
+          "dev_ret": 0.12010478396613977,
+          "dev_trades": 14,
+          "dev_turnover": 3.6333676622039137
+        },
+        {
+          "id": 10,
+          "dev_sharpe": 0.7274845974231952,
+          "dev_mdd": 0.016085186038275853,
+          "dev_ret": 0.11459517775714034,
+          "dev_trades": 14,
+          "dev_turnover": 3.6333676622039137
+        }
+      ],
+      "trade_rows": [
+        {
+          "entry_date": "2022-05-16",
+          "exit_date": "2022-05-19",
+          "entry_price": "1103.157420246584",
+          "exit_price": "1117.8773244825409",
+          "pnl": "665.8742925384577",
+          "pnl_pct": "0.012330593368774734",
+          "holding_bars": "3",
+          "exit_reason": "Stop Loss / Trailing Stop"
+        },
+        {
+          "entry_date": "2024-07-15",
+          "exit_date": "2024-07-19",
+          "entry_price": "1586.1247897373917",
+          "exit_price": "1537.6649958566293",
+          "pnl": "-1713.5407860965788",
+          "pnl_pct": "-0.031521284297323815",
+          "holding_bars": "3",
+          "exit_reason": "Stop Loss / Trailing Stop"
+        },
+        {
+          "entry_date": "2024-10-14",
+          "exit_date": "2024-10-23",
+          "entry_price": "1368.3228924318294",
+          "exit_price": "1324.860111805363",
+          "pnl": "-1749.0309124366104",
+          "pnl_pct": "-0.032731293824711405",
+          "holding_bars": "7",
+          "exit_reason": "Stop Loss / Trailing Stop"
+        }
+      ]
+    }
+  ]
+}

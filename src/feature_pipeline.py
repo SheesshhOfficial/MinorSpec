@@ -5,9 +5,9 @@ from pathlib import Path
 from typing import Tuple, List
 import numpy as np
 import pandas as pd
-import polars as pl
 
 from src.config import PROCESSED_DATA_DIR, PREDICTION_HORIZON_BARS, VOLATILITY_LOOKBACK
+from src.data_loader import ticker_cache_key, normalize_history
 
 
 def compute_technical_indicators(df: pd.DataFrame) -> pd.DataFrame:
@@ -15,7 +15,7 @@ def compute_technical_indicators(df: pd.DataFrame) -> pd.DataFrame:
     Computes comprehensive trend, momentum, volatility, and volume indicators.
     Input DataFrame must have: Date, Open, High, Low, Close, Volume.
     """
-    data = df.copy().sort_values("Date").reset_index(drop=True)
+    data = normalize_history(df)
     
     close = data["Close"]
     high = data["High"]
@@ -91,7 +91,7 @@ def compute_technical_indicators(df: pd.DataFrame) -> pd.DataFrame:
     # On-Balance Volume (OBV)
     obv_direction = np.sign(delta).fillna(0)
     data["obv"] = (obv_direction * volume).cumsum()
-    data["obv_roc_5"] = data["obv"].pct_change(5).replace([np.inf, -np.inf], 0)
+    data["obv_roc_5"] = data["obv"].pct_change(5, fill_method=None).replace([np.inf, -np.inf], 0).fillna(0.0)
     
     # 5. Market Regime Detection
     # Volatility Regime: 1 if volatility > 100-day rolling median, else 0
@@ -105,7 +105,10 @@ def compute_technical_indicators(df: pd.DataFrame) -> pd.DataFrame:
     
     # 6. Targets for Supervised Prediction (Strictly forward-looking for training)
     data["forward_return"] = close.shift(-PREDICTION_HORIZON_BARS) / close - 1.0
-    data["target_direction"] = (data["forward_return"] > 0).astype(int)
+    data["target_end_date"] = data["Date"].shift(-PREDICTION_HORIZON_BARS)
+    data["target_direction"] = np.where(
+        data["forward_return"].notna(), (data["forward_return"] > 0).astype(float), np.nan
+    )
     
     return data
 
@@ -137,7 +140,7 @@ def prepare_feature_dataset(
     ]
     
     if save_processed:
-        clean_ticker = ticker.upper().replace("^", "")
+        clean_ticker = ticker_cache_key(ticker)
         out_path = PROCESSED_DATA_DIR / f"{clean_ticker}_features.parquet"
         processed.to_parquet(out_path, index=False, compression="zstd")
         print(f"[FeaturePipeline] Saved feature matrix for {ticker} ({len(processed)} rows) -> {out_path}")
@@ -151,3 +154,4 @@ if __name__ == "__main__":
     proc_df, features = prepare_feature_dataset(raw_df, "SPY")
     print(f"Features engineered ({len(features)} total): {features[:6]}...")
     print(f"Dataset shape: {proc_df.shape}")
+

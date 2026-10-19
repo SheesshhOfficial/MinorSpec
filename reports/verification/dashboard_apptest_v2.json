@@ -1,0 +1,36 @@
+{
+  "test": "Real offline Streamlit AppTest; not browser visual QA",
+  "engine_accounting_version": 2,
+  "settings": {
+    "ticker": "RELIANCE.NS",
+    "population": 40,
+    "generations": 15,
+    "seed": 42,
+    "offline": true
+  },
+  "tabs": [
+    "Overview",
+    "Strategies",
+    "Model",
+    "Trades",
+    "Method"
+  ],
+  "exceptions": 0,
+  "verified": [
+    "initial state",
+    "offline real pipeline",
+    "five tabs",
+    "candidate selection preserves primary",
+    "pending edits preserve executed settings",
+    "repeat run resets selection"
+  ],
+  "data_sha256": "4e237b08835bd25c064c1cb1e4833dbf759b8c47f54226334f11a588aa76a14a",
+  "metrics": {
+    "total_return": -0.0004006054974065032,
+    "benchmark_return": 0.25303670278881496,
+    "max_drawdown": 0.007103760634009831,
+    "sharpe_ratio": -0.017462035378407275,
+    "total_trades": 5,
+    "win_rate": 0.6
+  }
+}

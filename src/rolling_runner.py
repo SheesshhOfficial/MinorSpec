@@ -48,6 +48,7 @@ from src.predictor import MarketPredictor
 from src.evolutionary_core import NSGA2Optimizer
 from src.backtest_engine import (
     run_vectorized_simulation_fast,
+    ENGINE_ACCOUNTING_VERSION,
     get_detailed_simulation_results,
 )
 
@@ -214,7 +215,7 @@ def simulate_buy_and_hold(
         }
 
     entry_exec = open_p[first_trade_idx] * (1.0 + slippage_pct)
-    shares = (initial_capital * (1.0 - commission_pct)) / entry_exec
+    shares = initial_capital / (entry_exec * (1.0 + commission_pct))
     cash_rem = initial_capital - (shares * entry_exec * (1.0 + commission_pct))
     entry_cost = shares * entry_exec * (1.0 + commission_pct)
 
@@ -383,7 +384,7 @@ def simulate_sma_baseline(
         # Phase 2C: Queued Entry at Open (full cash allocation, only if before last tradable bar)
         if position == 0.0 and queue_entry and has_volume and (last_tradable_idx == -1 or i < last_tradable_idx):
             exec_p = open_p[i] * (1.0 + slippage_pct)
-            shares = (cash * (1.0 - commission_pct)) / exec_p
+            shares = cash / (exec_p * (1.0 + commission_pct))
             if shares > 0.0001:
                 cost = shares * exec_p * (1.0 + commission_pct)
                 cash -= cost
@@ -540,11 +541,16 @@ class RollingNSEExperimentRunner:
 
         with open(protocol_path, "r") as f:
             self.protocol = json.load(f)
+        self.protocol_sha256 = compute_sha256(protocol_path)
 
-        self.test_years = test_years or self.protocol["test_years"]
-        self.universe = universe or self.protocol["universe"]
-        self.ga_seeds = ga_seeds or self.protocol["evolutionary_specification"]["evolution_seeds"]
+        self.test_years = self.protocol["test_years"] if test_years is None else test_years
+        self.universe = self.protocol["universe"] if universe is None else universe
+        self.ga_seeds = self.protocol["evolutionary_specification"]["evolution_seeds"] if ga_seeds is None else ga_seeds
         self.model_seed = model_seed
+        if not self.test_years or not self.universe or not self.ga_seeds:
+            raise ValueError("test_years, universe, and ga_seeds must not be empty")
+        if len(set(self.test_years)) != len(self.test_years) or len(set(self.universe)) != len(self.universe) or len(set(self.ga_seeds)) != len(self.ga_seeds):
+            raise ValueError("test_years, universe, and ga_seeds must not contain duplicates")
 
         # Results directory
         self.results_dir = self.output_dir / "results"
@@ -552,9 +558,16 @@ class RollingNSEExperimentRunner:
 
         # Verify input manifest
         self.manifest = verify_manifest(self.inputs_dir, self.manifest_path)
+        missing = set(self.universe) - set(self.manifest)
+        if missing:
+            raise ValueError(f"Universe contains assets without verified snapshots: {sorted(missing)}")
 
     def load_processed_asset(self, ticker: str) -> pd.DataFrame:
+        if ticker not in self.manifest:
+            raise ValueError(f"No verified snapshot for {ticker}")
         parquet_file = self.inputs_dir / f"{ticker}.parquet"
+        if compute_sha256(parquet_file) != self.manifest[ticker]["sha256"]:
+            raise ValueError(f"Snapshot changed after manifest verification for {ticker}")
         df = pd.read_parquet(parquet_file)
         df["Date"] = pd.to_datetime(df["Date"])
         df = df.sort_values("Date").reset_index(drop=True)
@@ -576,6 +589,8 @@ class RollingNSEExperimentRunner:
         - Preceding bar: Final completed bar of Dev partition supplies causal prefix context
         - Test:  [Y]       (out-of-sample trading; classification scored on valid non-boundary bars)
         """
+        if "Date" not in df_full or df_full["Date"].duplicated().any() or not df_full["Date"].is_monotonic_increasing:
+            raise ValueError("Fold data must have unique chronologically increasing dates")
         y = test_year
         train_raw = df_full[(df_full["Date"] >= f"{y-8}-01-01") & (df_full["Date"] <= f"{y-4}-12-31")].copy()
         val_raw = df_full[(df_full["Date"] >= f"{y-3}-01-01") & (df_full["Date"] <= f"{y-3}-12-31")].copy()
@@ -586,6 +601,10 @@ class RollingNSEExperimentRunner:
         train_df = train_raw.iloc[:-PREDICTION_HORIZON_BARS].copy().reset_index(drop=True)
         val_df = val_raw.iloc[:-PREDICTION_HORIZON_BARS].copy().reset_index(drop=True)
         dev_df = dev_raw.iloc[:-PREDICTION_HORIZON_BARS].copy().reset_index(drop=True)
+
+        for name, frame in (("train", train_df), ("validation", val_df), ("development", dev_df), ("test", test_df)):
+            if frame.empty:
+                raise ValueError(f"Fold {test_year} has no usable {name} bars after horizon purging")
 
         # 1. Fit LightGBM Model (model_seed = 42)
         predictor = MarketPredictor(ticker, FEATURE_COLUMNS, model_seed=self.model_seed)
@@ -614,20 +633,21 @@ class RollingNSEExperimentRunner:
         first_scored_date = str(test_df.loc[test_valid_mask, "Date"].iloc[0].strftime("%Y-%m-%d")) if scored_count > 0 else ""
         last_scored_date = str(test_df.loc[test_valid_mask, "Date"].iloc[-1].strftime("%Y-%m-%d")) if scored_count > 0 else ""
 
-        test_auc = float(roc_auc_score(y_test_scored, p_up_test_scored)) if len(np.unique(y_test_scored)) > 1 else 0.5
-        test_acc = float(accuracy_score(y_test_scored, (p_up_test_scored > 0.5).astype(int))) if scored_count > 0 else 0.0
-        test_brier = float(brier_score_loss(y_test_scored, p_up_test_scored)) if scored_count > 0 else 0.25
+        test_auc = float(roc_auc_score(y_test_scored, p_up_test_scored)) if len(np.unique(y_test_scored)) > 1 else float("nan")
+        test_acc = float(accuracy_score(y_test_scored, (p_up_test_scored > 0.5).astype(int))) if scored_count > 0 else float("nan")
+        test_brier = float(brier_score_loss(y_test_scored, p_up_test_scored)) if scored_count > 0 else float("nan")
 
         train_p_pos = float(train_df["target_direction"].mean())
         base_probs = np.full(len(y_test_scored), train_p_pos)
-        base_acc = float(accuracy_score(y_test_scored, (base_probs > 0.5).astype(int))) if scored_count > 0 else 0.0
-        base_brier = float(brier_score_loss(y_test_scored, base_probs)) if scored_count > 0 else 0.25
+        base_acc = float(accuracy_score(y_test_scored, (base_probs > 0.5).astype(int))) if scored_count > 0 else float("nan")
+        base_brier = float(brier_score_loss(y_test_scored, base_probs)) if scored_count > 0 else float("nan")
 
         model_eval = {
             "val_auc": float(train_metrics.get("val_auc", 0.5)),
             "val_accuracy": float(train_metrics.get("val_acc", 0.5)),
             "val_brier": float(train_metrics.get("val_brier", 0.25)),
             "test_auc": test_auc,
+            "test_auc_defined": bool(len(np.unique(y_test_scored)) > 1),
             "test_accuracy": test_acc,
             "test_brier": test_brier,
             "train_positive_fraction": train_p_pos,
@@ -691,6 +711,15 @@ class RollingNSEExperimentRunner:
         fold_results = {
             "ticker": ticker,
             "test_year": test_year,
+            "run_provenance": {
+                "engine_accounting_version": ENGINE_ACCOUNTING_VERSION,
+                "model_seed": self.model_seed,
+                "ga_seeds": self.ga_seeds,
+                "population_size": self.protocol["evolutionary_specification"]["population_size"],
+                "generations": self.protocol["evolutionary_specification"]["generations"],
+                "input_sha256": self.manifest[ticker]["sha256"],
+                "protocol_sha256": self.protocol_sha256,
+            },
             "model_eval": model_eval,
             "prefix_context": {
                 "prefix_p_up": prefix_p_up,
@@ -1016,6 +1045,9 @@ class RollingNSEExperimentRunner:
         return fold_results
 
     def run_all(self) -> Dict[str, Any]:
+        raw_results_file = self.results_dir / f"campaign_raw_results_v{ENGINE_ACCOUNTING_VERSION}.json"
+        if raw_results_file.exists():
+            raise FileExistsError(f"Refusing to overwrite recorded results: {raw_results_file}; choose a new output directory")
         campaign_start = time.time()
         print("=" * 70)
         print("STARTING FROZEN RETROSPECTIVE ROLLING NSE EXPERIMENT CAMPAIGN")
@@ -1046,9 +1078,17 @@ class RollingNSEExperimentRunner:
         print("Saving raw fold results...")
 
         # Save machine-readable raw fold results
-        raw_results_file = self.results_dir / "campaign_raw_results.json"
-        with open(raw_results_file, "w") as f:
-            json.dump(all_results, f, indent=2)
+        def json_safe(value):
+            if isinstance(value, dict):
+                return {key: json_safe(item) for key, item in value.items()}
+            if isinstance(value, list):
+                return [json_safe(item) for item in value]
+            if isinstance(value, float) and not np.isfinite(value):
+                return None
+            return value
+
+        with open(raw_results_file, "x") as f:
+            json.dump(json_safe(all_results), f, indent=2, allow_nan=False)
         print(f"Raw results saved -> {raw_results_file}")
 
         return all_results
@@ -1060,11 +1100,12 @@ if __name__ == "__main__":
     parser.add_argument("--universe", nargs="+", type=str, default=["RELIANCE.NS", "TCS.NS", "INFY.NS"])
     parser.add_argument("--ga-seeds", nargs="+", type=int, default=[42, 43, 44])
     parser.add_argument("--model-seed", type=int, default=42)
+    parser.add_argument("--output-dir", type=Path, help="Output directory for versioned current-engine results; existing result files are never replaced")
     args = parser.parse_args()
 
     project_root = Path(__file__).resolve().parent.parent
     inputs_path = project_root / "reports" / "experiments" / "inputs"
-    outputs_path = project_root / "reports" / "experiments"
+    outputs_path = args.output_dir if args.output_dir is not None else project_root / "reports" / "experiments"
     protocol_file = project_root / "reports" / "experiments" / "protocol.json"
 
     runner = RollingNSEExperimentRunner(
@@ -1077,3 +1118,4 @@ if __name__ == "__main__":
         model_seed=args.model_seed,
     )
     runner.run_all()
+

@@ -14,7 +14,7 @@ from src.config import (
     ETA_CROSSOVER,
     ETA_MUTATION,
 )
-from src.backtest_engine import run_vectorized_simulation_fast
+from src.backtest_engine import run_vectorized_simulation_fast, apply_fitness_penalty
 
 
 class Individual:
@@ -30,8 +30,9 @@ class Individual:
         self.crowding_distance: float = 0.0
 
     @classmethod
-    def create_random(cls, bounds: List[Tuple[float, float]] = GENE_BOUNDS) -> "Individual":
-        genes = [random.uniform(low, high) for (low, high) in bounds]
+    def create_random(cls, bounds: List[Tuple[float, float]] = GENE_BOUNDS, rng=None) -> "Individual":
+        rng = rng if rng is not None else random
+        genes = [rng.uniform(low, high) for (low, high) in bounds]
         return cls(np.array(genes, dtype=np.float64))
 
 
@@ -131,11 +132,12 @@ def crowded_comparison_operator(ind_a: Individual, ind_b: Individual) -> int:
         return 0
 
 
-def tournament_selection(population: List[Individual], k: int = 2) -> Individual:
+def tournament_selection(population: List[Individual], k: int = 2, rng=None) -> Individual:
     """
     Binary tournament selection using crowded comparison.
     """
-    candidates = random.sample(population, k)
+    rng = rng if rng is not None else random
+    candidates = rng.sample(population, k)
     best = candidates[0]
     for other in candidates[1:]:
         if crowded_comparison_operator(other, best) == -1:
@@ -148,22 +150,24 @@ def simulated_binary_crossover(
     parent2: Individual,
     bounds: List[Tuple[float, float]] = GENE_BOUNDS,
     eta_c: float = ETA_CROSSOVER,
+    rng=None,
 ) -> Tuple[Individual, Individual]:
     """
     Simulated Binary Crossover (SBX) for real-valued chromosomes.
     """
+    rng = rng if rng is not None else random
     g1 = parent1.genes.copy()
     g2 = parent2.genes.copy()
 
-    if random.random() < CROSSOVER_PROB:
+    if rng.random() < CROSSOVER_PROB:
         for i in range(len(bounds)):
-            if random.random() <= 0.5:
+            if rng.random() <= 0.5:
                 y1 = min(g1[i], g2[i])
                 y2 = max(g1[i], g2[i])
                 low, high = bounds[i]
 
                 if abs(y2 - y1) > 1e-10:
-                    rand = random.random()
+                    rand = rng.random()
                     beta = 1.0 + (2.0 * (y1 - low) / (y2 - y1))
                     alpha = 2.0 - beta ** (-(eta_c + 1.0))
                     if rand <= (1.0 / alpha):
@@ -190,18 +194,20 @@ def polynomial_mutation(
     ind: Individual,
     bounds: List[Tuple[float, float]] = GENE_BOUNDS,
     eta_m: float = ETA_MUTATION,
+    rng=None,
 ) -> Individual:
     """
     Polynomial mutation for real-coded evolutionary parameters.
     """
+    rng = rng if rng is not None else random
     genes = ind.genes.copy()
     for i in range(len(bounds)):
-        if random.random() < (1.0 / len(bounds)):
+        if rng.random() < (1.0 / len(bounds)):
             y = genes[i]
             low, high = bounds[i]
             delta1 = (y - low) / (high - low + 1e-10)
             delta2 = (high - y) / (high - low + 1e-10)
-            rand = random.random()
+            rand = rng.random()
             mut_pow = 1.0 / (eta_m + 1.0)
 
             if rand <= 0.5:
@@ -241,6 +247,15 @@ class NSGA2Optimizer:
         prefix_atr: float = -1.0,
         prefix_regime_vol: int = -1,
     ):
+        if isinstance(pop_size, (bool, np.bool_)) or not isinstance(pop_size, (int, np.integer)) or pop_size < 2:
+            raise ValueError("pop_size must be an integer of at least 2")
+        if isinstance(num_generations, (bool, np.bool_)) or not isinstance(num_generations, (int, np.integer)) or num_generations < 0:
+            raise ValueError("num_generations must be a nonnegative integer")
+        bound_values = np.asarray(bounds, dtype=float)
+        if bound_values.shape != (7, 2) or not np.isfinite(bound_values).all() or (bound_values[:, 0] >= bound_values[:, 1]).any():
+            raise ValueError("bounds must contain seven finite (lower, upper) pairs with lower < upper")
+        if len(close) == 0:
+            raise ValueError("Strategy search requires nonempty development data")
         self.open_prices = open_prices
         self.close = close
         self.high = high
@@ -267,13 +282,14 @@ class NSGA2Optimizer:
         """
         sharpe, max_dd, total_ret, trades, turnover = run_vectorized_simulation_fast(
             self.open_prices, self.close, self.high, self.low, self.p_up, self.atr, self.regime_vol,
-            ind.genes, apply_penalty=True, volume=self.volume,
+            ind.genes, apply_penalty=False, volume=self.volume,
             prefix_p_up=self.prefix_p_up, prefix_atr=self.prefix_atr, prefix_regime_vol=self.prefix_regime_vol,
         )
         # Objectives are to be maximized:
         # obj0 = Sharpe Ratio (penalized for GA fitness)
         # obj1 = -MaxDrawdown (penalized for GA fitness)
-        ind.fitness = (float(sharpe), float(-max_dd))
+        fitness_sharpe, fitness_dd = apply_fitness_penalty(sharpe, max_dd, trades)
+        ind.fitness = (float(fitness_sharpe), float(-fitness_dd))
         ind.metrics = {
             "sharpe_ratio": float(sharpe),
             "max_drawdown": float(max_dd),
@@ -287,12 +303,11 @@ class NSGA2Optimizer:
         Executes full NSGA-II evolutionary loop.
         Returns the non-dominated Pareto Front (Rank 1 individuals).
         """
-        if self.seed is not None:
-            random.seed(self.seed)
-            np.random.seed(self.seed)
+        rng = random.Random(self.seed)
+        self.generation_history = []
 
         # Step 1: Initialize random population
-        self.population = [Individual.create_random(self.bounds) for _ in range(self.pop_size)]
+        self.population = [Individual.create_random(self.bounds, rng=rng) for _ in range(self.pop_size)]
         for ind in self.population:
             self.evaluate_individual(ind)
 
@@ -306,11 +321,11 @@ class NSGA2Optimizer:
             # Create offspring population Q_t of size N
             offspring: List[Individual] = []
             while len(offspring) < self.pop_size:
-                p1 = tournament_selection(self.population)
-                p2 = tournament_selection(self.population)
-                c1, c2 = simulated_binary_crossover(p1, p2, self.bounds)
-                c1 = polynomial_mutation(c1, self.bounds)
-                c2 = polynomial_mutation(c2, self.bounds)
+                p1 = tournament_selection(self.population, rng=rng)
+                p2 = tournament_selection(self.population, rng=rng)
+                c1, c2 = simulated_binary_crossover(p1, p2, self.bounds, rng=rng)
+                c1 = polynomial_mutation(c1, self.bounds, rng=rng)
+                c2 = polynomial_mutation(c2, self.bounds, rng=rng)
                 self.evaluate_individual(c1)
                 self.evaluate_individual(c2)
                 offspring.extend([c1, c2])
@@ -366,25 +381,9 @@ class NSGA2Optimizer:
 
 
 if __name__ == "__main__":
-    from src.data_loader import fetch_and_cache_ticker
-    from src.feature_pipeline import prepare_feature_dataset
-    from src.predictor import MarketPredictor
+    # Use the same isolated train/validation/development/test contract as the app.
+    from src.pipeline import run_experiment_pipeline
 
-    df = fetch_and_cache_ticker("SPY")
-    proc_df, feats = prepare_feature_dataset(df, "SPY", save_processed=False)
-    predictor = MarketPredictor("SPY", feats)
-    predictor.train(proc_df)
-    p_up = predictor.predict_proba(proc_df)
-
-    close = proc_df["Close"].to_numpy(dtype=np.float64)
-    high = proc_df["High"].to_numpy(dtype=np.float64)
-    low = proc_df["Low"].to_numpy(dtype=np.float64)
-    atr = proc_df["atr_14"].to_numpy(dtype=np.float64)
-    reg_vol = proc_df["regime_high_vol"].to_numpy(dtype=np.int32)
-
-    optimizer = NSGA2Optimizer(close, high, low, p_up, atr, reg_vol, pop_size=40, num_generations=15)
-    pareto_solutions = optimizer.run()
-
-    print(f"\nEvolution complete! Discovered {len(pareto_solutions)} non-dominated Pareto solutions:")
-    for i, sol in enumerate(pareto_solutions[:5]):
-        print(f" Solution {i+1}: Sharpe={sol.metrics['sharpe_ratio']:.2f}, MaxDD={sol.metrics['max_drawdown']*100:.2f}%, Return={sol.metrics['total_return']*100:.2f}%, Trades={sol.metrics['trades']}")
+    result = run_experiment_pipeline("SPY", pop_size=40, num_generations=15, seed=42)
+    print(f"Frozen development-selected strategy: #{result['frozen_strategy_id']}")
+    print(f"Out-of-sample return: {result['detailed_test_result']['total_return']:.2%}")

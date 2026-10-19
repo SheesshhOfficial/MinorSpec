@@ -27,7 +27,7 @@ if %ERRORLEVEL% neq 0 (
     echo [WARNING] Streamlit is not installed in the active Python environment.
     echo Attempting to install project dependencies from requirements.txt...
     echo.
-    pip install -r requirements.txt
+    python -m pip install -r requirements.txt
     if %ERRORLEVEL% neq 0 (
         echo.
         echo [ERROR] Failed to install required packages.
@@ -50,3 +50,4 @@ if %ERRORLEVEL% neq 0 (
 )
 
 endlocal
+

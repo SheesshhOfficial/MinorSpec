@@ -7,6 +7,7 @@ Preserves strict financial truth:
 """
 
 from typing import Tuple
+import math
 
 
 def get_asset_currency_info(ticker: str) -> Tuple[str, str]:
@@ -43,6 +44,8 @@ def format_pct(value: float, include_sign: bool = False, decimal_places: int = 2
     """
     Formats decimal ratio as percentage string (e.g. 0.1234 -> +12.34% or 12.34%).
     """
+    if value is None or not math.isfinite(value):
+        return "N/A"
     sign_fmt = "+" if include_sign else ""
     return f"{value * 100.0:{sign_fmt}.{decimal_places}f}%"
 
@@ -51,4 +54,7 @@ def format_ratio(value: float, decimal_places: int = 2) -> str:
     """
     Formats unitless ratios such as Sharpe ratio.
     """
+    if value is None or not math.isfinite(value):
+        return "N/A"
     return f"{value:.{decimal_places}f}"
+

@@ -1,0 +1,393 @@
+EVOLUTIONARY MARKET LAB
+Complete beginner walkthrough and presentation script
+Updated for the 19 October 2026 accounting-v2 repair and compact dashboard. Original research artifacts remain historical; new example figures below were rerun on the repaired source.
+
+HOW TO USE THIS GUIDE
+The compact interface puts explanations behind ⓘ. Hover on desktop, or click/tap the icon. Keyboard users can Tab to its summary and press Enter or Space. Expand the named guides when you want longer explanations. Essential research, offline/stale-data and failure notices remain visible.
+“Do” tells you what to click. “Say” gives you a natural explanation for a presentation. Explanations and examples are included so you understand the controls rather than simply memorizing a script.
+
+Suggested first demonstration: RELIANCE.NS, population 40, generations 15, seed 42, with “Use saved historical data (offline)” checked for the bundled-data examples. Afterwards change only the seed to 43 to demonstrate how evolutionary randomness changes the strategy. These are demonstration settings, not investment recommendations.
+
+Important correction: the current dropdown contains NINE preset symbols, not three. Three Indian companies form the core published research universe. Also, 43 is a valid SEED, but it is not a valid POPULATION setting: population increases in steps of ten.
+
+1. INTRODUCE THE WEBSITE
+
+Do: Open the application and show the “Evolutionary Market Lab” heading.
+Say: “This website is a research workspace for testing trading strategies on historical market data. It combines a machine-learning model that estimates price direction with an evolutionary algorithm that searches for trading rules. We can inspect returns, risk and individual simulated trades. It does not buy shares, connect to a broker or promise future profits.”
+
+Why it is needed: predicting that a price might rise does not tell us how much to invest, when to exit, or how to control losses. This project studies those decisions together. Its purpose is to evaluate the trade-off between return and risk, not to assume that machine learning always beats a simple investment benchmark.
+
+Before the first run, the central screen explains three steps: choose asset and settings, run the evolutionary search, and inspect performance and risks. The result tabs appear after a successful experiment.
+
+If running locally: from the project folder, install requirements with “python -m pip install -r requirements.txt”, then launch “python -m streamlit run app.py”. Open the local address Streamlit prints. No verified public deployment URL is listed in the repository.
+
+2. CHOOSE THE STOCK OR ASSET
+
+Do: In the left sidebar, find “Experiment”, then “Asset”, then “Asset”. Choose RELIANCE.NS, the default.
+Say: “Here we select the asset whose historical prices we want to study. RELIANCE.NS is Reliance Industries Limited, the Indian company. The .NS suffix identifies its NSE listing in the data provider's symbol format. For this walkthrough, we will use Reliance.”
+
+The three core researched companies:
+- RELIANCE.NS: Reliance Industries Limited, a diversified Indian business.
+- TCS.NS: Tata Consultancy Services, an IT services and consulting company.
+- INFY.NS: Infosys Limited, an IT services and consulting company.
+
+The other current presets:
+- SPY: an exchange-traded fund tracking the S&P 500.
+- ^NSEI: the Nifty 50 index symbol.
+- QQQ: an exchange-traded fund tracking the Nasdaq-100.
+- AAPL: Apple.
+- MSFT: Microsoft.
+- NVDA: NVIDIA.
+
+These options do not mean the published research tested all nine. The formal rolling study used RELIANCE, TCS and INFY separately. The interface's US assets and index symbols provide exploratory options. Selecting an index does not turn that index into a directly purchasable stock or establish that the simulator's execution assumptions are appropriate for it.
+
+Do: Leave “Custom symbol” empty during this demonstration.
+What it does: this optional text box accepts another provider-compatible symbol. A nonempty accepted custom entry overrides the dropdown. To return to the dropdown choice, clear the custom field. Check the “Using” caption to confirm the symbol actually in use.
+Say: “The custom box lets us request another supported symbol. For a clear demonstration, I will leave it blank so our dropdown selection remains active.”
+
+The app uppercases the entry but does not silently remove invalid characters. Invalid input shows an error and disables both run buttons. An accepted format can still be unavailable from the provider.
+
+3. SET THE POPULATION
+
+Do: Under “Search”, leave “Population” at 40.
+Available values: 20 to 100, in steps of 10. Default: 40.
+Say: “Population means how many candidate trading strategies the evolutionary search maintains in a generation. At forty, it explores a population of forty candidate rule sets. These are different trading instructions, not forty stocks, forty investors or forty completed trades.”
+
+Each candidate contains seven parameters controlling entries, exits, stop-loss behavior, profit targets, position scaling and holding duration. A larger population gives the search more candidates to compare, but usually increases computation. It does not guarantee a better final test result.
+
+The caption beneath Population updates with the selected number. Read the executed N value after a run to confirm the setting actually used.
+
+4. SET THE NUMBER OF GENERATIONS
+
+Do: Leave “Generations” at 15.
+Available values: 5 to 40, in steps of 5. Default: 15.
+Say: “A generation is one round of evolutionary search. The algorithm evaluates candidates on development data, selects useful trade-offs, and creates variations through crossover and mutation. Fifteen generations means fifteen search rounds; it does not mean fifteen days of market data.”
+
+More generations increase the search effort. Do not describe 40 times 15 as an exact count of unique strategies or backtests: candidates can repeat, and the algorithm also evaluates offspring. More tuning can improve development results without improving performance on unseen periods.
+
+5. SET THE RANDOM SEED
+
+Do: Expand “Advanced”. Find “Seed”. Keep 42 for the first run.
+Available values: integers from 1 to 99,999. Default: 42.
+Say: “The seed controls the random choices in the evolutionary search. Forty-two is just a reproducibility setting, not an accuracy score. Later I will change it to forty-three while keeping everything else unchanged, so we can see how sensitive the strategy is to the search's starting randomness.”
+
+A seed helps reproduce a run when the dataset, settings, code and relevant software environment remain the same. Updated market data or changed libraries can change results. This sidebar seed controls NSGA-II; the LightGBM model uses its own fixed backend seed, so changing 42 to 43 need not change the classifier diagnostics.
+
+6. RUN THE EXPERIMENT
+
+Do: Click the sidebar “Run Experiment” button. On the first-run screen, the central “Run Experiment on RELIANCE.NS” button is another way to run the same active settings.
+Say: “Now the application loads historical data, builds twenty features, trains the direction classifier, searches for trading rules on development data, and tests the selected primary strategy on a later period.”
+
+Wait for the spinner to finish. First runs can take longer while data and simulation kernels load. Network access, hardware and search size affect timing.
+
+For a repeatable bundled-data demo, check “Use saved historical data (offline)” before running. This uses a compatible local snapshot without network refresh. Otherwise the loader verifies ticker, date request and cache hash, uses a fresh compatible cache or downloads prices. A failed refresh can use a compatible stale cache with a visible warning. The page shows the actual raw-data span/source; Method → Data provenance shows its hash and retrieval details. Identical settings may reuse a computed result for up to one hour.
+
+After success, inspect the header:
+- Status: Completed. This means an experiment is displayed, not that live orders are running.
+- Asset: the ticker actually used.
+- Test: the actual first and last test dates and number of bars.
+- N, G and Seed: executed population, generations and evolutionary seed.
+- The header identifies a single-split research backtest; Method explains its three-bar purge gaps.
+
+A bar here normally represents one trading session. Three bars are three trading observations, not necessarily three calendar days.
+
+If you change a sidebar setting after running, the screen shows “Pending Settings Modified”. The old results remain visible until you click Run Experiment again. Do not introduce those old results as belonging to the newly selected ticker or seed.
+
+7. OVERVIEW: EXPLAIN THE FIVE SUMMARY CARDS
+
+Do: Open “Overview”. Start with the top cards before discussing the graphs.
+Say: “Overview reports the frozen primary strategy. The system selected this strategy using development-period performance before examining its test-period results.”
+
+A. Primary Strategy Return
+The percentage change in the simulated portfolio over the test period, including the simulator's trading costs. It is a cumulative return, not an annual return.
+Example: starting at Rs 100,000 and ending at Rs 110,000 gives +10%.
+The “pp vs Benchmark” figure is a difference in percentage points. If a strategy returns 10% and the benchmark 15%, the difference is -5 percentage points, not -5% relative performance.
+“Frozen Strategy #...” identifies the primary candidate within this run.
+
+B. Benchmark Buy & Hold
+Cost-adjusted buy-and-hold invests 100% of capital at the first tradable Open and liquidates at the last tradable Close. It includes the same commission, slippage and volume rules. The hybrid uses up to 95% allocation and a volatility discount, so their exposures can still differ. This accounting-v2 convention replaces the older frictionless close-normalized dashboard benchmark.
+Say: “This asks what simply following the asset over the same displayed period would have produced, under the dashboard's benchmark convention.”
+
+C. Max Drawdown
+The largest percentage fall from an earlier portfolio peak to a subsequent trough. Lower means a shallower worst historical decline, but it does not guarantee future safety.
+Example: a fall from Rs 120,000 to Rs 90,000 is a 25% drawdown, even if the original starting capital was Rs 100,000.
+The smaller text provides Benchmark MDD for comparison.
+
+D. Annualized Sharpe
+The app uses mean daily portfolio return divided by daily-return standard deviation, multiplied by the square root of 252. Its assumed risk-free rate is zero.
+Explain it as return relative to variability. Higher is generally preferable for otherwise comparable runs; it is not a percentage or a guarantee. A negative number indicates a negative mean return under this calculation. Do not label a strategy “excellent” from Sharpe alone, particularly with few trades.
+
+E. Trades & Win Rate
+“Trades” counts completed simulated trades. Win rate is the fraction with net profit greater than zero. No trades produces N/A in the card.
+Example: three profitable trades out of five gives 60%. A 60% win rate can still lose money if losses are larger than gains or costs outweigh gains.
+
+8. OVERVIEW: EXPLAIN THE TWO-PANEL GRAPH
+
+Upper panel: “Out-of-Sample Portfolio Equity Growth”.
+- Horizontal axis: dates in the test period.
+- Vertical axis: simulated portfolio value, in rupees for RELIANCE.NS.
+- Cyan solid line: CI Strategy.
+- Grey dotted line: Buy & Hold.
+- Initial reference capital: 100,000 in the displayed asset currency.
+
+Do: Hover over a few dates to show the corresponding portfolio values. Look at the ending value and the path taken to get there.
+Say: “This shows how simulated wealth evolved through time. A higher ending value means a better cumulative return, while dips show losses along the way. Long flat sections can indicate substantial time in cash, but we should check the trade log rather than infer a precise exposure figure from the line.”
+
+Lower panel: “Underwater Drawdown Profile (%)”.
+Meaning: zero represents being at a running peak, and negative values show how far the portfolio is below its preceding peak. The strategy is red; the benchmark is a grey dashed line.
+
+REPAIRED IN ACCOUNTING V2: both strategy and benchmark drawdowns now use the peak available at each date, including the original starting capital. The curve and maximum-drawdown card can be interpreted consistently; costs can create an immediate drawdown even when the stock price is flat.
+
+Do: Expand “How to read these results”.
+It explains the frozen selection, next-bar timing, trading costs, opportunity cost of staying defensive, and currency units. This is a useful place to reinforce the difference between lower losses and higher returns.
+
+9. STRATEGY EXPLORER: READ THE SCATTER PLOT
+
+Do: Click “Strategies”. Initially keep the candidate labeled “(Primary)” in “Candidate”.
+Say: “The optimizer searches for a trade-off between return adjusted for variability and maximum drawdown. The search uses Sharpe and drawdown objectives with low-trade penalties. The chart shows raw measured metrics, so the displayed candidates need not form a Pareto frontier in these raw coordinates.”
+
+The graph:
+- Horizontal axis: Maximum Drawdown %, with lower values to the left.
+- Vertical axis: Annualized Sharpe Ratio, with higher values upward.
+- Cyan circles: GA Candidates (Raw Development Metrics).
+- Grey diamonds: Exploratory OOS Test (All Candidates).
+- Green star: Frozen Primary Strategy (Best Dev), plotted at its DEVELOPMENT coordinates.
+- Orange outlined circle: another candidate currently being inspected, also highlighted on development coordinates.
+
+Hover over points to see candidate ID, return, drawdown, Sharpe and completed trades. Upper-left is favorable for these two objectives, but the plotted points alone do not establish reliability or profitability. The final Pareto-front size can be smaller than the original population, and duplicate or similar candidates can occur.
+
+The green star is not a claim that this candidate performed best on the test data. The primary candidate was chosen before test evaluation. Grey diamonds are exploratory comparisons; do not select the best grey diamond afterwards and claim an untouched test result.
+
+10. STRATEGY EXPLORER: SELECT A CANDIDATE AND COMPARE PERIODS
+
+Do: Under “Inspect a strategy”, use “Candidate”. First examine the Primary option, then choose a different available candidate.
+
+The small values “Dev Sharpe”, “Dev MaxDD”, “Dev Return” and “Trades” refer to DEVELOPMENT performance, not the final test period.
+
+The “Performance” table has:
+- Annualized Sharpe Ratio.
+- Maximum Drawdown.
+- Cumulative Return.
+- Completed Trades.
+
+Columns compare Development with Frozen Test for the primary, or Exploratory Test for another candidate. A large deterioration can signal that a rule worked poorly outside the period used to search for it. Because the periods have different lengths, cumulative returns are not directly comparable as equal-duration rates.
+
+When you select a non-primary candidate, the site displays “Exploratory only”. The primary Overview does not change into that candidate's result. The selected candidate's parameter table and Trades do change.
+Say: “I am inspecting another candidate to understand different behavior. I am not replacing the primary strategy after seeing test performance.”
+
+Candidate numbers are local to one run. Strategy #1 with seed 42 and Strategy #1 with seed 43 can contain completely different rules.
+
+11. EXPLAIN ALL SEVEN EVOLVED PARAMETERS
+
+Do: Scroll down to “Trading rules”. Read the three columns: Parameter, Evolved Value and Search Bounds. Expand “Parameter guide” for the purpose of each rule.
+These values are outputs of the evolutionary search. They are not seven manual sidebar controls.
+
+1) Entry Probability Threshold, bounds 0.52–0.85.
+The minimum model probability of a positive three-bar return needed to queue a long entry when the strategy is out of the market. For example, 0.611 means approximately 61.1%, not 0.611%. The model estimate has not been established as calibrated; it is not a guaranteed success rate.
+
+2) Exit Probability Threshold, bounds 0.35–0.50.
+If the previous completed bar's probability falls below this threshold while holding a position, an exit is queued for the next open. Other rules can also exit a position.
+
+3) Dynamic ATR Stop Loss, bounds 1.0–4.5 times ATR(14).
+ATR means Average True Range, a measure of recent trading-range volatility. The initial stop is entry price minus this multiplier times the prior ATR.
+Illustrative example only: entry Rs 1,000, ATR Rs 20, multiplier 2 gives an initial stop at Rs 960, before execution friction and possible gaps.
+
+4) Dynamic ATR Take Profit, bounds 1.5–7.0 times ATR(14).
+The initial target is entry price plus this multiplier times the prior ATR. With entry Rs 1,000, ATR Rs 20 and multiplier 3, the illustrative target is Rs 1,060. An actual fill can differ because of gaps and slippage.
+
+5) Trailing Stop Percentage, bounds 1%–6%.
+This follows a higher achieved price and can lift the stop. An illustrative 3% trail below a peak of Rs 1,100 gives Rs 1,067. It can help protect gains but may also exit before a later recovery. In this implementation the update happens after the current bar's exit checks, so it affects later execution.
+
+6) Volatility Regime Scale Factor, bounds 0.10–1.00.
+This reduces the allocation when the prior bar is in the high-volatility regime. The regime compares 20-day volatility with its rolling 100-day median. The simulator's normal allocation base is approximately 95% of available cash. A factor of 0.50 gives approximately 47.5% before detailed costs, not a fixed 50% allocation in all conditions.
+
+7) Max Holding Duration, bounds 5–45 bars.
+This is a time-based exit setting. The underlying gene is continuous, but the simulator uses an integer duration. These are trading bars, not calendar days. The condition is checked using the previous bar and execution occurs at the next open, so it is not a promise that every journal row will end at precisely that displayed number. Stops or targets may exit earlier.
+
+12. MODEL INSIGHTS: EXPLAIN THE CLASSIFIER METRICS
+
+Do: Click “Model”. Show “Tier 1 Classifier Diagnostics”.
+Say: “The model predicts whether the closing price three trading bars ahead will be above the current close. These diagnostics evaluate that prediction on the validation partition. They are not the trading strategy's win rate and not the annual rolling campaign's test statistics.”
+
+Validation AUC: measures how well the model ranks positive versus negative outcomes across thresholds. Approximately 0.5 represents no useful ranking discrimination; 1.0 would be perfect ranking. AUC 0.5469 does not mean 54.69% accuracy.
+
+Directional Accuracy: the percentage of correct up/down classifications at the classifier's threshold. It should be considered alongside a simple baseline because class imbalance can make accuracy misleading.
+
+Brier Score: the mean squared difference between predicted probabilities and binary outcomes. Lower is better. It evaluates probability error; the presence of a Brier metric does not prove that probabilities are calibrated.
+
+13. MODEL INSIGHTS: FEATURE IMPORTANCE AND THE COMPLETE GLOSSARY
+
+Do: Show “Predictive Feature Importance (Split Gain)”. Hover over a bar.
+- Vertical axis: feature names, using friendly display names in the current implementation.
+- Horizontal axis: Importance (Split Gain).
+- Bars: the top ten of the twenty inputs, ranked by accumulated tree-split gain.
+- Hover: the exact source feature ID and split-gain value.
+
+Say: “A longer bar means this fitted model obtained more split gain from that feature. It is not a percentage contribution to profit, a buy signal or proof that this feature causes prices to move.”
+
+Do: Expand each category in “Technical Feature Indicator Glossary (20 Features)”. Trend Indicators starts open.
+
+Trend Indicators, five features:
+- Distance to SMA 10, SMA 50 and SMA 200: how far the close is above or below its 10-, 50- or 200-session simple average.
+- MACD Normalized Ratio: difference between 12- and 26-period exponential averages, divided by price.
+- MACD Signal Histogram: MACD minus its signal average, describing changes in the relationship between those averages.
+
+Momentum Indicators, six features:
+- RSI (14-Day Momentum): strength and speed of recent price changes on a 0–100 scale.
+- Stochastic %K: where the price lies within a recent 14-period high-low range.
+- Stochastic %D: a three-period smoothed version of %K.
+- Rate of Change over 5, 10 and 20 days: percentage price movement over those windows.
+
+Volatility Indicators, five features:
+- ATR Volatility Ratio: ATR(14) divided by the close.
+- Realized Volatility over 20 and 60 days: annualized variability in recent returns.
+- Bollinger Bands %B: price's relative position between the lower and upper bands; it can extend outside the usual 0–1 interval when price moves beyond the bands.
+- Bollinger Bands Width: distance between bands relative to the middle band.
+
+Volume & Regime Indicators, four features:
+- Volume Z-Score: whether volume is unusually high or low relative to its recent mean and variability.
+- On-Balance Volume 5D ROC: recent change in a cumulative signed-volume measure.
+- High Volatility Regime Flag: 1 when the volatility condition holds, otherwise 0.
+- Trend Regime Flag: +1 when Close > SMA50 > SMA200; -1 when Close < SMA50 < SMA200; otherwise 0.
+
+These are inputs to a model, not independent recommendations to buy or sell.
+
+14. TRADE JOURNAL: EXPLAIN EVERY COLUMN
+
+Do: Open “Trades”. Check the banner first: is this the Primary Frozen Best or an Exploratory Candidate? It follows the selection from Strategies.
+Say: “This tab lets us inspect the individual simulated decisions behind a result, instead of relying only on summary percentages.”
+
+The “Execution log” shows:
+- Entry Date: the session when a position opened.
+- Exit Date: the session when it closed.
+- Entry Price: simulated execution price, incorporating entry slippage.
+- Exit Price: simulated execution price, incorporating exit slippage.
+- Net P&L: net proceeds minus entry cost, including commissions on both sides.
+- Trade Return: net trade profit or loss divided by that trade's entry cost. It is not necessarily the change in the entire portfolio, because only some capital may have been allocated.
+- Duration (Bars): exit-bar index minus entry-bar index. A same-session trade can show zero; a weekend does not add trading bars.
+- Exit Reason: the simulator condition that closed the position.
+
+Possible exit reasons:
+- ML Exit Signal / Timeout: lower model probability or the time limit caused a next-open exit; this label combines the two cases.
+- Stop Loss / Trailing Stop: a stop threshold was hit. A trailing-stop exit can still be profitable.
+- Take Profit (ATR Target): the profit target was reached.
+- Gap Down Stop Loss or Gap Up Take Profit: the opening price moved through a threshold.
+- Bracket Conflict (Prioritized Stop) or Gap Conflict (Prioritized Stop): the daily-bar information implies both conditions; the simulator prioritizes the stop rather than assuming the favorable order.
+- Final Horizon Liquidation: closure at the end of the test horizon under the simulator's final tradable-session policy.
+
+15. FILTER AND DOWNLOAD THE TRADES
+
+Do: Open “Outcome”.
+Choices are “All Trades”, “Profitable Trades Only” (net P&L above zero), “Loss Trades Only” (below zero), and “Break-even Trades Only” (exactly zero).
+
+Do: Open “Exit reason”.
+“All Reasons” is always available. The other options come from the selected candidate's actual trade log, so they can differ between runs.
+
+Read “Showing X of Y trades · performance metrics unchanged”. Filters change displayed rows only. They do not recalculate the portfolio or improve the Overview figures.
+Say: “I am filtering the log to investigate specific trades. I have not changed the backtest or removed those losses from its results.”
+
+Do: Click “Download Complete Log (... trades, CSV)” to save all trades for the selected candidate. If a filter produces a nonempty subset smaller than the full log, a separate “Download Filtered Log (... trades, CSV)” appears.
+
+The filename contains the ticker and candidate number. Since it does not include the random seed, save it with an additional descriptive name yourself when comparing runs, such as RELIANCE_seed42_complete.csv. These downloads are trade logs, not necessarily a full export of every model output, chart or experiment setting.
+
+If there are no trades, the site displays a no-trades explanation. If filters exclude every trade, it asks you to adjust them. Neither state automatically means the application crashed.
+
+16. METHODOLOGY: EXPLAIN HOW THE EXPERIMENT IS SEPARATED
+
+Do: Open “Method”. Read the actual partition dates and bar counts.
+
+The interactive dashboard uses approximately:
+- 50% training: fit the LightGBM trees.
+- 15% validation: monitor the classifier and stop training early.
+- 15% development: evolve trading parameters and select the primary candidate.
+- Remaining roughly 20% test: assess the selected rule on a later period.
+
+Three-bar gaps separate these partitions so a three-bar forward training target does not reach into the next partition. Exact percentages differ slightly because of these gaps and feature preparation.
+
+Selection in THIS DASHBOARD: choose the highest raw development Sharpe among returned candidates with at least three completed development trades. If none qualifies, select the candidate with the highest raw development Sharpe overall. It does not automatically mean a cash-only fallback here.
+
+Execution: signals from a completed bar are evaluated before the next open. Entry and exit prices include assumed slippage. Standard assumptions are 0.05% commission plus 0.05% slippage per side, approximately 0.20% round trip. These are simulation assumptions, not an exhaustive account of every real-market tax, fee, fill or liquidity constraint.
+
+Starting capital: Rs 100,000 for NSE symbols; supported US symbols use dollars; unknown symbols may display neutral units. There is no initial-capital input in the current sidebar.
+
+The separate academic study uses a rolling 2020–2025 campaign: three equities times six years gives eighteen asset-year folds; three evolutionary seeds gives fifty-four fold-seed runs. Its protocol, selection and benchmark conventions differ from this interactive single-split demo. In particular, the rolling campaign uses a five-development-trade feasibility rule with a cash fallback. Do not mix the two experiments.
+
+17. VERIFIED REPAIRED EXAMPLES
+
+Use bundled RELIANCE.NS data with offline mode checked, population40 and generations15. Test period: 28 July2021–9 October2026; 1,287 bars. Results depend on the exact dataset, accounting version and software environment. These are single-split demos, not a rerun of the full archived research campaign.
+
+Seed 42:
+- Primary return -0.0401%; cost-adjusted benchmark +25.3037%.
+- Difference -25.3437 percentage points.
+- Maximum drawdown 0.7104%; benchmark 27.1757%.
+- Sharpe -0.0175; 5 completed trades; 60% winners.
+- Primary candidate #1; 13 returned candidates.
+- Development: Sharpe 1.0971, return +21.9032%, drawdown 2.4441%, 15 trades.
+- Genes: entry 0.6096; exit 0.3986; stop 1.1294 ATR; target 2.7800 ATR; trailing 1.1610%; volatility scale 0.3965; holding setting 30 bars.
+
+Seed 43:
+- Primary return -4.7678%; cost-adjusted benchmark +25.3037%.
+- Difference -30.0715 percentage points.
+- Maximum drawdown 6.8620%; benchmark 27.1757%.
+- Sharpe -0.4960; 4 completed trades; 25% winners.
+- Primary candidate #1; 10 returned candidates.
+- Development: Sharpe 1.0708, return +30.3348%, drawdown 6.0964%, 15 trades.
+- Genes: entry 0.6050; exit 0.4130; stop 1.4825 ATR; target 2.2346 ATR; trailing 3.9143%; volatility scale 0.5684; holding setting 14 bars.
+
+Classifier validation in both examples: AUC0.5469, accuracy54.79%, Brier0.2485. Say: “The strategy had lower historical drawdown but still earned less than buy-and-hold. Winning more trades does not necessarily produce a positive overall return.”
+
+18. CHANGE SEED42 TO43
+
+Record the first run. Expand Advanced, set Seed to43, and keep the asset, offline mode, population and generations fixed. The pending-settings notice means old results remain visible. Click Run Experiment and confirm Seed43 in the completed header. Inspect Overview, Strategies and Trades again.
+
+Say: “We changed the evolutionary search path while leaving the model seed fixed. This comparison demonstrates sensitivity; it does not establish that42 is universally better. Choosing a seed because it performed best on this test would introduce selection bias.”
+
+19. WARNINGS AND COMMON QUESTIONS
+
+“The figures did not change when I moved a slider.”
+Click Run Experiment. Pending sidebar edits do not retroactively change the last completed run.
+
+“I selected TCS, but the page still says Reliance.”
+Clear any custom ticker override, run the experiment again, and inspect the executed Asset chip.
+
+“Why does a run take longer than expected?”
+There is no fixed runtime guarantee. Network access, download delays, search size, compilation and machine resources vary.
+
+“The same seed now gives different numbers.”
+Check that asset, population, generations, data dates, code and software versions also match. A data refresh can move the split boundaries.
+
+“Why are there no trades?”
+The probability and risk thresholds may rarely trigger. Low trading activity is an outcome to inspect, not permission to invent missing trades.
+
+“Why does execution fail?”
+Read “Execution Alert”. Common possible causes include an unavailable ticker, network/data download problems, insufficient data or missing local dependencies. Verify the actual error rather than assuming the cause. A previous successful run may remain visible after a failed new request; check its executed settings.
+
+“Can I enter my budget, choose exact test dates, manually set the seven genes, or buy shares?”
+Those controls are not present in this sidebar. It provides asset, custom symbol, offline mode, population, generations and seed. The seven genes are evolved outputs. This application does not submit real orders.
+
+“Is 54.79% Directional Accuracy the same as 60% Win Rate?”
+No. The first evaluates the classifier on validation observations. The second counts profitable completed trades in the selected strategy's test period.
+
+20. A NATURAL CLOSING FOR YOUR PRESENTATION
+
+Say: “We have selected a company, configured the evolutionary search, run the experiment, compared the primary strategy against a benchmark, explored candidate rules, examined the model inputs and audited the actual simulated trades. The project makes the whole research process inspectable. Its findings also show why strong development performance or a reasonable classifier score does not guarantee better future trading returns.”
+
+For a short demonstration, follow this order:
+Reliance → population 40 → generations 15 → seed 42 → Run Experiment → header → Overview cards and equity curve → Strategies primary and alternate candidate → seven parameters → Model → Trades filters and CSV download → Method → seed 43 comparison → limitations.
+
+SOURCE REFERENCES
+Original baseline (superseded by the accounting-v2 repair; see the published repair commit for current UI/source):
+https://github.com/SheesshhOfficial/MinorSpec/tree/c8c400e286178201377b98fabbfb0fefa4f5f097
+
+Exact controls, tabs and state handling:
+https://github.com/SheesshhOfficial/MinorSpec/blob/c8c400e286178201377b98fabbfb0fefa4f5f097/app.py
+
+Ticker list and gene bounds: src/config.py
+Pipeline and dashboard selection rule: src/pipeline.py
+Simulator, costs, metrics and drawdown display issue: src/backtest_engine.py
+Chart axes and legends: ui/charts.py
+Parameter explanations and 20-feature glossary: ui/metadata.py
+Currency formatting: ui/formatting.py
+Historical campaign evidence: reports/experiments/RESULTS.md
+
+The seed-42 and seed-43 example figures above came from executing repaired accounting-v2 source with the bundled RELIANCE dataset in explicit offline mode. They are interactive single-split examples, not the published 2020–2025 rolling-campaign results.

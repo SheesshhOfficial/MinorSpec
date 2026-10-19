@@ -12,6 +12,7 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
 from ui.formatting import get_asset_currency_info, format_currency
+from src.config import INITIAL_CAPITAL
 
 
 CHART_LAYOUT_DEFAULTS = dict(
@@ -40,7 +41,7 @@ def create_pareto_chart(
         x=summary_df["dev_mdd"] * 100.0,
         y=summary_df["dev_sharpe"],
         mode="markers",
-        name="Development Pareto (GA Search)",
+        name="GA Candidates (Raw Development Metrics)",
         marker=dict(size=9, color="#00D2D3", symbol="circle", opacity=0.85, line=dict(color="#0B1020", width=1)),
         customdata=summary_df[["id", "dev_trades", "dev_ret"]].to_numpy(),
         hovertemplate=(
@@ -83,7 +84,7 @@ def create_pareto_chart(
             textposition="top center",
             textfont=dict(color="#10B981", size=11, family="sans-serif"),
             hovertemplate=(
-                "<b>Primary Frozen Strategy #%{text}</b><br>"
+                "<b>Primary Frozen Strategy %{text}</b><br>"
                 "Dev Max DD: %{x:.2f}%<br>"
                 "Dev Sharpe: %{y:.2f}<br>"
                 "<i>Frozen before test evaluation</i><extra></extra>"
@@ -113,7 +114,7 @@ def create_pareto_chart(
     fig.update_layout(
         **layout_pareto,
         xaxis=dict(
-            title="Maximum Drawdown % (Lower is Safer)",
+            title="Maximum Drawdown % (Lower is Better)",
             gridcolor="#263247",
             zerolinecolor="#263247",
             showgrid=True,
@@ -148,25 +149,30 @@ def create_equity_drawdown_chart(
     Panel 2: Underwater Drawdown Profile (%)
     """
     dates = detailed_sim["dates"]
-    equity = detailed_sim["equity"]
-    benchmark_equity = detailed_sim["benchmark_equity"]
-    strat_dd = detailed_sim["drawdowns"] * 100.0
+    equity = np.asarray(detailed_sim["equity"], dtype=np.float64)
+    benchmark_equity = np.asarray(detailed_sim["benchmark_equity"], dtype=np.float64)
+    strat_dd = np.asarray(detailed_sim["drawdowns"], dtype=np.float64) * 100.0
 
-    # Benchmark Drawdown
-    close_prices = test_df["Close"].to_numpy(dtype=np.float64)
-    b_peak = np.maximum.accumulate(close_prices)
-    benchmark_dd = ((close_prices - b_peak) / (b_peak + 1e-8)) * 100.0
+    # Include pre-entry cash: fees can create a drawdown on the very first bar.
+    initial_capital = detailed_sim.get("initial_capital", INITIAL_CAPITAL)
+    b_peak = np.maximum(initial_capital, np.maximum.accumulate(benchmark_equity))
+    benchmark_dd = np.asarray(detailed_sim.get("benchmark_drawdowns", np.divide(
+        benchmark_equity - b_peak, b_peak,
+        out=np.zeros_like(benchmark_equity), where=b_peak != 0,
+    )), dtype=np.float64) * 100.0
 
-    sym, _ = get_asset_currency_info(ticker)
+    sym, currency_code = get_asset_currency_info(ticker)
     curr_prefix = sym if sym else ""
+    curr_suffix = "" if sym else f" {currency_code}"
+    initial_label = format_currency(initial_capital, ticker)
 
     fig = make_subplots(
         rows=2, cols=1,
         shared_xaxes=True,
         vertical_spacing=0.08,
         subplot_titles=(
-            f"Out-of-Sample Portfolio Equity Growth ({curr_prefix}100,000 Initial)",
-            "Underwater Drawdown Profile (%)",
+            f"Portfolio · {initial_label} starting capital",
+            "Drawdown from peak (%)",
         ),
         row_heights=[0.68, 0.32],
     )
@@ -175,18 +181,18 @@ def create_equity_drawdown_chart(
     fig.add_trace(go.Scatter(
         x=dates,
         y=equity,
-        name="CI Strategy",
+        name="Frozen primary",
         line=dict(color="#00D2D3", width=2.0),
-        hovertemplate="<b>CI Strategy</b><br>Date: %{x}<br>Equity: " + curr_prefix + "%{y:,.2f}<extra></extra>",
+        hovertemplate="<b>Frozen primary</b><br>Date: %{x}<br>Equity: " + curr_prefix + "%{y:,.2f}" + curr_suffix + "<extra></extra>",
     ), row=1, col=1)
 
     # Panel 1: Benchmark Equity
     fig.add_trace(go.Scatter(
         x=dates,
         y=benchmark_equity,
-        name=f"Buy & Hold ({ticker})",
+        name="Cost-matched buy & hold",
         line=dict(color="#94A3B8", width=1.5, dash="dot"),
-        hovertemplate="<b>Buy & Hold</b><br>Date: %{x}<br>Equity: " + curr_prefix + "%{y:,.2f}<extra></extra>",
+        hovertemplate="<b>Cost-matched buy & hold</b><br>Date: %{x}<br>Equity: " + curr_prefix + "%{y:,.2f}" + curr_suffix + "<extra></extra>",
     ), row=1, col=1)
 
     # Panel 2: Strategy Drawdown
@@ -222,7 +228,7 @@ def create_equity_drawdown_chart(
         ),
         height=480,
     )
-    fig.update_yaxes(title_text=f"Portfolio ({curr_prefix})", gridcolor="#263247", row=1, col=1)
+    fig.update_yaxes(title_text=f"Portfolio ({currency_code})", gridcolor="#263247", row=1, col=1)
     fig.update_yaxes(title_text="Drawdown %", gridcolor="#263247", row=2, col=1)
     fig.update_xaxes(gridcolor="#263247")
     return fig
@@ -248,7 +254,7 @@ def create_feature_importance_chart(imp_df: pd.DataFrame, total_features: int) -
             colorscale=[[0, "#0EA5E9"], [1, "#00D2D3"]],
             line=dict(color="#0B1020", width=1),
         ),
-        hovertemplate="<b>%{y}</b><br>Source Feature ID: <code>%{customdata}</code><br>Split Gain Importance: %{x:,.1f}<extra></extra>",
+        hovertemplate="<b>%{y}</b><br>Source Feature ID: <code>%{customdata}</code><br>Gain Importance: %{x:,.1f}<extra></extra>",
     ))
 
     layout_kwargs = dict(CHART_LAYOUT_DEFAULTS)
@@ -256,8 +262,9 @@ def create_feature_importance_chart(imp_df: pd.DataFrame, total_features: int) -
 
     fig.update_layout(
         **layout_kwargs,
-        xaxis=dict(title="Importance (Split Gain)", gridcolor="#263247", showgrid=True),
+        xaxis=dict(title="Importance (Gain)", gridcolor="#263247", showgrid=True),
         yaxis=dict(gridcolor="#263247"),
         height=350,
     )
     return fig
+
